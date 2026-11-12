@@ -186,6 +186,7 @@ public class MapScript : IWasmModule
 		_api.OnSpellCast += HandleSpellCast;
 		_api.OnPlayerChatMessage += HandlePlayerChatMessage;
 		_api.OnPlayerLeft += HandlePlayerLeft;
+		_api.OnUnitSelected += HandleUnitSelected;
 
 		_countdownRemaining = CountdownDurationSeconds;
 		_lastAnnouncedSecond = 4;
@@ -456,6 +457,11 @@ public class MapScript : IWasmModule
 				RacerState r = _racers[i];
 				if (!r.Active || !r.Unit.IsValid) continue;
 
+				if (!r.IsComputer)
+				{
+					_api.GetPlayer(r.PlayerIndex).SelectUnit(r.Unit);
+				}
+
 				if (r.RocketAttemptElapsed >= 0f && r.RocketAttemptElapsed <= RocketBoostWindowSeconds)
 				{
 					r.BoostTimer = 2.0f;
@@ -463,6 +469,18 @@ public class MapScript : IWasmModule
 					_api.CreateFloatingText("ROCKET START!", r.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.4f);
 					_api.SpawnExpandingGroundRing(r.Position, 6f, 15f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
 				}
+			}
+		}
+	}
+
+	private void HandleUnitSelected(UnitId selectedUnit)
+	{
+		for (int i = 0; i < _racerCount; i++)
+		{
+			RacerState r = _racers[i];
+			if (!r.IsComputer && r.Active && r.Unit.IsValid && selectedUnit != r.Unit)
+			{
+				_api.GetPlayer(r.PlayerIndex).SelectUnit(r.Unit);
 			}
 		}
 	}
