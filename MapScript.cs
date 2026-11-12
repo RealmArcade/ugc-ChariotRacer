@@ -73,6 +73,7 @@ public class MapScript : IWasmModule
 		public float HeadingRadians;
 		public float Speed;
 		public float VisualSpinOffset;
+		public float CurrentTurnVelocity;
 
 		public bool HasSteerTarget;
 		public Vector3 SteerTarget;
@@ -388,12 +389,12 @@ public class MapScript : IWasmModule
 		_api.SetPlayerCameraFollowUnit(
 			playerIndex,
 			unit,
-			distance: 13.5f,
-			heightOffset: 7.0f,
-			pitchDegrees: -25.0f,
+			distance: 12.0f,
+			heightOffset: 4.5f,
+			pitchDegrees: -18.0f,
 			yawOffsetDegrees: 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 11.0f,
+			smoothing: 3.5f,
 			lockCameraInput: true);
 	}
 
@@ -549,7 +550,7 @@ public class MapScript : IWasmModule
 		}
 		else if (trimmed == "-wide")
 		{
-			player.FollowUnitWithCamera(racer.Unit, 20f, 11f, -30f, 0f, true, 9f, true);
+			player.FollowUnitWithCamera(racer.Unit, 15f, 6.0f, -20f, 0f, true, 3.5f, true);
 			player.SendMessage("Camera: Wide Chase View");
 		}
 		else if (trimmed == "-stuck")
@@ -677,32 +678,31 @@ public class MapScript : IWasmModule
 
 	private void UpdateSteerAndThrottle(RacerState racer, float delta)
 	{
+		float targetTurnRate = 0f;
 		if (racer.HasSteerTarget)
 		{
 			float dx = racer.SteerTarget.X - racer.Position.X;
 			float dz = racer.SteerTarget.Z - racer.Position.Z;
 			float distSq = dx * dx + dz * dz;
 
-			if (!racer.IsComputer && distSq < 4.5f * 4.5f)
+			if (!racer.IsComputer && distSq < 1.0f)
 			{
 				racer.HasSteerTarget = false;
 			}
-			else if (distSq > 0.2f)
+			else if (distSq > 0.25f)
 			{
 				float targetYaw = MathF.Atan2(dx, dz);
 				float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
-				float turnRate = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
-				float maxStep = turnRate * delta;
-
-				if (MathF.Abs(yawDiff) <= maxStep)
-				{
-					racer.HeadingRadians = targetYaw;
-				}
-				else
-				{
-					racer.HeadingRadians = WrapAngle(racer.HeadingRadians + MathF.Sign(yawDiff) * maxStep);
-				}
+				float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
+				targetTurnRate = Math.Clamp(yawDiff * 3.5f, -maxTurn, maxTurn);
 			}
+		}
+
+		float turnAccel = racer.DriftTimer > 0f ? 16.0f : 10.0f;
+		racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, turnAccel * delta);
+		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
+		{
+			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
 		}
 
 		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
@@ -1431,6 +1431,12 @@ public class MapScript : IWasmModule
 			if (ReferenceEquals(_racers[i], target)) return i;
 		}
 		return -1;
+	}
+
+	private static float MoveTowards(float current, float target, float maxDelta)
+	{
+		if (MathF.Abs(target - current) <= maxDelta) return target;
+		return current + MathF.Sign(target - current) * maxDelta;
 	}
 
 	private static float WrapAngle(float radians)
