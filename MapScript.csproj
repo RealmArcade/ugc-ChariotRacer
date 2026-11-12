@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifier>wasi-wasm</RuntimeIdentifier>
+    <WasmGenerateAppBundle>false</WasmGenerateAppBundle>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NativeLib>Shared</NativeLib>
+    <RunAOTCompilation>true</RunAOTCompilation>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>link</TrimMode>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <TrimmerRootAssembly Include="$(MSBuildProjectName)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Realm.MapAPI">
+      <HintPath>lib/Realm.MapAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Realm.Ecs">
+      <HintPath>lib/Realm.Ecs.dll</HintPath>
+    </Reference>
+    <Using Include="Realm.Maps" />
+    <Using Include="Realm.Ecs" />
+    <Using Include="GameClientWorld.WasmRandomProxy" Alias="Random" />
+  </ItemGroup>
+  <ItemGroup>
+    <TrimmerRootAssembly Include="$(AssemblyName)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="**/*.template.cs" />
+    <None Include="**/*.template.cs" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <Optimize>true</Optimize>
+    <StripSymbols>false</StripSymbols>
+    <IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <DirectPInvoke Include="env" />
+    <LinkerArg Include="-Wl,--allow-undefined" />
+    <LinkerArg Include="-g" Condition="'$(Configuration)' == 'Debug'" />
+    <LinkerArg Include="-gdwarf-4" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+  <Target Name="EnableAotLate" BeforeTargets="ImportRuntimeIlcPackageTarget;IlcCompile;_ComputeAssembliesToCompileToNative">
+    <PropertyGroup>
+      <PublishAot>true</PublishAot>
+      <IlcLlvmTarget>wasm32-unknown-wasip1</IlcLlvmTarget>
+    </PropertyGroup>
+  </Target>
+  <Target Name="FixWasiSdkLinkArgs" BeforeTargets="LinkNative;LinkNativeLlvm">
+    <PropertyGroup>
+      <IlcWasmGlobalBase>1048576</IlcWasmGlobalBase>
+    </PropertyGroup>
+    <ItemGroup>
+      <WasmComponentTypeWit Remove="@(WasmComponentTypeWit)" />
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-rc.1.26357.1" />
+    <PackageReference Include="runtime.win-x64.Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-rc.1.26357.1" />
+    <PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-rc.1.26357.1" />
+  </ItemGroup>
+</Project>
