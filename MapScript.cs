@@ -17,10 +17,10 @@ public class MapScript : IWasmModule
 
 	private const float CountdownDurationSeconds = 3.2f;
 	private const float RocketBoostWindowSeconds = 0.6f;
-	private const float BaseMaxSpeed = 19.5f;
-	private const float TurboMaxSpeed = 29.0f;
-	private const float StarMaxSpeed = 30.5f;
-	private const float OffroadMaxSpeed = 11.2f;
+	private const float BaseMaxSpeed = 18.0f;
+	private const float TurboMaxSpeed = 38.0f;
+	private const float StarMaxSpeed = 40.0f;
+	private const float OffroadMaxSpeed = 10.5f;
 	private const float AccelerationRate = 18.0f;
 	private const float BrakeDecelerationRate = 34.0f;
 	private const float CoastDecelerationRate = 6.0f;
@@ -698,8 +698,8 @@ public class MapScript : IWasmModule
 				racer.TurboVfxCooldown -= delta;
 				if (racer.TurboVfxCooldown <= 0f)
 				{
-					racer.TurboVfxCooldown = 0.2f;
-					_api.SpawnVisualEffect("fireblast", racer.Position, 0.65f);
+					racer.TurboVfxCooldown = 0.12f;
+					_api.SpawnVisualEffect("fireblast", racer.Position, 0.85f);
 				}
 			}
 
@@ -877,7 +877,7 @@ public class MapScript : IWasmModule
 		}
 		else if (racer.Speed < targetMaxSpeed)
 		{
-			float accel = racer.BoostTimer > 0f || racer.StarTimer > 0f ? AccelerationRate * 2.1f : AccelerationRate;
+			float accel = racer.BoostTimer > 0f || racer.StarTimer > 0f ? AccelerationRate * 3.2f : AccelerationRate;
 			racer.Speed = MathF.Min(targetMaxSpeed, racer.Speed + accel * delta);
 		}
 		else if (racer.Speed > targetMaxSpeed)
@@ -1423,13 +1423,13 @@ public class MapScript : IWasmModule
 	{
 		if (racer.SpinOutTimer > 0f) return;
 		racer.BoostTimer = MathF.Max(racer.BoostTimer, duration);
-		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed * 0.95f);
-		_api.CreateFloatingText(label, racer.Position + new Vector3(0f, 2.4f, 0f), new Vector3(1.0f, 0.65f, 0.15f), 1.0f);
-		_api.SpawnExpandingGroundRing(racer.Position, 4.5f, 14f, 0.35f, new Vector3(1.0f, 0.55f, 0.1f));
-		_api.SpawnVisualEffect("fireblast", racer.Position, 1.2f);
+		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed);
+		_api.CreateFloatingText(label, racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.75f, 0.15f), 1.2f);
+		_api.SpawnExpandingGroundRing(racer.Position, 5.0f, 16f, 0.35f, new Vector3(1.0f, 0.6f, 0.1f));
+		_api.SpawnVisualEffect("fireblast", racer.Position, 1.4f);
 		if (!racer.IsComputer)
 		{
-			_api.ShakePlayerCamera(racer.PlayerIndex, 0.5f, 0.38f);
+			_api.ShakePlayerCamera(racer.PlayerIndex, 0.65f, 0.45f);
 		}
 	}
 
