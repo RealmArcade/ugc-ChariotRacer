@@ -510,17 +510,21 @@ public class MapScript : IWasmModule
 
 			if (distSq < 1.0f) return;
 
-			int wpIndex = FindClosestWaypointIndex(racer.Position);
-			Vector2 wp = _waypoints[wpIndex];
-			Vector2 nextWp = _waypoints[(wpIndex + 1) % WaypointCount];
-			float trackHeading = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
+			float desiredHeading = MathF.Atan2(dx, dz);
+			float angleDiff = WrapAngle(desiredHeading - racer.HeadingRadians);
 
-			float rawHeading = MathF.Atan2(dx, dz);
-			float trackAngleDiff = WrapAngle(rawHeading - trackHeading);
+			// If the player clicks behind the vehicle (rear hemisphere > 90 degrees), do not steer backwards.
+			if (MathF.Abs(angleDiff) > MathF.PI * 0.5f)
+			{
+				if (racer.Speed > 4.0f)
+				{
+					racer.BrakeTimer = 0.45f;
+				}
+				return;
+			}
 
-			// Clamp steering so it can never point backwards relative to the race flow (max ~75 degrees deviation)
-			float clampedTrackDiff = Math.Clamp(trackAngleDiff, -1.3f, 1.3f);
-			racer.TargetHeading = WrapAngle(trackHeading + clampedTrackDiff);
+			// Point directly towards the clicked point
+			racer.TargetHeading = desiredHeading;
 			racer.HasSteerTarget = true;
 		}
 		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
@@ -775,22 +779,6 @@ public class MapScript : IWasmModule
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
 			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
-		}
-
-		if (!racer.IsComputer && !racer.Finished)
-		{
-			int wpIndex = FindClosestWaypointIndex(racer.Position);
-			Vector2 wp = _waypoints[wpIndex];
-			Vector2 nextWp = _waypoints[(wpIndex + 1) % WaypointCount];
-			float trackHeading = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
-
-			float diffFromTrack = WrapAngle(racer.HeadingRadians - trackHeading);
-			if (MathF.Abs(diffFromTrack) > 1.35f)
-			{
-				racer.HeadingRadians = WrapAngle(trackHeading + Math.Clamp(diffFromTrack, -1.35f, 1.35f));
-				racer.CurrentTurnVelocity = 0f;
-				racer.HasSteerTarget = false;
-			}
 		}
 
 		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
