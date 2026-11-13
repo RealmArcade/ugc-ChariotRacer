@@ -24,8 +24,8 @@ public class MapScript : IWasmModule
 	private const float AccelerationRate = 18.0f;
 	private const float BrakeDecelerationRate = 34.0f;
 	private const float CoastDecelerationRate = 6.0f;
-	private const float BaseTurnRate = 2.75f;
-	private const float DriftTurnRate = 4.35f;
+	private const float BaseTurnRate = 3.2f;
+	private const float DriftTurnRate = 4.8f;
 	private const float TrackHalfWidth = 12.2f;
 	private const float KartRadius = 1.15f;
 	private const float LeaderboardIntervalSeconds = 0.3f;
@@ -365,9 +365,9 @@ public class MapScript : IWasmModule
 				PlayerId player = _api.GetPlayer(racer.PlayerIndex);
 				player.SelectUnit(unit);
 				player.SetHudElementVisible(HudElement.ResourceBar, false);
-				ApplyChaseCamera(racer.PlayerIndex, unit);
+				ApplyRaceCamera(racer.PlayerIndex, unit);
 				player.SendMessage("CHARIOT RACER: Right-click to steer | [Q] Turbo | [W] Power-Up | [E] Drift | [R] Brake/Recover");
-				player.SendMessage("Tip: Hit [Q] right on GO for a Rocket Start! Chat '-top' for overhead camera or '-chase' for 3rd person.");
+				player.SendMessage("Tip: Hit [Q] right on GO for a Rocket Start! Chat '-chase' for 3rd person or '-top' for overhead.");
 			}
 		}
 	}
@@ -387,18 +387,33 @@ public class MapScript : IWasmModule
 		return new Vector3(x, _api.GetTerrainHeight(x, z), z);
 	}
 
-	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
+	private void ApplyRaceCamera(int playerIndex, UnitId unit)
 	{
 		if (!unit.IsValid) return;
 		_api.SetPlayerCameraFollowUnit(
 			playerIndex,
 			unit,
-			distance: 12.0f,
-			heightOffset: 4.5f,
-			pitchDegrees: -18.0f,
+			distance: 14.0f,
+			heightOffset: 22.0f,
+			pitchDegrees: -54.0f,
+			yawOffsetDegrees: 0.0f,
+			alignToUnitFacing: false,
+			smoothing: 7.0f,
+			lockCameraInput: true);
+	}
+
+	private void ApplyHighChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
+	{
+		if (!unit.IsValid) return;
+		_api.SetPlayerCameraFollowUnit(
+			playerIndex,
+			unit,
+			distance: 16.0f,
+			heightOffset: 8.5f,
+			pitchDegrees: -30.0f,
 			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 5.0f,
+			smoothing: 6.0f,
 			lockCameraInput: true);
 	}
 
@@ -503,7 +518,6 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer = 0f;
-				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
 			}
 
 			float dx = targetPosition.X - racer.Position.X;
@@ -515,18 +529,16 @@ public class MapScript : IWasmModule
 			float desiredHeading = MathF.Atan2(dx, dz);
 			float angleDiff = WrapAngle(desiredHeading - racer.HeadingRadians);
 
-			// If the player clicks behind the chariot (> 125 degrees away), do not steer backwards.
-			if (MathF.Abs(angleDiff) > 2.2f)
+			// If the player clicks behind the chariot (> 125 degrees away) while driving fast, do not steer backwards.
+			if (MathF.Abs(angleDiff) > 2.2f && racer.Speed > 5.0f)
 			{
-				if (racer.Speed > 4.0f)
-				{
-					racer.BrakeTimer = 0.45f;
-				}
+				racer.BrakeTimer = 0.45f;
 				return;
 			}
 
-			// Steer smoothly towards the target heading, clamped to forward arc
-			float clampedDiff = Math.Clamp(angleDiff, -1.45f, 1.45f);
+			// Steer smoothly towards the target heading
+			float maxClamp = racer.Speed > 5.0f ? 1.55f : MathF.PI;
+			float clampedDiff = Math.Clamp(angleDiff, -maxClamp, maxClamp);
 			racer.TargetHeading = WrapAngle(racer.HeadingRadians + clampedDiff);
 			racer.SteerTarget = targetPosition;
 			racer.HasSteerTarget = true;
@@ -539,7 +551,6 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer = 0f;
-				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
 			}
 			racer.HasSteerTarget = false;
 			racer.BrakeTimer = 0.6f;
@@ -582,10 +593,6 @@ public class MapScript : IWasmModule
 			racer.Speed = 0f;
 			racer.HasSteerTarget = false;
 			racer.CurrentTurnVelocity = 0f;
-			if (!racer.IsComputer)
-			{
-				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: true);
-			}
 			_api.CreateFloatingText("REVERSE", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.8f, 0.2f), 0.7f);
 		}
 	}
@@ -598,19 +605,19 @@ public class MapScript : IWasmModule
 		string trimmed = message.Trim().ToLowerInvariant();
 		PlayerId player = _api.GetPlayer(playerIndex);
 
-		if (trimmed == "-top")
+		if (trimmed == "-top" || trimmed == "-iso")
 		{
-			player.FollowUnitWithCamera(racer.Unit, 14f, 26f, -58f, 0f, false, 9f, false);
-			player.SendMessage("Camera: Overhead Track View");
+			ApplyRaceCamera(playerIndex, racer.Unit);
+			player.SendMessage("Camera: Elevated Racing View");
 		}
 		else if (trimmed == "-chase")
 		{
-			ApplyChaseCamera(playerIndex, racer.Unit);
-			player.SendMessage("Camera: Chase View");
+			ApplyHighChaseCamera(playerIndex, racer.Unit);
+			player.SendMessage("Camera: High Chase View");
 		}
 		else if (trimmed == "-wide")
 		{
-			player.FollowUnitWithCamera(racer.Unit, 15f, 6.0f, -20f, 0f, true, 3.5f, true);
+			_api.SetPlayerCameraFollowUnit(playerIndex, racer.Unit, 18f, 12f, -38f, 0f, true, 4.0f, true);
 			player.SendMessage("Camera: Wide Chase View");
 		}
 		else if (trimmed == "-stuck")
@@ -675,10 +682,6 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer -= delta;
-				if (racer.ReverseTimer <= 0f && !racer.IsComputer)
-				{
-					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-				}
 			}
 
 			if (racer.SpinOutTimer > 0f)
@@ -862,10 +865,6 @@ public class MapScript : IWasmModule
 				if (racer.ReverseTimer > 0f)
 				{
 					racer.ReverseTimer = 0f;
-					if (!racer.IsComputer)
-					{
-						ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-					}
 				}
 			}
 		}
@@ -1394,7 +1393,7 @@ public class MapScript : IWasmModule
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
 		if (!racer.IsComputer)
 		{
-			ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+			ApplyRaceCamera(racer.PlayerIndex, racer.Unit);
 		}
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
 	}
