@@ -26,6 +26,9 @@ public class MapScript : IWasmModule
 	private const float CoastDecelerationRate = 6.0f;
 	private const float BaseTurnRate = 2.6f;
 	private const float DriftTurnRate = 3.6f;
+	private const float BoostTurnRate = 1.35f;
+	private const float BoostDriftTurnRate = 1.8f;
+	private const float BoostTurnInertia = 7.0f;
 	private const float TrackHalfWidth = 12.2f;
 	private const float KartRadius = 1.15f;
 	private const float LeaderboardIntervalSeconds = 0.3f;
@@ -583,7 +586,7 @@ public class MapScript : IWasmModule
 				return;
 			}
 
-			TriggerBoost(racer, 1.8f, "TURBO!");
+			TriggerBoost(racer, 2.2f, "TURBO BOOST!");
 		}
 		else if (string.Equals(abilityId, AbilityIds.UsePowerup, StringComparison.OrdinalIgnoreCase))
 		{
@@ -783,6 +786,9 @@ public class MapScript : IWasmModule
 	private void UpdateSteerAndThrottle(RacerState racer, float delta)
 	{
 		float targetTurnRate = 0f;
+		float maxTurn = racer.BoostTimer > 0f
+			? (racer.DriftTimer > 0f ? BoostDriftTurnRate : BoostTurnRate)
+			: (racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate);
 
 		if (racer.IsComputer || racer.Finished)
 		{
@@ -796,8 +802,7 @@ public class MapScript : IWasmModule
 				{
 					float targetYaw = MathF.Atan2(dx, dz);
 					float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
-					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
-					targetTurnRate = Math.Clamp(yawDiff * 3.5f, -maxTurn, maxTurn);
+					targetTurnRate = Math.Clamp(yawDiff * (racer.BoostTimer > 0f ? 2.2f : 3.5f), -maxTurn, maxTurn);
 				}
 			}
 		}
@@ -807,7 +812,6 @@ public class MapScript : IWasmModule
 			{
 				if (racer.KeySteerInput != 0f)
 				{
-					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
 					targetTurnRate = racer.KeySteerInput * maxTurn;
 					racer.HasSteerTarget = false;
 				}
@@ -821,14 +825,21 @@ public class MapScript : IWasmModule
 					}
 					else
 					{
-						float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
-						targetTurnRate = Math.Clamp(yawDiff * 4.5f, -maxTurn, maxTurn);
+						targetTurnRate = Math.Clamp(yawDiff * (racer.BoostTimer > 0f ? 2.5f : 4.5f), -maxTurn, maxTurn);
 					}
 				}
 			}
 		}
 
-		racer.CurrentTurnVelocity = targetTurnRate;
+		if (racer.BoostTimer > 0f)
+		{
+			racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, BoostTurnInertia * delta);
+		}
+		else
+		{
+			racer.CurrentTurnVelocity = targetTurnRate;
+		}
+
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
 			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
@@ -907,6 +918,14 @@ public class MapScript : IWasmModule
 				nextX = racer.Position.X;
 				nextZ = racer.Position.Z;
 				racer.Speed = 0f;
+				if (racer.BoostTimer > 0f)
+				{
+					racer.BoostTimer = 0f;
+					if (!racer.IsComputer)
+					{
+						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.35f);
+					}
+				}
 				if (racer.ReverseTimer > 0f)
 				{
 					racer.ReverseTimer = 0f;
@@ -1404,9 +1423,14 @@ public class MapScript : IWasmModule
 	{
 		if (racer.SpinOutTimer > 0f) return;
 		racer.BoostTimer = MathF.Max(racer.BoostTimer, duration);
-		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed * 0.9f);
+		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed * 0.95f);
 		_api.CreateFloatingText(label, racer.Position + new Vector3(0f, 2.4f, 0f), new Vector3(1.0f, 0.65f, 0.15f), 1.0f);
 		_api.SpawnExpandingGroundRing(racer.Position, 4.5f, 14f, 0.35f, new Vector3(1.0f, 0.55f, 0.1f));
+		_api.SpawnVisualEffect("fireblast", racer.Position, 1.2f);
+		if (!racer.IsComputer)
+		{
+			_api.ShakePlayerCamera(racer.PlayerIndex, 0.5f, 0.38f);
+		}
 	}
 
 	private void SpinOutRacer(RacerState racer, string reason)
