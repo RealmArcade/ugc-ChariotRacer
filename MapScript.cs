@@ -81,6 +81,7 @@ public class MapScript : IWasmModule
 
 		public float BoostTimer;
 		public float DriftTimer;
+		public float ReverseTimer;
 		public bool PendingMiniTurbo;
 		public float SpinOutTimer;
 		public float StarTimer;
@@ -386,7 +387,7 @@ public class MapScript : IWasmModule
 		return new Vector3(x, _api.GetTerrainHeight(x, z), z);
 	}
 
-	private void ApplyChaseCamera(int playerIndex, UnitId unit)
+	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
 	{
 		if (!unit.IsValid) return;
 		_api.SetPlayerCameraFollowUnit(
@@ -395,9 +396,9 @@ public class MapScript : IWasmModule
 			distance: 12.0f,
 			heightOffset: 4.5f,
 			pitchDegrees: -18.0f,
-			yawOffsetDegrees: 0.0f,
+			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 3.5f,
+			smoothing: 0.0f,
 			lockCameraInput: true);
 	}
 
@@ -497,29 +498,39 @@ public class MapScript : IWasmModule
 			string.Equals(order, "attack_move", StringComparison.OrdinalIgnoreCase) ||
 			string.Equals(order, "attack_move_queued", StringComparison.OrdinalIgnoreCase))
 		{
+			if (racer.ReverseTimer > 0f)
+			{
+				racer.ReverseTimer = 0f;
+				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+			}
+
 			float dx = targetPosition.X - racer.Position.X;
 			float dz = targetPosition.Z - racer.Position.Z;
 			float distSq = dx * dx + dz * dz;
 
 			if (distSq < 1.0f) return;
 
-			float forwardX = MathF.Sin(racer.HeadingRadians);
-			float forwardZ = MathF.Cos(racer.HeadingRadians);
-			float forwardDot = dx * forwardX + dz * forwardZ;
+			int wpIndex = FindClosestWaypointIndex(racer.Position);
+			Vector2 wp = _waypoints[wpIndex];
+			Vector2 nextWp = _waypoints[(wpIndex + 1) % WaypointCount];
+			float trackHeading = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
 
-			if (racer.Speed > 4.0f && forwardDot < -0.2f)
-			{
-				racer.BrakeTimer = 0.5f;
-				racer.HasSteerTarget = false;
-				return;
-			}
+			float rawHeading = MathF.Atan2(dx, dz);
+			float trackAngleDiff = WrapAngle(rawHeading - trackHeading);
 
-			racer.TargetHeading = MathF.Atan2(dx, dz);
+			// Clamp steering so it can never point backwards relative to the race flow (max ~75 degrees deviation)
+			float clampedTrackDiff = Math.Clamp(trackAngleDiff, -1.3f, 1.3f);
+			racer.TargetHeading = WrapAngle(trackHeading + clampedTrackDiff);
 			racer.HasSteerTarget = true;
 		}
 		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
 				 string.Equals(order, "hold", StringComparison.OrdinalIgnoreCase))
 		{
+			if (racer.ReverseTimer > 0f)
+			{
+				racer.ReverseTimer = 0f;
+				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+			}
 			racer.HasSteerTarget = false;
 			racer.BrakeTimer = 0.6f;
 		}
@@ -557,15 +568,15 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.BrakeReverse, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			if (racer.Speed < 3.5f)
+			racer.ReverseTimer = 1.3f;
+			racer.Speed = 0f;
+			racer.HasSteerTarget = false;
+			racer.CurrentTurnVelocity = 0f;
+			if (!racer.IsComputer)
 			{
-				RecoverRacerToTrack(racer);
+				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: true);
 			}
-			else
-			{
-				racer.BrakeTimer = 0.75f;
-				racer.HasSteerTarget = false;
-			}
+			_api.CreateFloatingText("REVERSE", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.8f, 0.2f), 0.7f);
 		}
 	}
 
@@ -651,15 +662,19 @@ public class MapScript : IWasmModule
 
 			if (racer.BrakeTimer > 0f) racer.BrakeTimer -= delta;
 
+			if (racer.ReverseTimer > 0f)
+			{
+				racer.ReverseTimer -= delta;
+				if (racer.ReverseTimer <= 0f && !racer.IsComputer)
+				{
+					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+				}
+			}
+
 			if (racer.SpinOutTimer > 0f)
 			{
 				racer.SpinOutTimer -= delta;
-				racer.VisualSpinOffset += delta * 14.0f;
 				racer.Speed = MathF.Max(0f, racer.Speed - BrakeDecelerationRate * delta);
-				if (racer.SpinOutTimer <= 0f)
-				{
-					racer.VisualSpinOffset = 0f;
-				}
 			}
 			else
 			{
@@ -738,7 +753,7 @@ public class MapScript : IWasmModule
 		}
 		else
 		{
-			if (racer.HasSteerTarget)
+			if (racer.HasSteerTarget && racer.ReverseTimer <= 0f)
 			{
 				float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
 
@@ -760,6 +775,22 @@ public class MapScript : IWasmModule
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
 			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
+		}
+
+		if (!racer.IsComputer && !racer.Finished)
+		{
+			int wpIndex = FindClosestWaypointIndex(racer.Position);
+			Vector2 wp = _waypoints[wpIndex];
+			Vector2 nextWp = _waypoints[(wpIndex + 1) % WaypointCount];
+			float trackHeading = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
+
+			float diffFromTrack = WrapAngle(racer.HeadingRadians - trackHeading);
+			if (MathF.Abs(diffFromTrack) > 1.35f)
+			{
+				racer.HeadingRadians = WrapAngle(trackHeading + Math.Clamp(diffFromTrack, -1.35f, 1.35f));
+				racer.CurrentTurnVelocity = 0f;
+				racer.HasSteerTarget = false;
+			}
 		}
 
 		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
@@ -808,8 +839,9 @@ public class MapScript : IWasmModule
 		float forwardX = MathF.Sin(racer.HeadingRadians);
 		float forwardZ = MathF.Cos(racer.HeadingRadians);
 
-		float nextX = racer.Position.X + forwardX * racer.Speed * delta;
-		float nextZ = racer.Position.Z + forwardZ * racer.Speed * delta;
+		float moveDist = racer.ReverseTimer > 0f ? (-7.0f * delta) : (racer.Speed * delta);
+		float nextX = racer.Position.X + forwardX * moveDist;
+		float nextZ = racer.Position.Z + forwardZ * moveDist;
 
 		if (!_api.IsPointPassable(nextX, nextZ, PathingFlags.Ground))
 		{
@@ -822,28 +854,34 @@ public class MapScript : IWasmModule
 			if (canSlideX)
 			{
 				nextZ = racer.Position.Z;
-				racer.HeadingRadians = MathF.Atan2(forwardX, -forwardZ * 0.25f);
 				racer.Speed *= 0.85f;
 			}
 			else if (canSlideZ)
 			{
 				nextX = racer.Position.X;
-				racer.HeadingRadians = MathF.Atan2(-forwardX * 0.25f, forwardZ);
 				racer.Speed *= 0.85f;
 			}
 			else
 			{
-				nextX = racer.Position.X - forwardX * 0.5f;
-				nextZ = racer.Position.Z - forwardZ * 0.5f;
-				racer.Speed *= 0.45f;
+				nextX = racer.Position.X;
+				nextZ = racer.Position.Z;
+				racer.Speed = 0f;
+				if (racer.ReverseTimer > 0f)
+				{
+					racer.ReverseTimer = 0f;
+					if (!racer.IsComputer)
+					{
+						ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+					}
+				}
 			}
 		}
 
 		float nextY = _api.GetTerrainHeight(nextX, nextZ);
 		racer.Position = new Vector3(nextX, nextY, nextZ);
 		_api.TeleportUnit(racer.Unit, racer.Position);
-		_api.SetUnitFacing(racer.Unit, WrapAngle(racer.HeadingRadians + racer.VisualSpinOffset));
-		_api.SetUnitAnimation(racer.Unit, racer.Speed > 1.5f ? "Move" : "Idle");
+		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
+		_api.SetUnitAnimation(racer.Unit, racer.Speed > 1.5f || racer.ReverseTimer > 0f ? "Move" : "Idle");
 	}
 
 	private void ResolveKartCollisions()
@@ -1356,10 +1394,15 @@ public class MapScript : IWasmModule
 		racer.HeadingRadians = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
 		racer.TargetHeading = racer.HeadingRadians;
 		racer.Speed = 6.0f;
+		racer.ReverseTimer = 0f;
 		racer.HasSteerTarget = false;
 		racer.CurrentTurnVelocity = 0f;
 		_api.TeleportUnit(racer.Unit, racer.Position);
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
+		if (!racer.IsComputer)
+		{
+			ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+		}
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
 	}
 
