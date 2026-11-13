@@ -613,20 +613,20 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.SteerLeft, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			racer.KeySteerInput = -1.0f;
+			racer.KeySteerInput = 1.0f;
 		}
 		else if (string.Equals(abilityId, AbilityIds.SteerLeftStop, StringComparison.OrdinalIgnoreCase))
 		{
-			if (racer.KeySteerInput < 0f) racer.KeySteerInput = 0f;
+			if (racer.KeySteerInput > 0f) racer.KeySteerInput = 0f;
 		}
 		else if (string.Equals(abilityId, AbilityIds.SteerRight, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			racer.KeySteerInput = 1.0f;
+			racer.KeySteerInput = -1.0f;
 		}
 		else if (string.Equals(abilityId, AbilityIds.SteerRightStop, StringComparison.OrdinalIgnoreCase))
 		{
-			if (racer.KeySteerInput > 0f) racer.KeySteerInput = 0f;
+			if (racer.KeySteerInput < 0f) racer.KeySteerInput = 0f;
 		}
 	}
 
