@@ -78,6 +78,7 @@ public class MapScript : IWasmModule
 		public bool HasSteerTarget;
 		public Vector3 SteerTarget;
 		public float TargetHeading;
+		public float KeySteerInput;
 
 		public float BoostTimer;
 		public float DriftTimer;
@@ -547,6 +548,7 @@ public class MapScript : IWasmModule
 			racer.TargetHeading = WrapAngle(racer.HeadingRadians + clampedDiff);
 			racer.SteerTarget = targetPosition;
 			racer.HasSteerTarget = true;
+			racer.KeySteerInput = 0f;
 		}
 		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
 				 string.Equals(order, "hold", StringComparison.OrdinalIgnoreCase))
@@ -611,16 +613,20 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.SteerLeft, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			float turnAmount = racer.DriftTimer > 0f ? 0.35f : 0.25f;
-			racer.TargetHeading = WrapAngle(racer.HeadingRadians - turnAmount);
-			racer.HasSteerTarget = true;
+			racer.KeySteerInput = -1.0f;
+		}
+		else if (string.Equals(abilityId, AbilityIds.SteerLeftStop, StringComparison.OrdinalIgnoreCase))
+		{
+			if (racer.KeySteerInput < 0f) racer.KeySteerInput = 0f;
 		}
 		else if (string.Equals(abilityId, AbilityIds.SteerRight, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			float turnAmount = racer.DriftTimer > 0f ? 0.35f : 0.25f;
-			racer.TargetHeading = WrapAngle(racer.HeadingRadians + turnAmount);
-			racer.HasSteerTarget = true;
+			racer.KeySteerInput = 1.0f;
+		}
+		else if (string.Equals(abilityId, AbilityIds.SteerRightStop, StringComparison.OrdinalIgnoreCase))
+		{
+			if (racer.KeySteerInput > 0f) racer.KeySteerInput = 0f;
 		}
 	}
 
@@ -797,18 +803,27 @@ public class MapScript : IWasmModule
 		}
 		else
 		{
-			if (racer.HasSteerTarget && racer.ReverseTimer <= 0f)
+			if (racer.ReverseTimer <= 0f)
 			{
-				float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
-
-				if (MathF.Abs(yawDiff) < 0.025f)
-				{
-					racer.HasSteerTarget = false;
-				}
-				else
+				if (racer.KeySteerInput != 0f)
 				{
 					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
-					targetTurnRate = Math.Clamp(yawDiff * 4.5f, -maxTurn, maxTurn);
+					targetTurnRate = racer.KeySteerInput * maxTurn;
+					racer.HasSteerTarget = false;
+				}
+				else if (racer.HasSteerTarget)
+				{
+					float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
+
+					if (MathF.Abs(yawDiff) < 0.025f)
+					{
+						racer.HasSteerTarget = false;
+					}
+					else
+					{
+						float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
+						targetTurnRate = Math.Clamp(yawDiff * 4.5f, -maxTurn, maxTurn);
+					}
 				}
 			}
 		}
@@ -1403,6 +1418,7 @@ public class MapScript : IWasmModule
 		racer.DriftTimer = 0f;
 		racer.PendingMiniTurbo = false;
 		racer.HasSteerTarget = false;
+		racer.KeySteerInput = 0f;
 		racer.CurrentTurnVelocity = 0f;
 		_api.CreateFloatingText(reason, racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.25f, 0.25f), 1.2f);
 		if (!racer.IsComputer)
@@ -1423,6 +1439,7 @@ public class MapScript : IWasmModule
 		racer.Speed = 6.0f;
 		racer.ReverseTimer = 0f;
 		racer.HasSteerTarget = false;
+		racer.KeySteerInput = 0f;
 		racer.CurrentTurnVelocity = 0f;
 		_api.TeleportUnit(racer.Unit, racer.Position);
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);

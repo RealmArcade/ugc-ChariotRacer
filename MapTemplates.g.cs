@@ -46,6 +46,8 @@ public static class AbilityIds
 	public const string BrakeReverse = "ability/brake_reverse";
 	public const string SteerLeft = "ability/steer_left";
 	public const string SteerRight = "ability/steer_right";
+	public const string SteerLeftStop = "ability/steer_left_stop";
+	public const string SteerRightStop = "ability/steer_right_stop";
 }
 
 public static class WeaponIds
