@@ -586,7 +586,7 @@ public class MapScript : IWasmModule
 				return;
 			}
 
-			TriggerBoost(racer, 2.2f, "TURBO BOOST!");
+			TriggerBoost(racer, 7.5f, "TURBO BOOST!");
 		}
 		else if (string.Equals(abilityId, AbilityIds.UsePowerup, StringComparison.OrdinalIgnoreCase))
 		{

@@ -994,7 +994,7 @@
       {
         "TemplateID": "ability/turbo_boost",
         "Name": "Turbo Boost",
-        "Description": "[Q] Rocket booster ignition! Surges to top speed for 2.2s, but drastically stiffens steering and makes the chariot harder to control.",
+        "Description": "[Q] Rocket booster ignition! Surges to top speed for 7.5s, but drastically stiffens steering and makes the chariot harder to control.",
         "Role": null,
         "AbilityType": "instant_spell",
         "IconPath": "res://Assets/UI/move_speed.webp",
@@ -1002,7 +1002,7 @@
         "CostGold": 0,
         "CostWood": 0,
         "CostStone": 0,
-        "Cooldown": 6,
+        "Cooldown": 10,
         "TargetRange": 0,
         "VisualEffect": null,
         "ProjectileId": null,
