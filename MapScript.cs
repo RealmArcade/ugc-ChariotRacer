@@ -15,7 +15,7 @@ public class MapScript : IWasmModule
 	private const int MaxProjectiles = 16;
 	private const int NeutralSlotFallback = 23;
 
-	private const float CountdownDurationSeconds = 3.2f;
+	private const float CountdownDurationSeconds = 4.2f;
 	private const float RocketBoostWindowSeconds = 0.6f;
 	private const float BaseMaxSpeed = 18.0f;
 	private const float TurboMaxSpeed = 38.0f;
@@ -210,10 +210,14 @@ public class MapScript : IWasmModule
 		_api.OnUnitSelected += HandleUnitSelected;
 
 		_countdownRemaining = CountdownDurationSeconds;
-		_lastAnnouncedSecond = 4;
+		_lastAnnouncedSecond = 5;
 		_raceStarted = false;
 		_raceEnded = false;
 		_raceElapsed = 0f;
+
+		_api.StartCountdownTimer(CountdownDurationSeconds, "RACE STARTS IN");
+		_api.ShowFeedbackText("GET READY!", new Vector3(1.0f, 0.85f, 0.2f));
+		_api.BroadcastMessage("--- GET READY! ---");
 	}
 
 	public void Update(IGameAPI api, float delta)
@@ -521,13 +525,28 @@ public class MapScript : IWasmModule
 		if (sec >= 1 && sec <= 3 && sec != _lastAnnouncedSecond)
 		{
 			_lastAnnouncedSecond = sec;
-			_api.BroadcastMessage($"Starting in {sec}...");
-			_api.ShowFeedbackText($"{sec}...", new Vector3(1.0f, 0.85f, 0.2f));
+			Vector3 countColor = sec switch
+			{
+				3 => new Vector3(1.0f, 0.2f, 0.2f),
+				2 => new Vector3(1.0f, 0.55f, 0.15f),
+				1 => new Vector3(1.0f, 0.95f, 0.1f),
+				_ => new Vector3(1.0f, 1.0f, 1.0f)
+			};
+
+			_api.BroadcastMessage($"--- [ {sec} ] ---");
+			_api.ShowFeedbackText($"{sec}", countColor);
+
 			for (int i = 0; i < _racerCount; i++)
 			{
-				if (!_racers[i].IsComputer)
+				RacerState r = _racers[i];
+				if (!r.Active || !r.Unit.IsValid) continue;
+
+				_api.CreateFloatingText($"{sec}", r.Position + new Vector3(0f, 3.2f, 0f), countColor, 1.0f);
+				_api.SpawnExpandingGroundRing(r.Position, 3.0f, 9f, 0.35f, countColor);
+
+				if (!r.IsComputer)
 				{
-					_api.PlayPlayerClickSound(_racers[i].PlayerIndex);
+					_api.PlayPlayerClickSound(r.PlayerIndex);
 				}
 			}
 		}
@@ -535,15 +554,20 @@ public class MapScript : IWasmModule
 		if (_countdownRemaining <= 0f)
 		{
 			_raceStarted = true;
-			_api.BroadcastMessage("GO! Race 3 Laps!");
-			_api.ShowFeedbackText("GO!", new Vector3(0.2f, 1.0f, 0.35f));
+			_api.StopCountdownTimer();
+			_api.BroadcastMessage("★ ¡GO! RACE 3 LAPS! ★");
+			_api.ShowFeedbackText("★ GO! ★", new Vector3(0.2f, 1.0f, 0.35f));
 
 			for (int i = 0; i < _racerCount; i++)
 			{
 				RacerState r = _racers[i];
 				if (!r.Active || !r.Unit.IsValid) continue;
 
+				r.Unit.CommandsFrozen = false;
 				r.LapStartTime = _raceElapsed;
+
+				_api.CreateFloatingText("★ GO! ★", r.Position + new Vector3(0f, 3.2f, 0f), new Vector3(0.2f, 1.0f, 0.35f), 1.5f);
+				_api.SpawnExpandingGroundRing(r.Position, 6.0f, 16f, 0.45f, new Vector3(0.2f, 1.0f, 0.35f));
 
 				if (!r.IsComputer)
 				{
@@ -601,6 +625,12 @@ public class MapScript : IWasmModule
 	{
 		RacerState? racer = FindRacerByUnit(unit);
 		if (racer == null || racer.IsComputer) return;
+
+		if (!_raceStarted)
+		{
+			_api.IssueStopOrder(racer.Unit);
+			return;
+		}
 
 		if (string.Equals(order, "move", StringComparison.OrdinalIgnoreCase) ||
 			string.Equals(order, "move_queued", StringComparison.OrdinalIgnoreCase) ||
