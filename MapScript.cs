@@ -356,6 +356,7 @@ public class MapScript : IWasmModule
 			unit.CommandsFrozen = true;
 			unit.Invulnerable = true;
 			unit.HideHealthAndManaBars = true;
+			unit.Speed = 0f;
 			_api.SetUnitLevel(unit, 1);
 			_api.SetUnitFacing(unit, startFacing);
 			_api.SetAbilityState(unit, AbilityIds.UsePowerup, true, false);
@@ -365,7 +366,7 @@ public class MapScript : IWasmModule
 				PlayerId player = _api.GetPlayer(racer.PlayerIndex);
 				player.SelectUnit(unit);
 				player.SetHudElementVisible(HudElement.ResourceBar, false);
-				ApplyRaceCamera(racer.PlayerIndex, unit);
+				ApplyChaseCamera(racer.PlayerIndex, unit);
 				player.SendMessage("CHARIOT RACER: Right-click to steer | [Q] Turbo | [W] Power-Up | [E] Drift | [R] Brake/Recover");
 				player.SendMessage("Tip: Hit [Q] right on GO for a Rocket Start! Chat '-chase' for 3rd person or '-top' for overhead.");
 			}
@@ -387,7 +388,22 @@ public class MapScript : IWasmModule
 		return new Vector3(x, _api.GetTerrainHeight(x, z), z);
 	}
 
-	private void ApplyRaceCamera(int playerIndex, UnitId unit)
+	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
+	{
+		if (!unit.IsValid) return;
+		_api.SetPlayerCameraFollowUnit(
+			playerIndex,
+			unit,
+			distance: 14.0f,
+			heightOffset: 5.5f,
+			pitchDegrees: -18.0f,
+			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
+			alignToUnitFacing: true,
+			smoothing: 3.5f,
+			lockCameraInput: true);
+	}
+
+	private void ApplyTopDownCamera(int playerIndex, UnitId unit)
 	{
 		if (!unit.IsValid) return;
 		_api.SetPlayerCameraFollowUnit(
@@ -399,21 +415,6 @@ public class MapScript : IWasmModule
 			yawOffsetDegrees: 0.0f,
 			alignToUnitFacing: false,
 			smoothing: 7.0f,
-			lockCameraInput: true);
-	}
-
-	private void ApplyHighChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
-	{
-		if (!unit.IsValid) return;
-		_api.SetPlayerCameraFollowUnit(
-			playerIndex,
-			unit,
-			distance: 16.0f,
-			heightOffset: 8.5f,
-			pitchDegrees: -30.0f,
-			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
-			alignToUnitFacing: true,
-			smoothing: 6.0f,
 			lockCameraInput: true);
 	}
 
@@ -518,6 +519,10 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer = 0f;
+				if (!racer.IsComputer)
+				{
+					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+				}
 			}
 
 			float dx = targetPosition.X - racer.Position.X;
@@ -551,6 +556,10 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer = 0f;
+				if (!racer.IsComputer)
+				{
+					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+				}
 			}
 			racer.HasSteerTarget = false;
 			racer.BrakeTimer = 0.6f;
@@ -593,6 +602,10 @@ public class MapScript : IWasmModule
 			racer.Speed = 0f;
 			racer.HasSteerTarget = false;
 			racer.CurrentTurnVelocity = 0f;
+			if (!racer.IsComputer)
+			{
+				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: true);
+			}
 			_api.CreateFloatingText("REVERSE", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.8f, 0.2f), 0.7f);
 		}
 	}
@@ -607,17 +620,17 @@ public class MapScript : IWasmModule
 
 		if (trimmed == "-top" || trimmed == "-iso")
 		{
-			ApplyRaceCamera(playerIndex, racer.Unit);
+			ApplyTopDownCamera(playerIndex, racer.Unit);
 			player.SendMessage("Camera: Elevated Racing View");
 		}
 		else if (trimmed == "-chase")
 		{
-			ApplyHighChaseCamera(playerIndex, racer.Unit);
-			player.SendMessage("Camera: High Chase View");
+			ApplyChaseCamera(playerIndex, racer.Unit);
+			player.SendMessage("Camera: Chase View");
 		}
 		else if (trimmed == "-wide")
 		{
-			_api.SetPlayerCameraFollowUnit(playerIndex, racer.Unit, 18f, 12f, -38f, 0f, true, 4.0f, true);
+			_api.SetPlayerCameraFollowUnit(playerIndex, racer.Unit, 20f, 8f, -22f, 0f, true, 3.0f, true);
 			player.SendMessage("Camera: Wide Chase View");
 		}
 		else if (trimmed == "-stuck")
@@ -682,6 +695,10 @@ public class MapScript : IWasmModule
 			if (racer.ReverseTimer > 0f)
 			{
 				racer.ReverseTimer -= delta;
+				if (racer.ReverseTimer <= 0f && !racer.IsComputer)
+				{
+					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+				}
 			}
 
 			if (racer.SpinOutTimer > 0f)
@@ -865,6 +882,10 @@ public class MapScript : IWasmModule
 				if (racer.ReverseTimer > 0f)
 				{
 					racer.ReverseTimer = 0f;
+					if (!racer.IsComputer)
+					{
+						ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
+					}
 				}
 			}
 		}
@@ -1393,7 +1414,7 @@ public class MapScript : IWasmModule
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
 		if (!racer.IsComputer)
 		{
-			ApplyRaceCamera(racer.PlayerIndex, racer.Unit);
+			ApplyChaseCamera(racer.PlayerIndex, racer.Unit);
 		}
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
 	}
