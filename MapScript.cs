@@ -77,6 +77,7 @@ public class MapScript : IWasmModule
 
 		public bool HasSteerTarget;
 		public Vector3 SteerTarget;
+		public float TargetHeading;
 
 		public float BoostTimer;
 		public float DriftTimer;
@@ -343,6 +344,7 @@ public class MapScript : IWasmModule
 			racer.Unit = unit;
 			racer.Position = unit.Position;
 			racer.HeadingRadians = startFacing;
+			racer.TargetHeading = startFacing;
 			racer.Speed = 0f;
 			racer.Lap = 1;
 			racer.CheckpointStage = 0;
@@ -491,9 +493,28 @@ public class MapScript : IWasmModule
 		if (racer == null || racer.IsComputer) return;
 
 		if (string.Equals(order, "move", StringComparison.OrdinalIgnoreCase) ||
-			string.Equals(order, "attack_move", StringComparison.OrdinalIgnoreCase))
+			string.Equals(order, "move_queued", StringComparison.OrdinalIgnoreCase) ||
+			string.Equals(order, "attack_move", StringComparison.OrdinalIgnoreCase) ||
+			string.Equals(order, "attack_move_queued", StringComparison.OrdinalIgnoreCase))
 		{
-			racer.SteerTarget = targetPosition;
+			float dx = targetPosition.X - racer.Position.X;
+			float dz = targetPosition.Z - racer.Position.Z;
+			float distSq = dx * dx + dz * dz;
+
+			if (distSq < 1.0f) return;
+
+			float forwardX = MathF.Sin(racer.HeadingRadians);
+			float forwardZ = MathF.Cos(racer.HeadingRadians);
+			float forwardDot = dx * forwardX + dz * forwardZ;
+
+			if (racer.Speed > 4.0f && forwardDot < -0.2f)
+			{
+				racer.BrakeTimer = 0.5f;
+				racer.HasSteerTarget = false;
+				return;
+			}
+
+			racer.TargetHeading = MathF.Atan2(dx, dz);
 			racer.HasSteerTarget = true;
 		}
 		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
@@ -697,22 +718,40 @@ public class MapScript : IWasmModule
 	private void UpdateSteerAndThrottle(RacerState racer, float delta)
 	{
 		float targetTurnRate = 0f;
-		if (racer.HasSteerTarget)
-		{
-			float dx = racer.SteerTarget.X - racer.Position.X;
-			float dz = racer.SteerTarget.Z - racer.Position.Z;
-			float distSq = dx * dx + dz * dz;
 
-			if (!racer.IsComputer && distSq < 1.0f)
+		if (racer.IsComputer || racer.Finished)
+		{
+			if (racer.HasSteerTarget)
 			{
-				racer.HasSteerTarget = false;
+				float dx = racer.SteerTarget.X - racer.Position.X;
+				float dz = racer.SteerTarget.Z - racer.Position.Z;
+				float distSq = dx * dx + dz * dz;
+
+				if (distSq > 0.25f)
+				{
+					float targetYaw = MathF.Atan2(dx, dz);
+					float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
+					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
+					targetTurnRate = Math.Clamp(yawDiff * 3.5f, -maxTurn, maxTurn);
+				}
 			}
-			else if (distSq > 0.25f)
+		}
+		else
+		{
+			if (racer.HasSteerTarget)
 			{
-				float targetYaw = MathF.Atan2(dx, dz);
-				float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
-				float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
-				targetTurnRate = Math.Clamp(yawDiff * 3.5f, -maxTurn, maxTurn);
+				float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
+
+				if (MathF.Abs(yawDiff) < 0.035f && MathF.Abs(racer.CurrentTurnVelocity) < 0.3f)
+				{
+					racer.HasSteerTarget = false;
+					racer.CurrentTurnVelocity = 0f;
+				}
+				else
+				{
+					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
+					targetTurnRate = Math.Clamp(yawDiff * 4.0f, -maxTurn, maxTurn);
+				}
 			}
 		}
 
@@ -774,6 +813,9 @@ public class MapScript : IWasmModule
 
 		if (!_api.IsPointPassable(nextX, nextZ, PathingFlags.Ground))
 		{
+			racer.HasSteerTarget = false;
+			racer.CurrentTurnVelocity = 0f;
+
 			bool canSlideX = _api.IsPointPassable(nextX, racer.Position.Z, PathingFlags.Ground);
 			bool canSlideZ = _api.IsPointPassable(racer.Position.X, nextZ, PathingFlags.Ground);
 
@@ -1295,6 +1337,8 @@ public class MapScript : IWasmModule
 		racer.BoostTimer = 0f;
 		racer.DriftTimer = 0f;
 		racer.PendingMiniTurbo = false;
+		racer.HasSteerTarget = false;
+		racer.CurrentTurnVelocity = 0f;
 		_api.CreateFloatingText(reason, racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.25f, 0.25f), 1.2f);
 		if (!racer.IsComputer)
 		{
@@ -1310,8 +1354,10 @@ public class MapScript : IWasmModule
 
 		racer.Position = new Vector3(wp.X, _api.GetTerrainHeight(wp.X, wp.Y), wp.Y);
 		racer.HeadingRadians = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
+		racer.TargetHeading = racer.HeadingRadians;
 		racer.Speed = 6.0f;
 		racer.HasSteerTarget = false;
+		racer.CurrentTurnVelocity = 0f;
 		_api.TeleportUnit(racer.Unit, racer.Position);
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
