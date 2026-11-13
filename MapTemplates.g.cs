@@ -44,6 +44,8 @@ public static class AbilityIds
 	public const string UsePowerup = "ability/use_powerup";
 	public const string DriftHop = "ability/drift_hop";
 	public const string BrakeReverse = "ability/brake_reverse";
+	public const string SteerLeft = "ability/steer_left";
+	public const string SteerRight = "ability/steer_right";
 }
 
 public static class WeaponIds

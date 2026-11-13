@@ -367,7 +367,7 @@ public class MapScript : IWasmModule
 				player.SelectUnit(unit);
 				player.SetHudElementVisible(HudElement.ResourceBar, false);
 				ApplyChaseCamera(racer.PlayerIndex, unit);
-				player.SendMessage("CHARIOT RACER: Right-click to steer | [Q] Turbo | [W] Power-Up | [E] Drift | [R] Brake/Recover");
+				player.SendMessage("CHARIOT RACER: Steer with [A]/[D] or Right-click | [Q] Turbo | [W] Item | [E] Drift | [R] Reverse");
 				player.SendMessage("Tip: Hit [Q] right on GO for a Rocket Start! Chat '-chase' for 3rd person or '-top' for overhead.");
 			}
 		}
@@ -607,6 +607,20 @@ public class MapScript : IWasmModule
 				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: true);
 			}
 			_api.CreateFloatingText("REVERSE", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.8f, 0.2f), 0.7f);
+		}
+		else if (string.Equals(abilityId, AbilityIds.SteerLeft, StringComparison.OrdinalIgnoreCase))
+		{
+			if (!_raceStarted) return;
+			float turnAmount = racer.DriftTimer > 0f ? 0.35f : 0.25f;
+			racer.TargetHeading = WrapAngle(racer.HeadingRadians - turnAmount);
+			racer.HasSteerTarget = true;
+		}
+		else if (string.Equals(abilityId, AbilityIds.SteerRight, StringComparison.OrdinalIgnoreCase))
+		{
+			if (!_raceStarted) return;
+			float turnAmount = racer.DriftTimer > 0f ? 0.35f : 0.25f;
+			racer.TargetHeading = WrapAngle(racer.HeadingRadians + turnAmount);
+			racer.HasSteerTarget = true;
 		}
 	}
 
