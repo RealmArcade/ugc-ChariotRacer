@@ -1011,7 +1011,7 @@
         "AreaOfEffectRadius": 0,
         "Effects": [],
         "GridX": 0,
-        "GridY": 2,
+        "GridY": 0,
         "Hotkey": "Q",
         "Attribution_ImportedFromMap": null
       },
@@ -1035,7 +1035,7 @@
         "AreaOfEffectRadius": 0,
         "Effects": [],
         "GridX": 1,
-        "GridY": 2,
+        "GridY": 0,
         "Hotkey": "W",
         "Attribution_ImportedFromMap": null
       },
@@ -1059,7 +1059,7 @@
         "AreaOfEffectRadius": 0,
         "Effects": [],
         "GridX": 2,
-        "GridY": 2,
+        "GridY": 0,
         "Hotkey": "E",
         "Attribution_ImportedFromMap": null
       },
@@ -1083,7 +1083,7 @@
         "AreaOfEffectRadius": 0,
         "Effects": [],
         "GridX": 3,
-        "GridY": 2,
+        "GridY": 0,
         "Hotkey": "R",
         "Attribution_ImportedFromMap": null
       },

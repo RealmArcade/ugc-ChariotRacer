@@ -364,6 +364,10 @@ public class MapScript : IWasmModule
 			_api.SetUnitLevel(unit, 1);
 			_api.SetUnitFacing(unit, startFacing);
 			_api.SetAbilityState(unit, AbilityIds.UsePowerup, true, false);
+			_api.SetAbilityState(unit, AbilityIds.SteerLeft, false, true);
+			_api.SetAbilityState(unit, AbilityIds.SteerRight, false, true);
+			_api.SetAbilityState(unit, AbilityIds.SteerLeftStop, false, true);
+			_api.SetAbilityState(unit, AbilityIds.SteerRightStop, false, true);
 
 			if (!racer.IsComputer)
 			{
