@@ -85,6 +85,14 @@ public class MapScript : IWasmModule
 
 		public float BoostTimer;
 		public float DriftTimer;
+		public float DriftChargeDuration;
+		public float DriftSparkCooldown;
+		public float DraftingTimer;
+		public float DraftingCooldown;
+		public float StuntWindowTimer;
+		public float TireScrubCooldown;
+		public int PreviousRank = 1;
+		public bool IsInBoostCamera;
 		public float ReverseTimer;
 		public bool PendingMiniTurbo;
 		public float SpinOutTimer;
@@ -226,6 +234,7 @@ public class MapScript : IWasmModule
 
 		UpdateRacers(delta);
 		ResolveKartCollisions();
+		UpdateDrafting(delta);
 		UpdateItemBoxes(delta);
 		UpdateHazards(delta);
 		UpdateProjectiles(delta);
@@ -396,15 +405,15 @@ public class MapScript : IWasmModule
 		return new Vector3(x, _api.GetTerrainHeight(x, z), z);
 	}
 
-	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false)
+	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false, bool highSpeed = false)
 	{
 		if (!unit.IsValid) return;
 		_api.SetPlayerCameraFollowUnit(
 			playerIndex,
 			unit,
-			distance: 12.5f,
-			heightOffset: 4.5f,
-			pitchDegrees: -15.0f,
+			distance: reverseView ? 12.5f : (highSpeed ? 14.8f : 12.2f),
+			heightOffset: reverseView ? 4.5f : (highSpeed ? 4.8f : 4.3f),
+			pitchDegrees: reverseView ? -15.0f : (highSpeed ? -13.0f : -15.0f),
 			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
 			smoothing: 0f,
@@ -600,9 +609,13 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.DriftHop, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			racer.DriftTimer = 1.4f;
+			racer.DriftTimer = 2.4f;
+			racer.DriftChargeDuration = 0f;
+			racer.DriftSparkCooldown = 0.15f;
 			racer.PendingMiniTurbo = true;
-			_api.CreateFloatingText("DRIFT!", racer.Position + new Vector3(0f, 2.1f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 0.7f);
+			racer.StuntWindowTimer = 0.45f;
+			_api.CreateFloatingText("DRIFT HOP!", racer.Position + new Vector3(0f, 2.1f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 0.7f);
+			_api.SpawnExpandingGroundRing(racer.Position, 2.2f, 8f, 0.25f, new Vector3(0.3f, 0.7f, 1.0f));
 		}
 		else if (string.Equals(abilityId, AbilityIds.BrakeReverse, StringComparison.OrdinalIgnoreCase))
 		{
@@ -710,10 +723,51 @@ public class MapScript : IWasmModule
 			if (racer.DriftTimer > 0f)
 			{
 				racer.DriftTimer -= delta;
+				racer.DriftChargeDuration += delta;
+				racer.DriftSparkCooldown -= delta;
+
+				if (racer.DriftSparkCooldown <= 0f)
+				{
+					if (racer.DriftChargeDuration >= 1.5f)
+					{
+						racer.DriftSparkCooldown = 0.12f;
+						_api.SpawnVisualEffect("fireblast", racer.Position, 0.5f);
+					}
+					else if (racer.DriftChargeDuration >= 0.7f)
+					{
+						racer.DriftSparkCooldown = 0.16f;
+						_api.SpawnExpandingGroundRing(racer.Position, 2.0f, 7f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
+					}
+				}
+
 				if (racer.DriftTimer <= 0f && racer.PendingMiniTurbo)
 				{
 					racer.PendingMiniTurbo = false;
-					TriggerBoost(racer, 1.0f, "MINI-TURBO!");
+					if (racer.DriftChargeDuration >= 1.5f)
+					{
+						TriggerBoost(racer, 2.2f, "SUPER MINI-TURBO!!");
+						racer.Speed = MathF.Max(racer.Speed, 35.0f);
+						if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.45f, 0.3f);
+					}
+					else if (racer.DriftChargeDuration >= 0.7f)
+					{
+						TriggerBoost(racer, 1.2f, "MINI-TURBO!");
+						racer.Speed = MathF.Max(racer.Speed, 27.0f);
+					}
+					racer.DriftChargeDuration = 0f;
+				}
+			}
+
+			if (racer.StuntWindowTimer > 0f) racer.StuntWindowTimer -= delta;
+			if (racer.TireScrubCooldown > 0f) racer.TireScrubCooldown -= delta;
+
+			if (!racer.IsComputer && racer.ReverseTimer <= 0f)
+			{
+				bool highSpeed = racer.Speed > 24.0f || racer.BoostTimer > 0f;
+				if (highSpeed != racer.IsInBoostCamera)
+				{
+					racer.IsInBoostCamera = highSpeed;
+					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false, highSpeed: highSpeed);
 				}
 			}
 
@@ -847,6 +901,11 @@ public class MapScript : IWasmModule
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
 			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
+			if (MathF.Abs(racer.CurrentTurnVelocity) > 2.0f && racer.Speed > 14.0f && racer.TireScrubCooldown <= 0f)
+			{
+				racer.TireScrubCooldown = 0.25f;
+				_api.SpawnExpandingGroundRing(racer.Position, 1.5f, 6f, 0.18f, new Vector3(0.7f, 0.7f, 0.7f));
+			}
 		}
 
 		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
@@ -870,7 +929,7 @@ public class MapScript : IWasmModule
 		}
 		else if (racer.DriftTimer > 0f)
 		{
-			targetMaxSpeed = BaseMaxSpeed * 0.92f;
+			targetMaxSpeed = BaseMaxSpeed * 0.96f;
 		}
 
 		if (racer.Finished) targetMaxSpeed = BaseMaxSpeed * 0.6f;
@@ -1003,8 +1062,21 @@ public class MapScript : IWasmModule
 		if (racer.BoostPadCooldown <= 0f &&
 			(_boostPadEastRegion.Contains(racer.Position) || _boostPadWestRegion.Contains(racer.Position)))
 		{
-			racer.BoostPadCooldown = 1.25f;
-			TriggerBoost(racer, 1.5f, "BOOST PAD!");
+			racer.BoostPadCooldown = 1.3f;
+			if (racer.StuntWindowTimer > 0f)
+			{
+				racer.StuntWindowTimer = 0f;
+				TriggerBoost(racer, 2.6f, "PERFECT STUNT BOOST!!");
+				racer.Speed = TurboMaxSpeed;
+				_api.SpawnExpandingGroundRing(racer.Position, 6.0f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
+				if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.4f);
+			}
+			else
+			{
+				TriggerBoost(racer, 1.8f, "BOOST PAD!");
+				racer.Speed = MathF.Max(racer.Speed, 34.0f);
+				_api.SpawnExpandingGroundRing(racer.Position, 4.5f, 14f, 0.35f, new Vector3(1.0f, 0.8f, 0.2f));
+			}
 		}
 
 		if (racer.Finished) return;
@@ -1047,9 +1119,19 @@ public class MapScript : IWasmModule
 				_api.SetUnitLevel(racer.Unit, racer.Lap);
 				if (!racer.IsComputer)
 				{
-					string lapMsg = racer.Lap == TotalLaps ? "FINAL LAP!" : $"LAP {racer.Lap} / {TotalLaps}";
-					_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText(lapMsg, new Vector3(0.3f, 0.95f, 1.0f));
-					_api.GetPlayer(racer.PlayerIndex).SendMessage(lapMsg);
+					if (racer.Lap == TotalLaps)
+					{
+						_api.CreateFloatingText("★ FINAL LAP! FULL THROTTLE! ★", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 2.2f);
+						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
+						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.45f);
+						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText("★ FINAL LAP! ★", new Vector3(1.0f, 0.85f, 0.1f));
+					}
+					else
+					{
+						string lapMsg = $"LAP {racer.Lap} / {TotalLaps}";
+						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText(lapMsg, new Vector3(0.3f, 0.95f, 1.0f));
+						_api.GetPlayer(racer.PlayerIndex).SendMessage(lapMsg);
+					}
 				}
 			}
 		}
@@ -1477,6 +1559,74 @@ public class MapScript : IWasmModule
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
 	}
 
+	private void UpdateDrafting(float delta)
+	{
+		for (int i = 0; i < _racerCount; i++)
+		{
+			RacerState a = _racers[i];
+			if (!a.Active || !a.Unit.IsValid || a.SpinOutTimer > 0f || a.Finished) continue;
+
+			if (a.DraftingCooldown > 0f) a.DraftingCooldown -= delta;
+
+			bool foundDraft = false;
+			float forwardX = MathF.Sin(a.HeadingRadians);
+			float forwardZ = MathF.Cos(a.HeadingRadians);
+
+			for (int j = 0; j < _racerCount; j++)
+			{
+				if (i == j) continue;
+				RacerState b = _racers[j];
+				if (!b.Active || !b.Unit.IsValid || b.Finished) continue;
+
+				float dx = b.Position.X - a.Position.X;
+				float dz = b.Position.Z - a.Position.Z;
+				float distSq = dx * dx + dz * dz;
+
+				if (distSq < 6.25f || distSq > 121.0f) continue;
+
+				float dist = MathF.Sqrt(distSq);
+				float dirX = dx / dist;
+				float dirZ = dz / dist;
+				float dot = forwardX * dirX + forwardZ * dirZ;
+
+				float bForwardX = MathF.Sin(b.HeadingRadians);
+				float bForwardZ = MathF.Cos(b.HeadingRadians);
+				float facingDot = forwardX * bForwardX + forwardZ * bForwardZ;
+
+				if (dot > 0.84f && facingDot > 0.7f && a.Speed > 10.0f)
+				{
+					foundDraft = true;
+					a.DraftingTimer += delta;
+
+					if (!a.IsComputer && ((int)(_raceElapsed * 5.0f) % 2 == 0))
+					{
+						_api.SpawnExpandingGroundRing(a.Position, 2.2f, 8.0f, 0.2f, new Vector3(0.85f, 0.95f, 1.0f));
+					}
+
+					if (a.DraftingTimer >= 1.25f && a.DraftingCooldown <= 0f)
+					{
+						a.DraftingTimer = 0f;
+						a.DraftingCooldown = 5.5f;
+						TriggerBoost(a, 2.0f, "SLIPSTREAM!!");
+						a.Speed = MathF.Max(a.Speed, 35.0f);
+						_api.SpawnVisualEffect("fireblast", a.Position, 1.3f);
+						if (!a.IsComputer)
+						{
+							_api.CreateFloatingText("SLIPSTREAM SLINGSHOT!", a.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.3f, 1.0f, 0.85f), 1.4f);
+							_api.ShakePlayerCamera(a.PlayerIndex, 0.4f, 0.3f);
+						}
+					}
+					break;
+				}
+			}
+
+			if (!foundDraft)
+			{
+				a.DraftingTimer = MathF.Max(0f, a.DraftingTimer - delta * 1.8f);
+			}
+		}
+	}
+
 	private void UpdateRankings()
 	{
 		for (int i = 0; i < _racerCount; i++) _rankedIndices[i] = i;
@@ -1496,9 +1646,43 @@ public class MapScript : IWasmModule
 
 		for (int rank = 0; rank < _racerCount; rank++)
 		{
-			_racers[_rankedIndices[rank]].Rank = rank + 1;
+			RacerState r = _racers[_rankedIndices[rank]];
+			int newRank = rank + 1;
+			if (!r.IsComputer && r.PreviousRank != newRank && _raceStarted && !r.Finished)
+			{
+				if (newRank < r.PreviousRank)
+				{
+					if (newRank == 1)
+					{
+						_api.CreateFloatingText("★ 1ST PLACE - RACE LEADER! ★", r.Position + new Vector3(0f, 2.8f, 0f), new Vector3(1.0f, 0.85f, 0.15f), 1.5f);
+					}
+					else
+					{
+						_api.CreateFloatingText($"▲ OVERTAKE! {GetRankOrdinal(newRank)} Place", r.Position + new Vector3(0f, 2.6f, 0f), new Vector3(0.25f, 1.0f, 0.4f), 1.2f);
+					}
+				}
+				else if (newRank > r.PreviousRank)
+				{
+					_api.CreateFloatingText($"▼ PASSED! {GetRankOrdinal(newRank)} Place", r.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.4f, 0.2f), 1.2f);
+				}
+			}
+			r.Rank = newRank;
+			r.PreviousRank = newRank;
 		}
 	}
+
+	private static string GetRankOrdinal(int rank) => rank switch
+	{
+		1 => "1st",
+		2 => "2nd",
+		3 => "3rd",
+		4 => "4th",
+		5 => "5th",
+		6 => "6th",
+		7 => "7th",
+		8 => "8th",
+		_ => $"{rank}th"
+	};
 
 	private void PublishLeaderboard()
 	{

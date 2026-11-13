@@ -1042,7 +1042,7 @@
       {
         "TemplateID": "ability/drift_hop",
         "Name": "Drift Boost",
-        "Description": "[E] Tightens steering through corners for 1.4s and releases a Mini-Turbo surge.",
+        "Description": "[E] Drift Hop — Hold through corners to charge Blue Mini-Turbo (0.7s) or Orange Super Mini-Turbo (1.5s)! Tap on boost pads for Stunt Boost!",
         "Role": null,
         "AbilityType": "instant_spell",
         "IconPath": "res://Assets/UI/fire_spell.webp",
@@ -1050,7 +1050,7 @@
         "CostGold": 0,
         "CostWood": 0,
         "CostStone": 0,
-        "Cooldown": 3,
+        "Cooldown": 1.5,
         "TargetRange": 0,
         "VisualEffect": null,
         "ProjectileId": null,
