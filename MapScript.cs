@@ -103,6 +103,13 @@ public class MapScript : IWasmModule
 		public float StarVfxCooldown;
 		public float TurboVfxCooldown;
 		public float RocketAttemptElapsed = -1f;
+		public float ItemRouletteTimer;
+		public float ItemRouletteTick;
+		public float OffTrackTimer;
+		public float StationaryTimer;
+		public float LapStartTime;
+		public float BestLapTime = float.MaxValue;
+		public float DustVfxCooldown;
 
 		public PowerUpType HeldItem;
 		public int Lap = 1;
@@ -468,6 +475,42 @@ public class MapScript : IWasmModule
 	{
 		_api.SetLeaderboardVisible("CHARIOT RACER (3 LAPS)", true);
 		PublishLeaderboard();
+
+		_api.AddInstructionsSection(
+			"Controls & Steering",
+			"[b]Steering & Driving:[/b]\n" +
+			"• [b]A / D[/b] — Steer Chariot left / right (or Right-Click on ground to steer)\n" +
+			"• [b]Q[/b] — [b]Turbo Boost[/b] (7.5s high-speed rocket charge, 13s cooldown)\n" +
+			"• [b]W[/b] — [b]Use Item[/b] (Fires held power-up or drops hazard)\n" +
+			"• [b]E[/b] — [b]Drift Hop[/b] (Hold around bends to charge Mini-Turbos)\n" +
+			"• [b]R[/b] — [b]Brake / Reverse[/b] (Stops instantly or backs up out of corners)\n\n" +
+			"[b]Chat Commands:[/b]\n" +
+			"• [b]-chase[/b] — Dynamic Chase Camera\n" +
+			"• [b]-top[/b] — Aerial Elevated Racing Camera\n" +
+			"• [b]-wide[/b] — Cinematic Wide Camera\n" +
+			"• [b]-stuck[/b] — Resets chariot to track center");
+
+		_api.AddInstructionsSection(
+			"Drifting & Mini-Turbos",
+			"Hold [b][E][/b] around corners to charge sparks:\n\n" +
+			"• [b][color=#40c0ff]Tier 1 (0.7s) — Mini-Turbo[/color][/b]: Blue sparks. Releases a 1.2s boost at 27 m/s.\n" +
+			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire. Releases a 2.2s blast at 35 m/s with screen shake!");
+
+		_api.AddInstructionsSection(
+			"Advanced Techniques",
+			"• [b]Rocket Start[/b]: Hit [b][Q][/b] right as the countdown hits 1 / GO! Warning: pressing too early causes an engine burnout stall!\n\n" +
+			"• [b]Slipstream / Drafting[/b]: Tuck in behind a rival's kart for 1.25s to slice the air and trigger a [b]Slipstream Slingshot[/b] at 35 m/s!\n\n" +
+			"• [b]Stunt Boost[/b]: Tap [b][E][/b] right as you enter a glowing boost pad for a [b]Perfect Stunt Launch[/b] at 38 m/s!");
+
+		_api.AddInstructionsSection(
+			"Items & Defense",
+			"Drive through glowing item crystals on the track:\n\n" +
+			"• [b]Turbo Mushroom[/b]: Instant speed burst.\n" +
+			"• [b]Green Shell[/b]: Straight projectile that ricochets off track walls.\n" +
+			"• [b]Red Shell[/b]: Heat-seeking missile locked onto the rival ahead.\n" +
+			"• [b]Spike Trap[/b]: Drops hazard behind you; [b]shields against rear-end ramming[/b] while held!\n" +
+			"• [b]Lightning Shock[/b]: Zaps all rivals, spinning them out.\n" +
+			"• [b]Star Power[/b]: Total invulnerability, smash damage, and maximum speed!");
 	}
 
 	private void UpdateCountdown(float delta)
@@ -480,6 +523,13 @@ public class MapScript : IWasmModule
 			_lastAnnouncedSecond = sec;
 			_api.BroadcastMessage($"Starting in {sec}...");
 			_api.ShowFeedbackText($"{sec}...", new Vector3(1.0f, 0.85f, 0.2f));
+			for (int i = 0; i < _racerCount; i++)
+			{
+				if (!_racers[i].IsComputer)
+				{
+					_api.PlayPlayerClickSound(_racers[i].PlayerIndex);
+				}
+			}
 		}
 
 		if (_countdownRemaining <= 0f)
@@ -493,17 +543,43 @@ public class MapScript : IWasmModule
 				RacerState r = _racers[i];
 				if (!r.Active || !r.Unit.IsValid) continue;
 
+				r.LapStartTime = _raceElapsed;
+
 				if (!r.IsComputer)
 				{
 					_api.GetPlayer(r.PlayerIndex).SelectUnit(r.Unit);
+					_api.PlayPlayerClickSound(r.PlayerIndex);
 				}
 
-				if (r.RocketAttemptElapsed >= 0f && r.RocketAttemptElapsed <= RocketBoostWindowSeconds)
+				if (r.RocketAttemptElapsed >= 0f)
 				{
-					r.BoostTimer = 2.0f;
-					r.Speed = TurboMaxSpeed;
-					_api.CreateFloatingText("ROCKET START!", r.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.4f);
-					_api.SpawnExpandingGroundRing(r.Position, 6f, 15f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
+					if (r.RocketAttemptElapsed <= 0.85f && r.RocketAttemptElapsed >= 0.08f)
+					{
+						r.BoostTimer = 2.5f;
+						r.Speed = TurboMaxSpeed;
+						_api.CreateFloatingText("★ PERFECT ROCKET START! ★", r.Position + new Vector3(0f, 2.7f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 1.6f);
+						_api.SpawnExpandingGroundRing(r.Position, 7f, 18f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
+						_api.SpawnExpandingBurstSphere(r.Position, 4.0f, 14f, 0.4f, new Vector3(1.0f, 0.7f, 0.1f));
+						_api.TriggerMeshImpulse(r.Unit, 1.4f, 0.35f, 14.0f);
+						if (!r.IsComputer)
+						{
+							_api.ShakePlayerCamera(r.PlayerIndex, 0.7f, 0.4f);
+							_api.PlayPlayerClickSound(r.PlayerIndex);
+						}
+					}
+					else if (r.RocketAttemptElapsed > 1.1f)
+					{
+						r.SpinOutTimer = 0.95f;
+						r.Speed = 0f;
+						_api.CreateFloatingText("⚠ BURNOUT STALL!", r.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.3f, 0.2f), 1.4f);
+						_api.SpawnVisualEffect("fireblast", r.Position, 0.7f);
+						_api.TriggerMeshImpulse(r.Unit, 1.0f, 0.4f, 20.0f);
+						if (!r.IsComputer)
+						{
+							_api.PlayPlayerWarningSound(r.PlayerIndex);
+							_api.ShakePlayerCamera(r.PlayerIndex, 0.5f, 0.3f);
+						}
+					}
 				}
 			}
 		}
@@ -594,8 +670,10 @@ public class MapScript : IWasmModule
 		{
 			if (!_raceStarted)
 			{
-				racer.RocketAttemptElapsed = CountdownDurationSeconds - _countdownRemaining;
+				racer.RocketAttemptElapsed = _countdownRemaining;
 				_api.CreateFloatingText("REV UP!", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.75f, 0.2f), 0.7f);
+				_api.SpawnExpandingGroundRing(racer.Position, 1.8f, 5.0f, 0.2f, new Vector3(1.0f, 0.7f, 0.2f));
+				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
 				return;
 			}
 
@@ -697,6 +775,64 @@ public class MapScript : IWasmModule
 
 			if (racer.BoostPadCooldown > 0f) racer.BoostPadCooldown -= delta;
 			if (racer.ShockedTimer > 0f) racer.ShockedTimer -= delta;
+
+			if (racer.ItemRouletteTimer > 0f)
+			{
+				racer.ItemRouletteTimer -= delta;
+				racer.ItemRouletteTick -= delta;
+				if (racer.ItemRouletteTick <= 0f)
+				{
+					racer.ItemRouletteTick = 0.16f;
+					if (!racer.IsComputer)
+					{
+						_api.PlayPlayerClickSound(racer.PlayerIndex);
+					}
+				}
+
+				if (racer.ItemRouletteTimer <= 0f)
+				{
+					GrantRandomPowerUp(racer);
+				}
+			}
+
+			bool isOffroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
+			if (isOffroad && racer.Speed > 4.0f)
+			{
+				racer.DustVfxCooldown -= delta;
+				if (racer.DustVfxCooldown <= 0f)
+				{
+					racer.DustVfxCooldown = 0.22f;
+					_api.SpawnExpandingGroundRing(racer.Position, 1.4f, 4.5f, 0.18f, new Vector3(0.55f, 0.45f, 0.3f));
+				}
+			}
+
+			if (isOffroad && !racer.Finished)
+			{
+				racer.OffTrackTimer += delta;
+				if (racer.OffTrackTimer > 4.5f)
+				{
+					racer.OffTrackTimer = 0f;
+					RecoverRacerToTrack(racer);
+				}
+			}
+			else
+			{
+				racer.OffTrackTimer = 0f;
+			}
+
+			if (_raceStarted && !racer.Finished && racer.Speed < 1.2f && racer.SpinOutTimer <= 0f && racer.ReverseTimer <= 0f)
+			{
+				racer.StationaryTimer += delta;
+				if (racer.StationaryTimer > 5.5f)
+				{
+					racer.StationaryTimer = 0f;
+					RecoverRacerToTrack(racer);
+				}
+			}
+			else
+			{
+				racer.StationaryTimer = 0f;
+			}
 
 			if (racer.StarTimer > 0f)
 			{
@@ -822,22 +958,46 @@ public class MapScript : IWasmModule
 		racer.SteerTarget = new Vector3(aim.X, racer.Position.Y, aim.Y);
 		racer.HasSteerTarget = true;
 
+		if (racer.DriftTimer <= 0f && (racer.AiWaypointIndex == 2 || racer.AiWaypointIndex == 3 || racer.AiWaypointIndex == 10 || racer.AiWaypointIndex == 11))
+		{
+			racer.DriftTimer = 1.5f;
+			racer.DriftChargeDuration = 0f;
+			racer.DriftSparkCooldown = 0.16f;
+			racer.PendingMiniTurbo = true;
+			_api.SpawnExpandingGroundRing(racer.Position, 2.0f, 7f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
+		}
+
 		if (racer.Finished) return;
 
 		if (racer.AiTurboCooldown > 0f) racer.AiTurboCooldown -= delta;
 
 		racer.AiDecisionTimer -= delta;
 		if (racer.AiDecisionTimer > 0f) return;
-		racer.AiDecisionTimer = _api.RandomFloat(0.6f, 1.4f);
+		racer.AiDecisionTimer = _api.RandomFloat(0.6f, 1.3f);
 
 		if (racer.HeldItem != PowerUpType.None)
 		{
-			ActivateHeldPowerUp(racer);
+			if (racer.HeldItem == PowerUpType.RedShell)
+			{
+				if (racer.Rank > 1) ActivateHeldPowerUp(racer);
+			}
+			else if (racer.HeldItem == PowerUpType.SpikeTrap)
+			{
+				if (racer.Rank <= 3) ActivateHeldPowerUp(racer);
+			}
+			else
+			{
+				ActivateHeldPowerUp(racer);
+			}
 		}
-		else if (racer.AiTurboCooldown <= 0f && _api.RandomInt(0, 3) == 0)
+		else if (racer.AiTurboCooldown <= 0f)
 		{
-			TriggerBoost(racer, 1.6f, "AI TURBO");
-			racer.AiTurboCooldown = 7.0f;
+			bool trailing = racer.Rank >= 3;
+			if (_api.RandomInt(0, trailing ? 1 : 4) == 0)
+			{
+				TriggerBoost(racer, trailing ? 2.2f : 1.6f, "AI TURBO");
+				racer.AiTurboCooldown = trailing ? 5.5f : 8.5f;
+			}
 		}
 	}
 
@@ -963,6 +1123,17 @@ public class MapScript : IWasmModule
 			racer.HasSteerTarget = false;
 			racer.CurrentTurnVelocity = 0f;
 
+			if (racer.Speed > 10.0f)
+			{
+				_api.TriggerMeshImpulse(racer.Unit, 1.25f, 0.3f, 16.0f);
+				_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 7.0f, 0.22f, new Vector3(1.0f, 0.45f, 0.2f));
+				if (!racer.IsComputer)
+				{
+					_api.PlayPlayerWarningSound(racer.PlayerIndex);
+					_api.ShakePlayerCamera(racer.PlayerIndex, 0.5f, 0.25f);
+				}
+			}
+
 			bool canSlideX = _api.IsPointPassable(nextX, racer.Position.Z, PathingFlags.Ground);
 			bool canSlideZ = _api.IsPointPassable(racer.Position.X, nextZ, PathingFlags.Ground);
 
@@ -1040,6 +1211,45 @@ public class MapScript : IWasmModule
 				{
 					SpinOutRacer(a, "STAR SMASH!");
 				}
+				else
+				{
+					float aForwardX = MathF.Sin(a.HeadingRadians);
+					float aForwardZ = MathF.Cos(a.HeadingRadians);
+					float bBehindA = -(nx * aForwardX + nz * aForwardZ);
+
+					if (bBehindA > 0.55f && b.Speed > 7.0f)
+					{
+						if ((a.HeldItem == PowerUpType.SpikeTrap || a.HeldItem == PowerUpType.GreenShell) && a.StarTimer <= 0f)
+						{
+							a.HeldItem = PowerUpType.None;
+							_api.SetAbilityState(a.Unit, AbilityIds.UsePowerup, true, false);
+							_api.CreateFloatingText("SHIELD BLOCKED!", a.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
+							_api.SpawnExpandingBurstSphere(a.Position, 3.0f, 10f, 0.3f, new Vector3(0.2f, 1.0f, 0.4f));
+							_api.TriggerMeshImpulse(a.Unit, 1.0f, 0.25f, 14.0f);
+							SpinOutRacer(b, "BLOCKED BY SHIELD!");
+						}
+					}
+					else if (bBehindA < -0.55f && a.Speed > 7.0f)
+					{
+						if ((b.HeldItem == PowerUpType.SpikeTrap || b.HeldItem == PowerUpType.GreenShell) && b.StarTimer <= 0f)
+						{
+							b.HeldItem = PowerUpType.None;
+							_api.SetAbilityState(b.Unit, AbilityIds.UsePowerup, true, false);
+							_api.CreateFloatingText("SHIELD BLOCKED!", b.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
+							_api.SpawnExpandingBurstSphere(b.Position, 3.0f, 10f, 0.3f, new Vector3(0.2f, 1.0f, 0.4f));
+							_api.TriggerMeshImpulse(b.Unit, 1.0f, 0.25f, 14.0f);
+							SpinOutRacer(a, "BLOCKED BY SHIELD!");
+						}
+					}
+				}
+
+				if (a.Speed > 8.0f || b.Speed > 8.0f)
+				{
+					_api.TriggerMeshImpulse(a.Unit, 0.6f, 0.2f, 14.0f);
+					_api.TriggerMeshImpulse(b.Unit, 0.6f, 0.2f, 14.0f);
+					if (!a.IsComputer) _api.PlayPlayerClickSound(a.PlayerIndex);
+					if (!b.IsComputer) _api.PlayPlayerClickSound(b.PlayerIndex);
+				}
 
 				TryNudgeRacer(a, -nx * overlap, -nz * overlap);
 				TryNudgeRacer(b, nx * overlap, nz * overlap);
@@ -1098,6 +1308,13 @@ public class MapScript : IWasmModule
 			racer.CheckpointStage = 0;
 			racer.Lap++;
 
+			float lapDuration = _raceElapsed - racer.LapStartTime;
+			racer.LapStartTime = _raceElapsed;
+			if (lapDuration < racer.BestLapTime)
+			{
+				racer.BestLapTime = lapDuration;
+			}
+
 			if (racer.Lap > TotalLaps)
 			{
 				racer.Finished = true;
@@ -1105,8 +1322,13 @@ public class MapScript : IWasmModule
 				_finishedCount++;
 				racer.FinishOrder = _finishedCount;
 
-				_api.BroadcastMessage($"{racer.ColoredName} finished in position #{racer.FinishOrder} ({racer.FinishTime:F1}s)!");
+				_api.BroadcastMessage($"{racer.ColoredName} finished in position #{racer.FinishOrder} (Total: {racer.FinishTime:F1}s | Best: {racer.BestLapTime:F1}s)!");
 				_api.CreateFloatingText($"FINISH #{racer.FinishOrder}!", racer.Position + new Vector3(0f, 3.0f, 0f), new Vector3(1.0f, 0.9f, 0.2f), 2.5f);
+				if (!racer.IsComputer)
+				{
+					_api.PlayPlayerClickSound(racer.PlayerIndex);
+					_api.ShowPlayerFeedbackText(racer.PlayerIndex, $"FINISH #{racer.FinishOrder} ({racer.FinishTime:F1}s)", new Vector3(1.0f, 0.85f, 0.15f));
+				}
 
 				if (racer.FinishOrder == 1)
 				{
@@ -1119,16 +1341,17 @@ public class MapScript : IWasmModule
 				_api.SetUnitLevel(racer.Unit, racer.Lap);
 				if (!racer.IsComputer)
 				{
+					_api.PlayPlayerClickSound(racer.PlayerIndex);
 					if (racer.Lap == TotalLaps)
 					{
 						_api.CreateFloatingText("★ FINAL LAP! FULL THROTTLE! ★", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 2.2f);
 						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
 						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.45f);
-						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText("★ FINAL LAP! ★", new Vector3(1.0f, 0.85f, 0.1f));
+						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText($"★ FINAL LAP! ({lapDuration:F1}s) ★", new Vector3(1.0f, 0.85f, 0.1f));
 					}
 					else
 					{
-						string lapMsg = $"LAP {racer.Lap} / {TotalLaps}";
+						string lapMsg = $"LAP {racer.Lap} / {TotalLaps} ({lapDuration:F1}s)";
 						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText(lapMsg, new Vector3(0.3f, 0.95f, 1.0f));
 						_api.GetPlayer(racer.PlayerIndex).SendMessage(lapMsg);
 					}
@@ -1201,11 +1424,18 @@ public class MapScript : IWasmModule
 				_api.DestroyUnit(box.Unit, false, false);
 				box.Unit = UnitId.Invalid;
 				box.RespawnTimer = 6.0f;
-				_api.SpawnExpandingBurstSphere(box.Position, 3.0f, 12f, 0.35f, new Vector3(1.0f, 0.85f, 0.2f));
+				_api.SpawnExpandingBurstSphere(box.Position, 3.2f, 13f, 0.35f, new Vector3(1.0f, 0.85f, 0.2f));
+				_api.TriggerMeshImpulse(racer.Unit, 0.85f, 0.2f, 14.0f);
+				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
 
-				if (racer.HeldItem == PowerUpType.None)
+				if (racer.HeldItem == PowerUpType.None && racer.ItemRouletteTimer <= 0f)
 				{
-					GrantRandomPowerUp(racer);
+					racer.ItemRouletteTimer = 1.15f;
+					racer.ItemRouletteTick = 0.16f;
+					if (!racer.IsComputer)
+					{
+						_api.CreateFloatingText("? ROLLING... ?", racer.Position + new Vector3(0f, 2.4f, 0f), new Vector3(0.9f, 0.9f, 0.9f), 0.7f);
+					}
 				}
 				break;
 			}
@@ -1242,6 +1472,7 @@ public class MapScript : IWasmModule
 
 		if (!racer.IsComputer)
 		{
+			_api.PlayPlayerClickSound(racer.PlayerIndex);
 			_api.GetPlayer(racer.PlayerIndex).SendMessage($"Item collected: [{label}] — Press [W] to use!");
 		}
 	}
@@ -1530,8 +1761,10 @@ public class MapScript : IWasmModule
 		racer.KeySteerInput = 0f;
 		racer.CurrentTurnVelocity = 0f;
 		_api.CreateFloatingText(reason, racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.25f, 0.25f), 1.2f);
+		_api.TriggerMeshImpulse(racer.Unit, 1.4f, 0.4f, 18.0f);
 		if (!racer.IsComputer)
 		{
+			_api.PlayPlayerWarningSound(racer.PlayerIndex);
 			_api.ShakePlayerCamera(racer.PlayerIndex, 0.7f, 0.35f);
 		}
 	}
@@ -1552,9 +1785,12 @@ public class MapScript : IWasmModule
 		racer.CurrentTurnVelocity = 0f;
 		_api.TeleportUnit(racer.Unit, racer.Position);
 		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
+		_api.SpawnExpandingBurstSphere(racer.Position, 3.5f, 12f, 0.35f, new Vector3(0.3f, 0.8f, 1.0f));
+		_api.TriggerMeshImpulse(racer.Unit, 1.0f, 0.3f, 12.0f);
 		if (!racer.IsComputer)
 		{
 			ApplyChaseCamera(racer.PlayerIndex, racer.Unit);
+			_api.PlayPlayerClickSound(racer.PlayerIndex);
 		}
 		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
 	}
@@ -1690,8 +1926,11 @@ public class MapScript : IWasmModule
 		{
 			RacerState racer = _racers[_rankedIndices[rank]];
 			string lapText = racer.Finished ? $"FIN ({racer.FinishTime:F1}s)" : $"Lap {racer.Lap}/{TotalLaps}";
-			string itemText = racer.HeldItem == PowerUpType.None ? string.Empty : $" | [{FormatPowerUpName(racer.HeldItem)}]";
-			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{itemText}");
+			string speedText = !racer.IsComputer && !racer.Finished ? $" [{(int)(racer.Speed * 3.6f)} km/h]" : string.Empty;
+			string itemText = racer.HeldItem == PowerUpType.None
+				? (racer.ItemRouletteTimer > 0f ? " | [?]" : string.Empty)
+				: $" | [{FormatPowerUpName(racer.HeldItem)}]";
+			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{speedText}{itemText}");
 		}
 	}
 
@@ -1700,14 +1939,16 @@ public class MapScript : IWasmModule
 		if (_raceEnded) return;
 		_raceEnded = true;
 
-		_api.SetSummaryTableHeaders("Racer", "Rank", "Lap", "Status");
+		_api.SetSummaryTableHeaders("Racer", "Rank", "Total Time", "Best Lap", "Status");
 		for (int rank = 0; rank < _racerCount; rank++)
 		{
 			RacerState racer = _racers[_rankedIndices[rank]];
-			string status = racer.Finished ? $"{racer.FinishTime:F1}s" : $"Lap {racer.Lap}/{TotalLaps}";
-			_api.SetSummaryTableRow(racer.ColoredName, $"#{rank + 1}", $"{Math.Min(racer.Lap, TotalLaps)}/{TotalLaps}", status);
+			string totalTime = racer.Finished ? $"{racer.FinishTime:F1}s" : $"DNF (Lap {Math.Min(racer.Lap, TotalLaps)})";
+			string bestLap = racer.BestLapTime < 999f ? $"{racer.BestLapTime:F1}s" : "--";
+			string status = rank == 0 ? "★ WINNER ★" : $"Finished #{rank + 1}";
+			_api.SetSummaryTableRow(racer.ColoredName, $"#{rank + 1}", totalTime, bestLap, status);
 		}
-		_api.ShowSummaryTable("Chariot Racer Results", true);
+		_api.ShowSummaryTable("Chariot Racer - Grand Prix Results", true);
 
 		if (_winnerRacerIndex < 0) return;
 
