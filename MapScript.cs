@@ -398,7 +398,7 @@ public class MapScript : IWasmModule
 			pitchDegrees: -18.0f,
 			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 0.0f,
+			smoothing: 5.0f,
 			lockCameraInput: true);
 	}
 
@@ -510,11 +510,12 @@ public class MapScript : IWasmModule
 
 			if (distSq < 1.0f) return;
 
-			float desiredHeading = MathF.Atan2(dx, dz);
-			float angleDiff = WrapAngle(desiredHeading - racer.HeadingRadians);
+			float forwardX = MathF.Sin(racer.HeadingRadians);
+			float forwardZ = MathF.Cos(racer.HeadingRadians);
+			float forwardDot = dx * forwardX + dz * forwardZ;
 
-			// If the player clicks behind the vehicle (rear hemisphere > 90 degrees), do not steer backwards.
-			if (MathF.Abs(angleDiff) > MathF.PI * 0.5f)
+			// If the player clicks behind the chariot (rear hemisphere), do not steer backwards.
+			if (forwardDot < -1.0f)
 			{
 				if (racer.Speed > 4.0f)
 				{
@@ -523,8 +524,7 @@ public class MapScript : IWasmModule
 				return;
 			}
 
-			// Point directly towards the clicked point
-			racer.TargetHeading = desiredHeading;
+			racer.SteerTarget = targetPosition;
 			racer.HasSteerTarget = true;
 		}
 		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
@@ -759,22 +759,31 @@ public class MapScript : IWasmModule
 		{
 			if (racer.HasSteerTarget && racer.ReverseTimer <= 0f)
 			{
-				float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
+				float dx = racer.SteerTarget.X - racer.Position.X;
+				float dz = racer.SteerTarget.Z - racer.Position.Z;
+				float distSq = dx * dx + dz * dz;
 
-				if (MathF.Abs(yawDiff) < 0.035f && MathF.Abs(racer.CurrentTurnVelocity) < 0.3f)
+				float forwardX = MathF.Sin(racer.HeadingRadians);
+				float forwardZ = MathF.Cos(racer.HeadingRadians);
+				float forwardDot = dx * forwardX + dz * forwardZ;
+
+				// If target has been reached or passed, release steering target and smoothly continue forward
+				if (forwardDot <= 0.8f || distSq < 3.0f)
 				{
 					racer.HasSteerTarget = false;
 					racer.CurrentTurnVelocity = 0f;
 				}
 				else
 				{
+					float targetYaw = MathF.Atan2(dx, dz);
+					float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
 					float maxTurn = racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate;
 					targetTurnRate = Math.Clamp(yawDiff * 4.0f, -maxTurn, maxTurn);
 				}
 			}
 		}
 
-		float turnAccel = racer.DriftTimer > 0f ? 16.0f : 10.0f;
+		float turnAccel = racer.DriftTimer > 0f ? 16.0f : 12.0f;
 		racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, turnAccel * delta);
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
