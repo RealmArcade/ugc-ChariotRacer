@@ -395,12 +395,12 @@ public class MapScript : IWasmModule
 		_api.SetPlayerCameraFollowUnit(
 			playerIndex,
 			unit,
-			distance: 14.0f,
-			heightOffset: 5.5f,
-			pitchDegrees: -18.0f,
+			distance: 13.0f,
+			heightOffset: 4.8f,
+			pitchDegrees: -16.0f,
 			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 3.5f,
+			smoothing: 8.5f,
 			lockCameraInput: true);
 	}
 
@@ -828,7 +828,7 @@ public class MapScript : IWasmModule
 			}
 		}
 
-		float turnAccel = racer.DriftTimer > 0f ? 18.0f : 14.0f;
+		float turnAccel = targetTurnRate == 0f ? 34.0f : (racer.DriftTimer > 0f ? 20.0f : 16.0f);
 		racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, turnAccel * delta);
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
