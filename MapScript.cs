@@ -24,8 +24,8 @@ public class MapScript : IWasmModule
 	private const float AccelerationRate = 18.0f;
 	private const float BrakeDecelerationRate = 34.0f;
 	private const float CoastDecelerationRate = 6.0f;
-	private const float BaseTurnRate = 3.2f;
-	private const float DriftTurnRate = 4.8f;
+	private const float BaseTurnRate = 2.6f;
+	private const float DriftTurnRate = 3.6f;
 	private const float TrackHalfWidth = 12.2f;
 	private const float KartRadius = 1.15f;
 	private const float LeaderboardIntervalSeconds = 0.3f;
@@ -395,12 +395,12 @@ public class MapScript : IWasmModule
 		_api.SetPlayerCameraFollowUnit(
 			playerIndex,
 			unit,
-			distance: 13.0f,
-			heightOffset: 4.8f,
-			pitchDegrees: -16.0f,
+			distance: 12.5f,
+			heightOffset: 4.5f,
+			pitchDegrees: -15.0f,
 			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
 			alignToUnitFacing: true,
-			smoothing: 8.5f,
+			smoothing: 0f,
 			lockCameraInput: true);
 	}
 
@@ -828,8 +828,7 @@ public class MapScript : IWasmModule
 			}
 		}
 
-		float turnAccel = targetTurnRate == 0f ? 34.0f : (racer.DriftTimer > 0f ? 20.0f : 16.0f);
-		racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, turnAccel * delta);
+		racer.CurrentTurnVelocity = targetTurnRate;
 		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
 		{
 			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
