@@ -73,7 +73,9 @@ public class MapScript : IWasmModule
 		public UnitId Unit = UnitId.Invalid;
 
 		public Vector3 Position;
+		public Vector3 StartPosition;
 		public float HeadingRadians;
+		public float StartHeading;
 		public float Speed;
 		public float VisualSpinOffset;
 		public float CurrentTurnVelocity;
@@ -347,7 +349,9 @@ public class MapScript : IWasmModule
 
 			racer.Unit = unit;
 			racer.Position = unit.Position;
+			racer.StartPosition = racer.Position;
 			racer.HeadingRadians = startFacing;
+			racer.StartHeading = startFacing;
 			racer.TargetHeading = startFacing;
 			racer.Speed = 0f;
 			racer.Lap = 1;
@@ -501,9 +505,31 @@ public class MapScript : IWasmModule
 		_countdownRemaining -= delta;
 		int sec = (int)MathF.Ceiling(_countdownRemaining);
 
+		for (int i = 0; i < _racerCount; i++)
+		{
+			RacerState r = _racers[i];
+			if (!r.Active || !r.Unit.IsValid) continue;
+
+			r.Position = r.StartPosition;
+			r.HeadingRadians = r.StartHeading;
+			r.TargetHeading = r.StartHeading;
+			r.Speed = 0f;
+			r.BoostTimer = 0f;
+			r.CurrentTurnVelocity = 0f;
+			r.HasSteerTarget = false;
+			r.KeySteerInput = 0f;
+			r.Unit.Speed = 0f;
+			_api.SetUnitCommandsFrozen(r.Unit, true);
+			_api.IssueStopOrder(r.Unit);
+			_api.TeleportUnit(r.Unit, r.StartPosition);
+			_api.SetUnitFacing(r.Unit, r.StartHeading);
+			_api.SetUnitAnimation(r.Unit, "Idle");
+		}
+
 		if (sec >= 1 && sec <= 3 && sec != _lastAnnouncedSecond)
 		{
 			_lastAnnouncedSecond = sec;
+			_api.SetCountdownTimerLabel($"RACE STARTS IN: {sec}s");
 			Vector3 countColor = sec switch
 			{
 				3 => new Vector3(1.0f, 0.2f, 0.2f),
@@ -542,7 +568,9 @@ public class MapScript : IWasmModule
 				RacerState r = _racers[i];
 				if (!r.Active || !r.Unit.IsValid) continue;
 
+				_api.SetUnitCommandsFrozen(r.Unit, false);
 				r.Unit.CommandsFrozen = false;
+				r.Unit.Speed = BaseMaxSpeed;
 				r.LapStartTime = _raceElapsed;
 
 				_api.CreateFloatingText("★ GO! ★", r.Position + new Vector3(0f, 3.2f, 0f), new Vector3(0.2f, 1.0f, 0.35f), 1.5f);
@@ -607,7 +635,14 @@ public class MapScript : IWasmModule
 
 		if (!_raceStarted)
 		{
+			racer.Position = racer.StartPosition;
+			racer.HeadingRadians = racer.StartHeading;
+			racer.TargetHeading = racer.StartHeading;
+			racer.Speed = 0f;
+			racer.Unit.Speed = 0f;
+			_api.SetUnitCommandsFrozen(racer.Unit, true);
 			_api.IssueStopOrder(racer.Unit);
+			_api.TeleportUnit(racer.Unit, racer.StartPosition);
 			return;
 		}
 
