@@ -315,27 +315,6 @@ public class MapScript : IWasmModule
 			_racerCount++;
 		}
 
-		if (_racerCount == 1)
-		{
-			int desiredAiCount = 3;
-			for (int candidate = 0; candidate < EcsSharedMemory.MAX_PLAYERS && desiredAiCount > 0; candidate++)
-			{
-				if (IsPlayerSeated(candidate)) continue;
-				if (_api.AddComputerPlayer(candidate, $"Chariot AI {candidate}"))
-				{
-					PlayerId ai = _api.GetPlayer(candidate);
-					RacerState racer = _racers[_racerCount];
-					racer.Active = true;
-					racer.PlayerIndex = candidate;
-					racer.IsComputer = true;
-					racer.DisplayName = ai.Name;
-					racer.ColoredName = ai.ColoredName;
-					_racerCount++;
-					desiredAiCount--;
-				}
-			}
-		}
-
 		for (int slot = EcsSharedMemory.MAX_PLAYERS - 1; slot >= 0; slot--)
 		{
 			if (!IsPlayerSeated(slot))
@@ -1477,7 +1456,11 @@ public class MapScript : IWasmModule
 		int roll = _api.RandomInt(0, 99);
 		PowerUpType item;
 
-		if (racer.Rank <= 1)
+		if (_racerCount == 1)
+		{
+			item = roll < 65 ? PowerUpType.TurboMushroom : roll < 85 ? PowerUpType.StarPower : PowerUpType.GreenShell;
+		}
+		else if (racer.Rank <= 1)
 		{
 			item = roll < 40 ? PowerUpType.SpikeTrap : roll < 75 ? PowerUpType.GreenShell : PowerUpType.TurboMushroom;
 		}
