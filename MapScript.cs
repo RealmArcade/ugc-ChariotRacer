@@ -41,7 +41,9 @@ public class MapScript : IWasmModule
 		RedShell = 3,
 		SpikeTrap = 4,
 		LightningBolt = 5,
-		StarPower = 6
+		StarPower = 6,
+		BlueShell = 7,
+		SuperHorn = 8
 	}
 
 	private struct TrackRegion
@@ -114,6 +116,7 @@ public class MapScript : IWasmModule
 		public float DustVfxCooldown;
 
 		public PowerUpType HeldItem;
+		public int Coins;
 		public int Lap = 1;
 		public int CheckpointStage;
 		public float RaceScore;
@@ -154,11 +157,22 @@ public class MapScript : IWasmModule
 		public float Speed;
 		public int OwnerPlayerIndex;
 		public bool IsHoming;
+		public bool IsBlueShell;
+		public float WarningTimer;
 		public int BouncesRemaining;
 		public float GraceTimer;
 		public float RemainingLifetime;
 	}
 
+	private struct CoinSlot
+	{
+		public Vector3 Position;
+		public float RespawnTimer;
+		public float PulseCooldown;
+	}
+
+	private const int CoinCount = 12;
+	private readonly CoinSlot[] _coins = new CoinSlot[CoinCount];
 	private readonly RacerState[] _racers = new RacerState[MaxRacers];
 	private readonly int[] _rankedIndices = new int[MaxRacers];
 	private readonly ItemBoxSlot[] _itemBoxes = new ItemBoxSlot[ItemBoxCount];
@@ -181,6 +195,7 @@ public class MapScript : IWasmModule
 	private int _lastAnnouncedSecond = -1;
 	private bool _raceStarted;
 	private bool _raceEnded;
+	private bool _finalLapTriggered;
 	private float _raceElapsed;
 	private float _leaderboardRefreshTimer;
 	private float _endGameTimer = -1f;
@@ -203,7 +218,12 @@ public class MapScript : IWasmModule
 		EnsureParticipants();
 		SpawnRacers();
 		SpawnItemBoxes();
+		InitCoins();
 		SetupInitialHudAndLeaderboard();
+
+		_api.SetWeather("clear");
+		_api.SetTimeOfDay(14.0f);
+		_finalLapTriggered = false;
 
 		_api.OnUnitOrdered += HandleUnitOrdered;
 		_api.OnSpellCast += HandleSpellCast;
@@ -248,6 +268,7 @@ public class MapScript : IWasmModule
 		UpdateRacers(delta);
 		ResolveKartCollisions();
 		UpdateDrafting(delta);
+		UpdateCoins(delta);
 		UpdateItemBoxes(delta);
 		UpdateHazards(delta);
 		UpdateProjectiles(delta);
@@ -354,6 +375,7 @@ public class MapScript : IWasmModule
 			racer.StartHeading = startFacing;
 			racer.TargetHeading = startFacing;
 			racer.Speed = 0f;
+			racer.Coins = 0;
 			racer.Lap = 1;
 			racer.CheckpointStage = 0;
 			racer.Rank = i + 1;
@@ -458,6 +480,37 @@ public class MapScript : IWasmModule
 		};
 	}
 
+	private void InitCoins()
+	{
+		Vector2[] coinLocations =
+		[
+			new Vector2(18f, -48f),
+			new Vector2(-18f, -48f),
+			new Vector2(50f, -45f),
+			new Vector2(75f, -30f),
+			new Vector2(86f, 0f),
+			new Vector2(75f, 30f),
+			new Vector2(18f, 48f),
+			new Vector2(-18f, 48f),
+			new Vector2(-50f, 45f),
+			new Vector2(-75f, 30f),
+			new Vector2(-86f, 0f),
+			new Vector2(-75f, -30f)
+		];
+
+		for (int i = 0; i < CoinCount; i++)
+		{
+			Vector2 loc = coinLocations[i];
+			float y = _api.GetTerrainHeight(loc.X, loc.Y);
+			_coins[i] = new CoinSlot
+			{
+				Position = new Vector3(loc.X, y, loc.Y),
+				RespawnTimer = 0f,
+				PulseCooldown = (i % 3) * 0.45f
+			};
+		}
+	}
+
 	private void SetupInitialHudAndLeaderboard()
 	{
 		_api.SetLeaderboardVisible("CHARIOT RACER (3 LAPS)", true);
@@ -481,13 +534,16 @@ public class MapScript : IWasmModule
 			"Drifting & Mini-Turbos",
 			"Hold [b][E][/b] around corners to charge sparks:\n\n" +
 			"• [b][color=#40c0ff]Tier 1 (0.7s) — Mini-Turbo[/color][/b]: Blue sparks. Releases a 1.2s boost at 27 m/s.\n" +
-			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire. Releases a 2.2s blast at 35 m/s with screen shake!");
+			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire. Releases a 2.2s blast at 35 m/s with screen shake!\n" +
+			"• [b][color=#c040ff]Tier 3 (2.4s) — Ultra Mini-Turbo[/color][/b]: Purple lightning. Releases a 3.5s super rocket blast at 38 m/s!");
 
 		_api.AddInstructionsSection(
 			"Advanced Techniques",
 			"• [b]Rocket Start[/b]: Hit [b][Q][/b] right as the countdown hits 1 / GO! Warning: pressing too early causes an engine burnout stall!\n\n" +
+			"• [b]Track Coins (🪙)[/b]: Drive over golden rings scattered on the track (+speed up to 10 coins max). Dropped on hit!\n\n" +
 			"• [b]Slipstream / Drafting[/b]: Tuck in behind a rival's kart for 1.25s to slice the air and trigger a [b]Slipstream Slingshot[/b] at 35 m/s!\n\n" +
-			"• [b]Stunt Boost[/b]: Tap [b][E][/b] right as you enter a glowing boost pad for a [b]Perfect Stunt Launch[/b] at 38 m/s!");
+			"• [b]Aerial Stunt Boost[/b]: Tap [b][E][/b] right as you enter a glowing boost pad to jump into the air and land a [b]Stunt Boost[/b] at 38 m/s!\n\n" +
+			"• [b]Final Lap Climactic Event[/b]: Lap 3 triggers dusk storm lighting and +10% maximum engine speed!");
 
 		_api.AddInstructionsSection(
 			"Items & Defense",
@@ -495,6 +551,8 @@ public class MapScript : IWasmModule
 			"• [b]Turbo Mushroom[/b]: Instant speed burst.\n" +
 			"• [b]Green Shell[/b]: Straight projectile that ricochets off track walls.\n" +
 			"• [b]Red Shell[/b]: Heat-seeking missile locked onto the rival ahead.\n" +
+			"• [b]Blue Spiny Shell[/b]: Wings across the map to detonate on the 1st place leader with a sonic blast!\n" +
+			"• [b]Super Horn[/b]: Radial sonic blast that knocks away all rivals, hazards, and destroys even incoming Blue Shells!\n" +
 			"• [b]Spike Trap[/b]: Drops hazard behind you; [b]shields against rear-end ramming[/b] while held!\n" +
 			"• [b]Lightning Shock[/b]: Zaps all rivals, spinning them out.\n" +
 			"• [b]Star Power[/b]: Total invulnerability, smash damage, and maximum speed!");
@@ -731,11 +789,12 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.DriftHop, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
-			racer.DriftTimer = 2.4f;
+			racer.DriftTimer = 3.5f;
 			racer.DriftChargeDuration = 0f;
 			racer.DriftSparkCooldown = 0.15f;
 			racer.PendingMiniTurbo = true;
-			racer.StuntWindowTimer = 0.45f;
+			racer.StuntWindowTimer = 0.55f;
+			_api.TriggerMeshImpulse(racer.Unit, 0.7f, 0.2f, 12.0f);
 			_api.CreateFloatingText("DRIFT HOP!", racer.Position + new Vector3(0f, 2.1f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 0.7f);
 			_api.SpawnExpandingGroundRing(racer.Position, 2.2f, 8f, 0.25f, new Vector3(0.3f, 0.7f, 1.0f));
 		}
@@ -897,6 +956,7 @@ public class MapScript : IWasmModule
 				{
 					racer.TurboVfxCooldown = 0.12f;
 					_api.SpawnVisualEffect("fireblast", racer.Position, 0.85f);
+					_api.SpawnExpandingGroundRing(racer.Position, 2.4f, 8.0f, 0.2f, new Vector3(1.0f, 0.6f, 0.15f));
 				}
 			}
 
@@ -908,10 +968,17 @@ public class MapScript : IWasmModule
 
 				if (racer.DriftSparkCooldown <= 0f)
 				{
-					if (racer.DriftChargeDuration >= 1.5f)
+					if (racer.DriftChargeDuration >= 2.4f)
+					{
+						racer.DriftSparkCooldown = 0.09f;
+						_api.SpawnVisualEffect("lightning", racer.Position, 0.7f);
+						_api.SpawnExpandingGroundRing(racer.Position, 3.2f, 11f, 0.18f, new Vector3(0.85f, 0.2f, 1.0f));
+					}
+					else if (racer.DriftChargeDuration >= 1.5f)
 					{
 						racer.DriftSparkCooldown = 0.12f;
 						_api.SpawnVisualEffect("fireblast", racer.Position, 0.5f);
+						_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 9f, 0.2f, new Vector3(1.0f, 0.55f, 0.15f));
 					}
 					else if (racer.DriftChargeDuration >= 0.7f)
 					{
@@ -923,7 +990,16 @@ public class MapScript : IWasmModule
 				if (racer.DriftTimer <= 0f && racer.PendingMiniTurbo)
 				{
 					racer.PendingMiniTurbo = false;
-					if (racer.DriftChargeDuration >= 1.5f)
+					if (racer.DriftChargeDuration >= 2.4f)
+					{
+						TriggerBoost(racer, 3.5f, "★ ULTRA MINI-TURBO!! ★");
+						racer.Speed = TurboMaxSpeed;
+						_api.SpawnExpandingBurstSphere(racer.Position, 5.5f, 18f, 0.45f, new Vector3(0.85f, 0.25f, 1.0f));
+						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.4f, new Vector3(0.8f, 0.2f, 1.0f));
+						_api.TriggerMeshImpulse(racer.Unit, 1.5f, 0.4f, 18.0f);
+						if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.8f, 0.4f);
+					}
+					else if (racer.DriftChargeDuration >= 1.5f)
 					{
 						TriggerBoost(racer, 2.2f, "SUPER MINI-TURBO!!");
 						racer.Speed = MathF.Max(racer.Speed, 35.0f);
@@ -1136,6 +1212,8 @@ public class MapScript : IWasmModule
 			targetMaxSpeed = BaseMaxSpeed * 0.96f;
 		}
 
+		targetMaxSpeed += racer.Coins * 0.45f;
+		if (racer.Lap >= TotalLaps) targetMaxSpeed += 2.0f;
 		if (racer.Finished) targetMaxSpeed = BaseMaxSpeed * 0.6f;
 
 		if (racer.BrakeTimer > 0f)
@@ -1320,9 +1398,11 @@ public class MapScript : IWasmModule
 			if (racer.StuntWindowTimer > 0f)
 			{
 				racer.StuntWindowTimer = 0f;
-				TriggerBoost(racer, 2.6f, "PERFECT STUNT BOOST!!");
+				_api.TriggerMeshImpulse(racer.Unit, 2.2f, 0.45f, 20.0f);
+				TriggerBoost(racer, 2.8f, "PERFECT AERIAL STUNT BOOST!!");
 				racer.Speed = TurboMaxSpeed;
-				_api.SpawnExpandingGroundRing(racer.Position, 6.0f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
+				_api.SpawnExpandingBurstSphere(racer.Position, 5.0f, 16f, 0.4f, new Vector3(0.2f, 1.0f, 0.85f));
+				_api.SpawnExpandingGroundRing(racer.Position, 6.5f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
 				if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.4f);
 			}
 			else
@@ -1388,6 +1468,14 @@ public class MapScript : IWasmModule
 					_api.PlayPlayerClickSound(racer.PlayerIndex);
 					if (racer.Lap == TotalLaps)
 					{
+						if (!_finalLapTriggered)
+						{
+							_finalLapTriggered = true;
+							_api.SetTimeOfDay(18.5f);
+							_api.SetWeather("rain");
+							_api.BroadcastMessage("⚡ ¡FINAL LAP! INTENSITY AT 120% (+10% MAX SPEED)! ⚡");
+							_api.ShowFeedbackText("⚡ FINAL LAP! ⚡", new Vector3(1.0f, 0.25f, 0.2f));
+						}
 						_api.CreateFloatingText("★ FINAL LAP! FULL THROTTLE! ★", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 2.2f);
 						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
 						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.45f);
@@ -1430,6 +1518,47 @@ public class MapScript : IWasmModule
 		}
 
 		return (bestWp - startWp) * 5.0f + MathF.Max(0f, 4.9f - MathF.Sqrt(bestDistSq) * 0.08f);
+	}
+
+	private void UpdateCoins(float delta)
+	{
+		for (int i = 0; i < CoinCount; i++)
+		{
+			ref CoinSlot coin = ref _coins[i];
+			if (coin.RespawnTimer > 0f)
+			{
+				coin.RespawnTimer -= delta;
+				continue;
+			}
+
+			coin.PulseCooldown -= delta;
+			if (coin.PulseCooldown <= 0f)
+			{
+				coin.PulseCooldown = 1.6f;
+				_api.SpawnExpandingGroundRing(coin.Position, 1.8f, 3.8f, 0.45f, new Vector3(1.0f, 0.85f, 0.15f));
+			}
+
+			for (int r = 0; r < _racerCount; r++)
+			{
+				RacerState racer = _racers[r];
+				if (!racer.Active || !racer.Unit.IsValid || racer.Finished) continue;
+
+				float dx = racer.Position.X - coin.Position.X;
+				float dz = racer.Position.Z - coin.Position.Z;
+				if (dx * dx + dz * dz > 2.3f * 2.3f) continue;
+
+				coin.RespawnTimer = 7.0f;
+				racer.Coins = Math.Min(10, racer.Coins + 1);
+				racer.Speed = MathF.Min(TurboMaxSpeed, racer.Speed + 1.8f);
+				_api.SpawnExpandingBurstSphere(coin.Position, 2.5f, 9.0f, 0.25f, new Vector3(1.0f, 0.9f, 0.2f));
+				_api.CreateFloatingText($"+1 COIN (x{racer.Coins})", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(1.0f, 0.9f, 0.15f), 1.0f);
+				if (!racer.IsComputer)
+				{
+					_api.PlayPlayerClickSound(racer.PlayerIndex);
+				}
+				break;
+			}
+		}
 	}
 
 	private void UpdateItemBoxes(float delta)
@@ -1493,22 +1622,34 @@ public class MapScript : IWasmModule
 
 		if (_racerCount == 1)
 		{
-			item = roll < 65 ? PowerUpType.TurboMushroom : roll < 85 ? PowerUpType.StarPower : PowerUpType.GreenShell;
+			item = roll < 50 ? PowerUpType.TurboMushroom :
+				roll < 70 ? PowerUpType.StarPower :
+				roll < 85 ? PowerUpType.GreenShell :
+				PowerUpType.SuperHorn;
 		}
 		else if (racer.Rank <= 1)
 		{
-			item = roll < 40 ? PowerUpType.SpikeTrap : roll < 75 ? PowerUpType.GreenShell : PowerUpType.TurboMushroom;
+			item = roll < 35 ? PowerUpType.SpikeTrap :
+				roll < 65 ? PowerUpType.GreenShell :
+				roll < 85 ? PowerUpType.SuperHorn :
+				PowerUpType.TurboMushroom;
 		}
 		else if (racer.Rank >= _racerCount)
 		{
-			item = roll < 28 ? PowerUpType.StarPower : roll < 52 ? PowerUpType.LightningBolt : roll < 78 ? PowerUpType.RedShell : PowerUpType.TurboMushroom;
+			item = roll < 28 ? PowerUpType.BlueShell :
+				roll < 52 ? PowerUpType.StarPower :
+				roll < 72 ? PowerUpType.LightningBolt :
+				roll < 88 ? PowerUpType.RedShell :
+				PowerUpType.TurboMushroom;
 		}
 		else
 		{
-			item = roll < 25 ? PowerUpType.TurboMushroom :
-				roll < 50 ? PowerUpType.GreenShell :
-				roll < 72 ? PowerUpType.RedShell :
-				roll < 88 ? PowerUpType.SpikeTrap :
+			item = roll < 20 ? PowerUpType.TurboMushroom :
+				roll < 40 ? PowerUpType.GreenShell :
+				roll < 60 ? PowerUpType.RedShell :
+				roll < 74 ? PowerUpType.SpikeTrap :
+				roll < 86 ? PowerUpType.SuperHorn :
+				roll < 93 ? PowerUpType.BlueShell :
 				PowerUpType.StarPower;
 		}
 
@@ -1540,11 +1681,19 @@ public class MapScript : IWasmModule
 				break;
 
 			case PowerUpType.GreenShell:
-				LaunchShell(racer, isHoming: false);
+				LaunchShell(racer, isHoming: false, isBlueShell: false);
 				break;
 
 			case PowerUpType.RedShell:
-				LaunchShell(racer, isHoming: true);
+				LaunchShell(racer, isHoming: true, isBlueShell: false);
+				break;
+
+			case PowerUpType.BlueShell:
+				LaunchShell(racer, isHoming: true, isBlueShell: true);
+				break;
+
+			case PowerUpType.SuperHorn:
+				ActivateSuperHorn(racer);
 				break;
 
 			case PowerUpType.SpikeTrap:
@@ -1566,7 +1715,7 @@ public class MapScript : IWasmModule
 		}
 	}
 
-	private void LaunchShell(RacerState racer, bool isHoming)
+	private void LaunchShell(RacerState racer, bool isHoming, bool isBlueShell)
 	{
 		for (int i = 0; i < MaxProjectiles; i++)
 		{
@@ -1581,21 +1730,88 @@ public class MapScript : IWasmModule
 				proj.CommandsFrozen = true;
 				proj.Invulnerable = true;
 				proj.HideHealthAndManaBars = true;
-				_api.SetUnitColor(proj, isHoming ? new Vector3(1.0f, 0.25f, 0.2f) : new Vector3(0.2f, 1.0f, 0.35f));
+				Vector3 shellColor = isBlueShell
+					? new Vector3(0.15f, 0.65f, 1.0f)
+					: (isHoming ? new Vector3(1.0f, 0.25f, 0.2f) : new Vector3(0.2f, 1.0f, 0.35f));
+				_api.SetUnitColor(proj, shellColor);
 			}
 
 			slot.Active = true;
 			slot.Unit = proj;
 			slot.Position = new Vector3(spawnX, _api.GetTerrainHeight(spawnX, spawnZ), spawnZ);
 			slot.HeadingRadians = racer.HeadingRadians;
-			slot.Speed = isHoming ? 32.0f : 34.0f;
+			slot.Speed = isBlueShell ? 44.0f : (isHoming ? 32.0f : 34.0f);
 			slot.OwnerPlayerIndex = racer.PlayerIndex;
-			slot.IsHoming = isHoming;
-			slot.BouncesRemaining = isHoming ? 1 : 3;
+			slot.IsHoming = isHoming || isBlueShell;
+			slot.IsBlueShell = isBlueShell;
+			slot.WarningTimer = 0f;
+			slot.BouncesRemaining = isBlueShell ? 0 : (isHoming ? 1 : 3);
 			slot.GraceTimer = 0.2f;
-			slot.RemainingLifetime = 5.0f;
+			slot.RemainingLifetime = isBlueShell ? 14.0f : 5.0f;
+
+			if (isBlueShell)
+			{
+				_api.BroadcastMessage($"⚡ {racer.ColoredName} launched a BLUE SPINY SHELL!");
+			}
 			return;
 		}
+	}
+
+	private void ActivateSuperHorn(RacerState racer)
+	{
+		_api.SpawnExpandingBurstSphere(racer.Position, 6.5f, 18.0f, 0.45f, new Vector3(1.0f, 0.2f, 0.85f));
+		_api.SpawnExpandingGroundRing(racer.Position, 7.5f, 20.0f, 0.4f, new Vector3(1.0f, 0.3f, 0.8f));
+		_api.TriggerMeshImpulse(racer.Unit, 1.3f, 0.35f, 16.0f);
+		_api.CreateFloatingText("★ SUPER HORN SONIC BLAST! ★", racer.Position + new Vector3(0f, 3.0f, 0f), new Vector3(1.0f, 0.3f, 0.9f), 1.5f);
+		_api.BroadcastMessage($"{racer.ColoredName} sounded the SUPER HORN!");
+
+		for (int p = 0; p < MaxProjectiles; p++)
+		{
+			ShellProjectileSlot proj = _projectiles[p];
+			if (!proj.Active) continue;
+			float dx = proj.Position.X - racer.Position.X;
+			float dz = proj.Position.Z - racer.Position.Z;
+			if (dx * dx + dz * dz <= 6.5f * 6.5f)
+			{
+				ClearProjectile(proj);
+				_api.CreateFloatingText("SHELL DEFLECTED!", racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.2f);
+			}
+		}
+
+		for (int h = 0; h < MaxHazards; h++)
+		{
+			HazardSlot haz = _hazards[h];
+			if (!haz.Active) continue;
+			float dx = haz.Position.X - racer.Position.X;
+			float dz = haz.Position.Z - racer.Position.Z;
+			if (dx * dx + dz * dz <= 6.5f * 6.5f)
+			{
+				ClearHazard(haz);
+			}
+		}
+
+		for (int r = 0; r < _racerCount; r++)
+		{
+			RacerState rival = _racers[r];
+			if (!rival.Active || rival.PlayerIndex == racer.PlayerIndex || rival.StarTimer > 0f) continue;
+			float dx = rival.Position.X - racer.Position.X;
+			float dz = rival.Position.Z - racer.Position.Z;
+			if (dx * dx + dz * dz <= 6.5f * 6.5f)
+			{
+				SpinOutRacer(rival, "SUPER HORN!");
+			}
+		}
+	}
+
+	private RacerState? FindLeaderRacer(int excludedPlayerIndex)
+	{
+		for (int i = 0; i < _racerCount; i++)
+		{
+			RacerState r = _racers[_rankedIndices[i]];
+			if (!r.Active || !r.Unit.IsValid || r.Finished) continue;
+			if (r.PlayerIndex != excludedPlayerIndex) return r;
+		}
+		return null;
 	}
 
 	private void DropHazardBehind(RacerState racer)
@@ -1695,7 +1911,48 @@ public class MapScript : IWasmModule
 				continue;
 			}
 
-			if (slot.IsHoming)
+			if (slot.IsBlueShell)
+			{
+				RacerState? leader = FindLeaderRacer(slot.OwnerPlayerIndex);
+				if (leader != null)
+				{
+					float desired = MathF.Atan2(leader.Position.X - slot.Position.X, leader.Position.Z - slot.Position.Z);
+					float diff = WrapAngle(desired - slot.HeadingRadians);
+					float maxTurn = 6.0f * delta;
+					slot.HeadingRadians = WrapAngle(slot.HeadingRadians + Math.Clamp(diff, -maxTurn, maxTurn));
+
+					slot.WarningTimer -= delta;
+					if (slot.WarningTimer <= 0f)
+					{
+						slot.WarningTimer = 0.45f;
+						_api.SpawnVisualEffect("lightning", slot.Position, 0.5f);
+						if (!leader.IsComputer)
+						{
+							_api.CreateFloatingText("⚠ BLUE SHELL INCOMING! ⚠", leader.Position + new Vector3(0f, 3.5f, 0f), new Vector3(1.0f, 0.25f, 0.2f), 0.5f);
+							_api.PlayPlayerWarningSound(leader.PlayerIndex);
+							_api.ShakePlayerCamera(leader.PlayerIndex, 0.4f, 0.2f);
+						}
+					}
+
+					float tdx = leader.Position.X - slot.Position.X;
+					float tdz = leader.Position.Z - slot.Position.Z;
+					if (tdx * tdx + tdz * tdz <= 3.2f * 3.2f)
+					{
+						_api.SpawnVisualEffect("fireblast", leader.Position, 1.8f);
+						_api.SpawnExpandingBurstSphere(leader.Position, 7.5f, 22.0f, 0.55f, new Vector3(0.15f, 0.65f, 1.0f));
+						_api.SpawnExpandingGroundRing(leader.Position, 8.5f, 24.0f, 0.5f, new Vector3(0.2f, 0.5f, 1.0f));
+						_api.TriggerMeshImpulse(leader.Unit, 2.5f, 0.6f, 22.0f);
+						_api.BroadcastMessage($"💥 BLUE SHELL DETONATED ON {leader.ColoredName}!");
+						if (leader.StarTimer <= 0f)
+						{
+							SpinOutRacer(leader, "BLUE SHELL!");
+						}
+						ClearProjectile(slot);
+						continue;
+					}
+				}
+			}
+			else if (slot.IsHoming)
 			{
 				RacerState? target = FindClosestRacer(slot.Position, slot.OwnerPlayerIndex);
 				if (target != null)
@@ -1808,6 +2065,14 @@ public class MapScript : IWasmModule
 		racer.HasSteerTarget = false;
 		racer.KeySteerInput = 0f;
 		racer.CurrentTurnVelocity = 0f;
+
+		if (racer.Coins > 0)
+		{
+			int lost = Math.Min(3, racer.Coins);
+			racer.Coins -= lost;
+			_api.CreateFloatingText($"-{lost} COINS!", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.3f, 0.2f), 1.2f);
+		}
+
 		_api.CreateFloatingText(reason, racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.25f, 0.25f), 1.2f);
 		_api.TriggerMeshImpulse(racer.Unit, 1.4f, 0.4f, 18.0f);
 		if (!racer.IsComputer)
@@ -1975,10 +2240,11 @@ public class MapScript : IWasmModule
 			RacerState racer = _racers[_rankedIndices[rank]];
 			string lapText = racer.Finished ? $"FIN ({racer.FinishTime:F1}s)" : $"Lap {racer.Lap}/{TotalLaps}";
 			string speedText = !racer.IsComputer && !racer.Finished ? $" [{(int)(racer.Speed * 3.6f)} km/h]" : string.Empty;
+			string coinsText = racer.Coins > 0 ? $" | 🪙{racer.Coins}" : string.Empty;
 			string itemText = racer.HeldItem == PowerUpType.None
 				? (racer.ItemRouletteTimer > 0f ? " | [?]" : string.Empty)
 				: $" | [{FormatPowerUpName(racer.HeldItem)}]";
-			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{speedText}{itemText}");
+			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{speedText}{coinsText}{itemText}");
 		}
 	}
 
@@ -2102,6 +2368,8 @@ public class MapScript : IWasmModule
 		PowerUpType.TurboMushroom => "Mushroom",
 		PowerUpType.GreenShell => "Green Shell",
 		PowerUpType.RedShell => "Red Shell",
+		PowerUpType.BlueShell => "Blue Spiny Shell",
+		PowerUpType.SuperHorn => "Super Horn",
 		PowerUpType.SpikeTrap => "Spike Trap",
 		PowerUpType.LightningBolt => "Lightning",
 		PowerUpType.StarPower => "Star Power",
