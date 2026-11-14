@@ -47,7 +47,10 @@ public class MapScript : IWasmModule
 		Bobomb = 9,
 		TripleMushrooms = 10,
 		TripleGreenShells = 11,
-		TripleRedShells = 12
+		TripleRedShells = 12,
+		FakeItemBox = 13,
+		GoldenMushroom = 14,
+		Blooper = 15
 	}
 
 	private struct TrackRegion
@@ -118,6 +121,9 @@ public class MapScript : IWasmModule
 		public float LapStartTime;
 		public float BestLapTime = float.MaxValue;
 		public float DustVfxCooldown;
+		public float GoldenMushroomTimer;
+		public float GoldenVfxCooldown;
+		public float InkedTimer;
 
 		public PowerUpType HeldItem;
 		public int ItemCharges;
@@ -152,6 +158,7 @@ public class MapScript : IWasmModule
 		public Vector3 Position;
 		public int OwnerPlayerIndex;
 		public bool IsBobomb;
+		public bool IsFakeItemBox;
 		public float BobombFuse;
 		public float PulseTimer;
 		public float GraceTimer;
@@ -181,8 +188,19 @@ public class MapScript : IWasmModule
 		public float PulseCooldown;
 	}
 
+	private struct SpeedRingSlot
+	{
+		public Vector3 Position;
+		public float Cooldown;
+		public float PulseTimer;
+	}
+
 	private const int CoinCount = 12;
 	private readonly CoinSlot[] _coins = new CoinSlot[CoinCount];
+	private SpeedRingSlot _speedRingEast;
+	private SpeedRingSlot _speedRingWest;
+	private float _fastestLapTime = float.MaxValue;
+	private string _fastestLapRacerName = string.Empty;
 	private readonly RacerState[] _racers = new RacerState[MaxRacers];
 	private readonly int[] _rankedIndices = new int[MaxRacers];
 	private readonly ItemBoxSlot[] _itemBoxes = new ItemBoxSlot[ItemBoxCount];
@@ -231,6 +249,7 @@ public class MapScript : IWasmModule
 		SpawnRacers();
 		SpawnItemBoxes();
 		InitCoins();
+		InitSpeedRings();
 		SetupInitialHudAndLeaderboard();
 
 		_api.SetWeather("clear");
@@ -281,6 +300,7 @@ public class MapScript : IWasmModule
 		ResolveKartCollisions();
 		UpdateDrafting(delta);
 		UpdateCoins(delta);
+		UpdateSpeedRings(delta);
 		UpdateItemBoxes(delta);
 		UpdateHazards(delta);
 		UpdateProjectiles(delta);
@@ -391,6 +411,9 @@ public class MapScript : IWasmModule
 			racer.Speed = 0f;
 			racer.Coins = 0;
 			racer.ItemCharges = 0;
+			racer.GoldenMushroomTimer = 0f;
+			racer.GoldenVfxCooldown = 0f;
+			racer.InkedTimer = 0f;
 			racer.QuickRecoveryWindow = 0f;
 			racer.LastCheckpointTime = 0f;
 			racer.Lap = 1;
@@ -528,6 +551,25 @@ public class MapScript : IWasmModule
 		}
 	}
 
+	private void InitSpeedRings()
+	{
+		float yEast = _api.GetTerrainHeight(28f, -22f);
+		_speedRingEast = new SpeedRingSlot
+		{
+			Position = new Vector3(28f, yEast, -22f),
+			Cooldown = 0f,
+			PulseTimer = 0.5f
+		};
+
+		float yWest = _api.GetTerrainHeight(-28f, 22f);
+		_speedRingWest = new SpeedRingSlot
+		{
+			Position = new Vector3(-28f, yWest, 22f),
+			Cooldown = 0f,
+			PulseTimer = 1.0f
+		};
+	}
+
 	private void SetupInitialHudAndLeaderboard()
 	{
 		_api.SetLeaderboardVisible("CHARIOT RACER (3 LAPS)", true);
@@ -538,41 +580,44 @@ public class MapScript : IWasmModule
 			"[b]Steering & Driving:[/b]\n" +
 			"• [b]A / D[/b] — Steer Chariot left / right (or Right-Click on ground to steer)\n" +
 			"• [b]Q[/b] — [b]Turbo Boost[/b] (7.5s high-speed rocket charge, 13s cooldown)\n" +
-			"• [b]W[/b] — [b]Use Item[/b] (Fires held power-up or drops hazard)\n" +
+			"• [b]W[/b] — [b]Use Item[/b] (Fires held power-up or drops hazard / dash during Frenzy)\n" +
 			"• [b]E[/b] — [b]Drift Hop[/b] (Hold around bends to charge Mini-Turbos)\n" +
 			"• [b]R[/b] — [b]Brake / Reverse[/b] (Stops instantly or backs up out of corners)\n\n" +
 			"[b]Chat Commands:[/b]\n" +
 			"• [b]-chase[/b] — Dynamic Chase Camera\n" +
 			"• [b]-top[/b] — Aerial Elevated Racing Camera\n" +
 			"• [b]-wide[/b] — Cinematic Wide Camera\n" +
-			"• [b]-stuck[/b] — Resets chariot to track center");
+			"• [b]-stuck[/b] — Resets chariot to track center\n" +
+			"• [b]-honk / -spin[/b] — Sound horn / do mid-race trick");
 
 		_api.AddInstructionsSection(
 			"Drifting & Mini-Turbos",
 			"Hold [b][E][/b] around corners to charge sparks:\n\n" +
-			"• [b][color=#40c0ff]Tier 1 (0.7s) — Mini-Turbo[/color][/b]: Blue sparks. Releases a 1.2s boost at 27 m/s.\n" +
-			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire. Releases a 2.2s blast at 35 m/s with screen shake!\n" +
-			"• [b][color=#c040ff]Tier 3 (2.4s) — Ultra Mini-Turbo[/color][/b]: Purple lightning. Releases a 3.5s super rocket blast at 38 m/s!");
+			"• [b][color=#40c0ff]Tier 1 (0.7s) — Mini-Turbo[/color][/b]: Blue sparks + chime. Releases a 1.2s boost at 27 m/s.\n" +
+			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire + pulse. Releases a 2.2s blast at 35 m/s with screen shake!\n" +
+			"• [b][color=#c040ff]Tier 3 (2.4s) — Ultra Mini-Turbo[/color][/b]: Purple lightning + thunder. Releases a 3.5s super rocket blast at 38 m/s!");
 
 		_api.AddInstructionsSection(
 			"Advanced Techniques",
 			"• [b]Rocket Start[/b]: Hit [b][Q][/b] right as the countdown hits 1 / GO! Warning: pressing too early causes an engine burnout stall!\n\n" +
-			"• [b]Track Coins (🪙)[/b]: Drive over golden rings scattered on the track (+speed up to 10 coins max). Dropped on hit!\n\n" +
+			"• [b]Quick Recovery[/b]: Tap [b][Q][/b] or [b][E][/b] within 0.45s of getting hit to instantly snap out of a spin at 14 m/s!\n\n" +
+			"• [b]Track Coins & Speed Rings[/b]: Collect coins (+speed) and hit golden Speed Rings on the straights for instant boosts!\n\n" +
+			"• [b]Directional Aerial Stunts[/b]: Tap [b][E][/b] on boost pads while steering [b][A][/b] or [b][D][/b] for Barrel Rolls or Backflips!\n\n" +
 			"• [b]Slipstream / Drafting[/b]: Tuck in behind a rival's kart for 1.25s to slice the air and trigger a [b]Slipstream Slingshot[/b] at 35 m/s!\n\n" +
-			"• [b]Aerial Stunt Boost[/b]: Tap [b][E][/b] right as you enter a glowing boost pad to jump into the air and land a [b]Stunt Boost[/b] at 38 m/s!\n\n" +
 			"• [b]Final Lap Climactic Event[/b]: Lap 3 triggers dusk storm lighting and +10% maximum engine speed!");
 
 		_api.AddInstructionsSection(
 			"Items & Defense",
 			"Drive through glowing item crystals on the track:\n\n" +
-			"• [b]Turbo Mushroom[/b]: Instant speed burst.\n" +
-			"• [b]Green Shell[/b]: Straight projectile that ricochets off track walls.\n" +
-			"• [b]Red Shell[/b]: Heat-seeking missile locked onto the rival ahead.\n" +
-			"• [b]Blue Spiny Shell[/b]: Wings across the map to detonate on the 1st place leader with a sonic blast!\n" +
-			"• [b]Super Horn[/b]: Radial sonic blast that knocks away all rivals, hazards, and destroys even incoming Blue Shells!\n" +
-			"• [b]Spike Trap[/b]: Drops hazard behind you; [b]shields against rear-end ramming[/b] while held!\n" +
-			"• [b]Lightning Shock[/b]: Zaps all rivals, spinning them out.\n" +
-			"• [b]Star Power[/b]: Total invulnerability, smash damage, and maximum speed!");
+			"• [b]Golden Mushroom[/b]: 6s frenzy of infinite instant dashes and off-road immunity!\n" +
+			"• [b]Fake Item Box[/b]: Sinister decoy crystal; zaps victims and drops their coins!\n" +
+			"• [b]Blooper Ink[/b]: Squirts black ink at all leaders ahead, crippling traction and speed!\n" +
+			"• [b]Triple Items[/b]: x3 Mushrooms or x3 Shells with auto-blocking rear shield!\n" +
+			"• [b]Bob-omb[/b]: Proximity ticking explosive with massive 6.5m shockwave blast!\n" +
+			"• [b]Blue Spiny Shell[/b]: Wings across the map to detonate on the 1st place leader!\n" +
+			"• [b]Super Horn[/b]: Radial sonic blast that shatters incoming shells (including Blue Shells)!\n" +
+			"• [b]Spike Trap / Shells[/b]: Rear protection and tactical obstacle drops!\n" +
+			"• [b]Star Power & Lightning[/b]: Invulnerability and track-wide electricity!");
 	}
 
 	private void UpdateCountdown(float delta)
@@ -815,6 +860,14 @@ public class MapScript : IWasmModule
 		else if (string.Equals(abilityId, AbilityIds.UsePowerup, StringComparison.OrdinalIgnoreCase))
 		{
 			if (!_raceStarted) return;
+			if (racer.GoldenMushroomTimer > 0f)
+			{
+				TriggerBoost(racer, 1.8f, "★ GOLDEN DASH! ★");
+				_api.SpawnExpandingBurstSphere(racer.Position, 4.0f, 14f, 0.35f, new Vector3(1.0f, 0.85f, 0.15f));
+				_api.TriggerMeshImpulse(racer.Unit, 0.7f, 0.18f, 10.0f);
+				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
+				return;
+			}
 			ActivateHeldPowerUp(racer);
 		}
 		else if (string.Equals(abilityId, AbilityIds.DriftHop, StringComparison.OrdinalIgnoreCase))
@@ -923,6 +976,34 @@ public class MapScript : IWasmModule
 			if (racer.ShockedTimer > 0f) racer.ShockedTimer -= delta;
 			if (racer.QuickRecoveryWindow > 0f) racer.QuickRecoveryWindow -= delta;
 
+			if (racer.GoldenMushroomTimer > 0f)
+			{
+				racer.GoldenMushroomTimer -= delta;
+				racer.GoldenVfxCooldown -= delta;
+				if (racer.GoldenVfxCooldown <= 0f)
+				{
+					racer.GoldenVfxCooldown = 0.14f;
+					_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 7.5f, 0.18f, new Vector3(1.0f, 0.9f, 0.2f));
+				}
+				if (racer.GoldenMushroomTimer <= 0f)
+				{
+					racer.HeldItem = PowerUpType.None;
+					_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
+					_api.SetUnitColor(racer.Unit, racer.IsComputer ? new Vector3(0.6f, 0.6f, 0.6f) : new Vector3(1f, 1f, 1f));
+					_api.CreateFloatingText("Frenzy Over", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.9f, 0.9f, 0.9f), 1.0f);
+				}
+			}
+
+			if (racer.InkedTimer > 0f)
+			{
+				racer.InkedTimer -= delta;
+				if (racer.BoostTimer > 0f)
+				{
+					racer.InkedTimer = 0f;
+					_api.CreateFloatingText("INK CLEANSED!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.0f);
+				}
+			}
+
 			if (racer.ItemRouletteTimer > 0f)
 			{
 				racer.ItemRouletteTimer -= delta;
@@ -1006,9 +1087,37 @@ public class MapScript : IWasmModule
 
 			if (racer.DriftTimer > 0f)
 			{
+				float prevCharge = racer.DriftChargeDuration;
 				racer.DriftTimer -= delta;
 				racer.DriftChargeDuration += delta;
 				racer.DriftSparkCooldown -= delta;
+
+				if (prevCharge < 0.7f && racer.DriftChargeDuration >= 0.7f)
+				{
+					_api.CreateFloatingText("✦ MINI-TURBO! (Blue)", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.25f, 0.85f, 1.0f), 0.75f);
+					_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 8f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
+					if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
+				}
+				else if (prevCharge < 1.5f && racer.DriftChargeDuration >= 1.5f)
+				{
+					_api.CreateFloatingText("✦✦ SUPER MINI-TURBO! (Orange)", racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.6f, 0.15f), 0.85f);
+					_api.SpawnExpandingBurstSphere(racer.Position, 3.5f, 12f, 0.3f, new Vector3(1.0f, 0.55f, 0.15f));
+					if (!racer.IsComputer)
+					{
+						_api.PlayPlayerClickSound(racer.PlayerIndex);
+						_api.ShakePlayerCamera(racer.PlayerIndex, 0.35f, 0.2f);
+					}
+				}
+				else if (prevCharge < 2.4f && racer.DriftChargeDuration >= 2.4f)
+				{
+					_api.CreateFloatingText("✦✦✦ ULTRA MINI-TURBO! (Purple)", racer.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.85f, 0.25f, 1.0f), 1.0f);
+					_api.SpawnExpandingBurstSphere(racer.Position, 4.5f, 15f, 0.35f, new Vector3(0.85f, 0.25f, 1.0f));
+					if (!racer.IsComputer)
+					{
+						_api.PlayPlayerClickSound(racer.PlayerIndex);
+						_api.ShakePlayerCamera(racer.PlayerIndex, 0.55f, 0.3f);
+					}
+				}
 
 				if (racer.DriftSparkCooldown <= 0f)
 				{
@@ -1141,11 +1250,11 @@ public class MapScript : IWasmModule
 
 		if (racer.HeldItem != PowerUpType.None)
 		{
-			if (racer.HeldItem == PowerUpType.RedShell)
+			if (racer.HeldItem == PowerUpType.RedShell || racer.HeldItem == PowerUpType.TripleRedShells)
 			{
 				if (racer.Rank > 1) ActivateHeldPowerUp(racer);
 			}
-			else if (racer.HeldItem == PowerUpType.SpikeTrap)
+			else if (racer.HeldItem == PowerUpType.SpikeTrap || racer.HeldItem == PowerUpType.FakeItemBox)
 			{
 				if (racer.Rank <= 3) ActivateHeldPowerUp(racer);
 			}
@@ -1171,6 +1280,11 @@ public class MapScript : IWasmModule
 		float maxTurn = racer.BoostTimer > 0f
 			? (racer.DriftTimer > 0f ? BoostDriftTurnRate : BoostTurnRate)
 			: (racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate);
+
+		if (racer.InkedTimer > 0f)
+		{
+			maxTurn *= 0.65f;
+		}
 
 		if (racer.IsComputer || racer.Finished)
 		{
@@ -1213,9 +1327,10 @@ public class MapScript : IWasmModule
 			}
 		}
 
-		if (racer.BoostTimer > 0f)
+		if (racer.BoostTimer > 0f || racer.InkedTimer > 0f)
 		{
-			racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, BoostTurnInertia * delta);
+			float inertiaRate = racer.InkedTimer > 0f ? 4.0f : BoostTurnInertia;
+			racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, inertiaRate * delta);
 		}
 		else
 		{
@@ -1235,7 +1350,7 @@ public class MapScript : IWasmModule
 		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
 		float targetMaxSpeed = BaseMaxSpeed;
 
-		if (racer.StarTimer > 0f)
+		if (racer.StarTimer > 0f || racer.GoldenMushroomTimer > 0f)
 		{
 			targetMaxSpeed = StarMaxSpeed;
 		}
@@ -1254,6 +1369,11 @@ public class MapScript : IWasmModule
 		else if (racer.DriftTimer > 0f)
 		{
 			targetMaxSpeed = BaseMaxSpeed * 0.96f;
+		}
+
+		if (racer.InkedTimer > 0f)
+		{
+			targetMaxSpeed *= 0.85f;
 		}
 
 		targetMaxSpeed += racer.Coins * 0.45f;
@@ -1377,6 +1497,16 @@ public class MapScript : IWasmModule
 				{
 					SpinOutRacer(a, "STAR SMASH!");
 				}
+				else if (a.GoldenMushroomTimer > 0f && b.GoldenMushroomTimer <= 0f && a.Speed > 16.0f)
+				{
+					SpinOutRacer(b, "GOLDEN TRAMPLE!");
+					_api.TriggerMeshImpulse(b.Unit, 1.4f, 0.35f, 16.0f);
+				}
+				else if (b.GoldenMushroomTimer > 0f && a.GoldenMushroomTimer <= 0f && b.Speed > 16.0f)
+				{
+					SpinOutRacer(a, "GOLDEN TRAMPLE!");
+					_api.TriggerMeshImpulse(a.Unit, 1.4f, 0.35f, 16.0f);
+				}
 				else
 				{
 					float aForwardX = MathF.Sin(a.HeadingRadians);
@@ -1473,12 +1603,30 @@ public class MapScript : IWasmModule
 			if (racer.StuntWindowTimer > 0f)
 			{
 				racer.StuntWindowTimer = 0f;
-				_api.TriggerMeshImpulse(racer.Unit, 2.2f, 0.45f, 20.0f);
-				TriggerBoost(racer, 2.8f, "PERFECT AERIAL STUNT BOOST!!");
+				string stuntLabel;
+				float spinImpulse;
+				if (racer.KeySteerInput < -0.2f)
+				{
+					stuntLabel = "★ BARREL ROLL LEFT STUNT!! ★";
+					spinImpulse = 26.0f;
+				}
+				else if (racer.KeySteerInput > 0.2f)
+				{
+					stuntLabel = "★ BARREL ROLL RIGHT STUNT!! ★";
+					spinImpulse = -26.0f;
+				}
+				else
+				{
+					stuntLabel = "★ 360° AERIAL BACKFLIP!! ★";
+					spinImpulse = 18.0f;
+				}
+
+				_api.TriggerMeshImpulse(racer.Unit, 2.3f, 0.48f, spinImpulse);
+				TriggerBoost(racer, 3.2f, stuntLabel);
 				racer.Speed = TurboMaxSpeed;
-				_api.SpawnExpandingBurstSphere(racer.Position, 5.0f, 16f, 0.4f, new Vector3(0.2f, 1.0f, 0.85f));
-				_api.SpawnExpandingGroundRing(racer.Position, 6.5f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
-				if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.4f);
+				_api.SpawnExpandingBurstSphere(racer.Position, 5.5f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.85f));
+				_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
+				if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.7f, 0.45f);
 			}
 			else
 			{
@@ -1522,6 +1670,15 @@ public class MapScript : IWasmModule
 			if (lapDuration < racer.BestLapTime)
 			{
 				racer.BestLapTime = lapDuration;
+			}
+
+			if (lapDuration < _fastestLapTime && lapDuration > 6.0f)
+			{
+				_fastestLapTime = lapDuration;
+				_fastestLapRacerName = racer.DisplayName;
+				_api.BroadcastMessage($"🏆 NEW ALL-TIME TRACK RECORD: {racer.ColoredName} with {lapDuration:F2}s! 🏆");
+				_api.SpawnExpandingBurstSphere(racer.Position, 6.5f, 20f, 0.5f, new Vector3(1.0f, 0.85f, 0.2f));
+				_api.SpawnExpandingGroundRing(racer.Position, 8.0f, 24f, 0.45f, new Vector3(0.85f, 0.25f, 1.0f));
 			}
 
 			if (racer.Lap > TotalLaps)
@@ -1663,6 +1820,53 @@ public class MapScript : IWasmModule
 		}
 	}
 
+	private void UpdateSpeedRings(float delta)
+	{
+		UpdateSingleSpeedRing(ref _speedRingEast, delta);
+		UpdateSingleSpeedRing(ref _speedRingWest, delta);
+	}
+
+	private void UpdateSingleSpeedRing(ref SpeedRingSlot ring, float delta)
+	{
+		if (ring.Cooldown > 0f)
+		{
+			ring.Cooldown -= delta;
+			return;
+		}
+
+		ring.PulseTimer -= delta;
+		if (ring.PulseTimer <= 0f)
+		{
+			ring.PulseTimer = 1.4f;
+			_api.SpawnExpandingGroundRing(ring.Position, 2.2f, 5.5f, 0.35f, new Vector3(1.0f, 0.88f, 0.2f));
+		}
+
+		for (int r = 0; r < _racerCount; r++)
+		{
+			RacerState racer = _racers[r];
+			if (!racer.Active || !racer.Unit.IsValid || racer.Finished) continue;
+
+			float dx = racer.Position.X - ring.Position.X;
+			float dz = racer.Position.Z - ring.Position.Z;
+			if (dx * dx + dz * dz <= 3.4f * 3.4f)
+			{
+				ring.Cooldown = 4.5f;
+				racer.Coins = Math.Min(10, racer.Coins + 1);
+				TriggerBoost(racer, 1.8f, "★ SPEED RING SURGE! ★");
+				racer.Speed = MathF.Max(racer.Speed, 33.0f);
+				_api.SpawnExpandingBurstSphere(ring.Position, 4.5f, 15f, 0.4f, new Vector3(1.0f, 0.9f, 0.2f));
+				_api.SpawnExpandingGroundRing(ring.Position, 6.0f, 18f, 0.35f, new Vector3(1.0f, 0.85f, 0.15f));
+				_api.TriggerMeshImpulse(racer.Unit, 0.8f, 0.2f, 12.0f);
+				if (!racer.IsComputer)
+				{
+					_api.PlayPlayerClickSound(racer.PlayerIndex);
+					_api.ShakePlayerCamera(racer.PlayerIndex, 0.4f, 0.25f);
+				}
+				break;
+			}
+		}
+	}
+
 	private void UpdateItemBoxes(float delta)
 	{
 		for (int i = 0; i < ItemBoxCount; i++)
@@ -1724,41 +1928,45 @@ public class MapScript : IWasmModule
 
 		if (_racerCount == 1)
 		{
-			item = roll < 40 ? PowerUpType.TurboMushroom :
-				roll < 55 ? PowerUpType.TripleMushrooms :
-				roll < 70 ? PowerUpType.StarPower :
-				roll < 85 ? PowerUpType.GreenShell :
+			item = roll < 25 ? PowerUpType.TurboMushroom :
+				roll < 45 ? PowerUpType.TripleMushrooms :
+				roll < 60 ? PowerUpType.GoldenMushroom :
+				roll < 75 ? PowerUpType.StarPower :
+				roll < 88 ? PowerUpType.GreenShell :
 				PowerUpType.SuperHorn;
 		}
 		else if (racer.Rank <= 1)
 		{
-			item = roll < 25 ? PowerUpType.SpikeTrap :
-				roll < 45 ? PowerUpType.GreenShell :
-				roll < 60 ? PowerUpType.TripleGreenShells :
-				roll < 75 ? PowerUpType.Bobomb :
-				roll < 90 ? PowerUpType.SuperHorn :
+			item = roll < 22 ? PowerUpType.FakeItemBox :
+				roll < 42 ? PowerUpType.SpikeTrap :
+				roll < 58 ? PowerUpType.GreenShell :
+				roll < 70 ? PowerUpType.TripleGreenShells :
+				roll < 82 ? PowerUpType.Bobomb :
+				roll < 93 ? PowerUpType.SuperHorn :
 				PowerUpType.TurboMushroom;
 		}
 		else if (racer.Rank >= _racerCount)
 		{
-			item = roll < 24 ? PowerUpType.BlueShell :
-				roll < 44 ? PowerUpType.StarPower :
-				roll < 64 ? PowerUpType.TripleRedShells :
-				roll < 80 ? PowerUpType.TripleMushrooms :
-				roll < 92 ? PowerUpType.LightningBolt :
+			item = roll < 22 ? PowerUpType.BlueShell :
+				roll < 40 ? PowerUpType.GoldenMushroom :
+				roll < 56 ? PowerUpType.StarPower :
+				roll < 72 ? PowerUpType.TripleRedShells :
+				roll < 84 ? PowerUpType.LightningBolt :
+				roll < 92 ? PowerUpType.Blooper :
 				PowerUpType.Bobomb;
 		}
 		else
 		{
-			item = roll < 15 ? PowerUpType.TurboMushroom :
-				roll < 28 ? PowerUpType.TripleMushrooms :
-				roll < 42 ? PowerUpType.GreenShell :
+			item = roll < 12 ? PowerUpType.TurboMushroom :
+				roll < 22 ? PowerUpType.TripleMushrooms :
+				roll < 32 ? PowerUpType.GoldenMushroom :
+				roll < 44 ? PowerUpType.GreenShell :
 				roll < 54 ? PowerUpType.RedShell :
-				roll < 66 ? PowerUpType.TripleRedShells :
-				roll < 76 ? PowerUpType.Bobomb :
-				roll < 86 ? PowerUpType.SpikeTrap :
-				roll < 93 ? PowerUpType.SuperHorn :
-				roll < 97 ? PowerUpType.BlueShell :
+				roll < 64 ? PowerUpType.TripleRedShells :
+				roll < 74 ? PowerUpType.Bobomb :
+				roll < 82 ? PowerUpType.FakeItemBox :
+				roll < 90 ? PowerUpType.Blooper :
+				roll < 95 ? PowerUpType.SuperHorn :
 				PowerUpType.StarPower;
 		}
 
@@ -1867,6 +2075,25 @@ public class MapScript : IWasmModule
 				racer.HeldItem = PowerUpType.None;
 				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
 				DropHazardBehind(racer, isBobomb: true);
+				break;
+
+			case PowerUpType.FakeItemBox:
+				racer.HeldItem = PowerUpType.None;
+				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
+				DropHazardBehind(racer, isBobomb: false, isFakeBox: true);
+				break;
+
+			case PowerUpType.GoldenMushroom:
+				racer.GoldenMushroomTimer = 6.0f;
+				TriggerBoost(racer, 2.5f, "★ GOLDEN MUSHROOM FRENZY! ★");
+				_api.SetUnitColor(racer.Unit, new Vector3(1.0f, 0.95f, 0.2f));
+				_api.BroadcastMessage($"{racer.ColoredName} triggered a GOLDEN MUSHROOM FRENZY!");
+				break;
+
+			case PowerUpType.Blooper:
+				racer.HeldItem = PowerUpType.None;
+				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
+				ActivateBlooper(racer);
 				break;
 
 			case PowerUpType.LightningBolt:
@@ -1987,7 +2214,32 @@ public class MapScript : IWasmModule
 		return null;
 	}
 
-	private void DropHazardBehind(RacerState racer, bool isBobomb = false)
+	private void ActivateBlooper(RacerState caster)
+	{
+		_api.BroadcastMessage($"{caster.ColoredName} released BLOOPER INK!");
+		_api.SpawnExpandingBurstSphere(caster.Position, 5.0f, 16.0f, 0.4f, new Vector3(0.1f, 0.1f, 0.15f));
+		_api.CreateFloatingText("★ BLOOPER SQUIRT! ★", caster.Position + new Vector3(0f, 2.8f, 0f), new Vector3(0.2f, 0.2f, 0.3f), 1.5f);
+
+		for (int r = 0; r < _racerCount; r++)
+		{
+			RacerState rival = _racers[r];
+			if (!rival.Active || !rival.Unit.IsValid || rival.StarTimer > 0f || rival.Finished) continue;
+			if (rival.Rank < caster.Rank || (_racerCount <= 2 && rival.PlayerIndex != caster.PlayerIndex))
+			{
+				rival.InkedTimer = 4.5f;
+				_api.CreateFloatingText("⚠ INKED! TRACTION SLIPPING! ⚠", rival.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.2f, 0.2f, 0.2f), 1.8f);
+				_api.SpawnVisualEffect("lightning", rival.Position, 0.8f);
+				_api.SpawnExpandingGroundRing(rival.Position, 3.0f, 9.0f, 0.3f, new Vector3(0.12f, 0.12f, 0.15f));
+				if (!rival.IsComputer)
+				{
+					_api.PlayPlayerWarningSound(rival.PlayerIndex);
+					_api.ShakePlayerCamera(rival.PlayerIndex, 0.4f, 0.3f);
+				}
+			}
+		}
+	}
+
+	private void DropHazardBehind(RacerState racer, bool isBobomb = false, bool isFakeBox = false)
 	{
 		for (int i = 0; i < MaxHazards; i++)
 		{
@@ -1997,7 +2249,8 @@ public class MapScript : IWasmModule
 			float offset = isBobomb && racer.Speed > 10.0f ? 4.5f : -2.4f;
 			float dropX = racer.Position.X + MathF.Sin(racer.HeadingRadians) * offset;
 			float dropZ = racer.Position.Z + MathF.Cos(racer.HeadingRadians) * offset;
-			UnitId hazardUnit = _api.SpawnUnitForPlayer(UnitIds.TrackHazard, new Vector2(dropX, dropZ), _neutralSlot, false, true);
+			string unitTemplate = isFakeBox ? UnitIds.ItemCrystal : UnitIds.TrackHazard;
+			UnitId hazardUnit = _api.SpawnUnitForPlayer(unitTemplate, new Vector2(dropX, dropZ), _neutralSlot, false, true);
 			if (hazardUnit.IsValid)
 			{
 				hazardUnit.CommandsFrozen = true;
@@ -2007,6 +2260,10 @@ public class MapScript : IWasmModule
 				{
 					_api.SetUnitColor(hazardUnit, new Vector3(0.12f, 0.12f, 0.15f));
 				}
+				else if (isFakeBox)
+				{
+					_api.SetUnitColor(hazardUnit, new Vector3(1.0f, 0.2f, 0.2f));
+				}
 			}
 
 			slot.Active = true;
@@ -2014,14 +2271,19 @@ public class MapScript : IWasmModule
 			slot.Position = new Vector3(dropX, _api.GetTerrainHeight(dropX, dropZ), dropZ);
 			slot.OwnerPlayerIndex = racer.PlayerIndex;
 			slot.IsBobomb = isBobomb;
+			slot.IsFakeItemBox = isFakeBox;
 			slot.BobombFuse = 4.0f;
 			slot.PulseTimer = 0.5f;
 			slot.GraceTimer = 0.6f;
-			slot.RemainingLifetime = isBobomb ? 4.2f : 25.0f;
+			slot.RemainingLifetime = isBobomb ? 4.2f : (isFakeBox ? 30.0f : 25.0f);
 
 			if (isBobomb)
 			{
 				_api.CreateFloatingText("BOB-OMB PLANTED!", slot.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.35f, 0.1f), 1.0f);
+			}
+			else if (isFakeBox)
+			{
+				_api.CreateFloatingText("FAKE ITEM BOX DEPLOYED!", slot.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.3f, 0.3f), 1.0f);
 			}
 			return;
 		}
@@ -2129,6 +2391,16 @@ public class MapScript : IWasmModule
 				continue;
 			}
 
+			if (slot.IsFakeItemBox)
+			{
+				slot.PulseTimer -= delta;
+				if (slot.PulseTimer <= 0f)
+				{
+					slot.PulseTimer = 1.3f;
+					_api.SpawnExpandingGroundRing(slot.Position, 1.6f, 4.2f, 0.25f, new Vector3(1.0f, 0.2f, 0.2f));
+				}
+			}
+
 			if (slot.RemainingLifetime <= 0f)
 			{
 				ClearHazard(slot);
@@ -2144,6 +2416,25 @@ public class MapScript : IWasmModule
 				float dx = racer.Position.X - slot.Position.X;
 				float dz = racer.Position.Z - slot.Position.Z;
 				if (dx * dx + dz * dz > 1.9f * 1.9f) continue;
+
+				if (slot.IsFakeItemBox)
+				{
+					if (racer.StarTimer <= 0f)
+					{
+						SpinOutRacer(racer, "FAKE ITEM BOX!");
+						_api.SpawnVisualEffect("lightning", slot.Position, 1.2f);
+						_api.SpawnExpandingBurstSphere(slot.Position, 4.5f, 16f, 0.4f, new Vector3(1.0f, 0.2f, 0.2f));
+						_api.SpawnExpandingGroundRing(slot.Position, 5.5f, 18f, 0.35f, new Vector3(1.0f, 0.35f, 0.1f));
+						_api.TriggerMeshImpulse(racer.Unit, 1.5f, 0.35f, 16.0f);
+						if (!racer.IsComputer)
+						{
+							_api.ShakePlayerCamera(racer.PlayerIndex, 0.8f, 0.4f);
+							_api.PlayPlayerWarningSound(racer.PlayerIndex);
+						}
+					}
+					ClearHazard(slot);
+					break;
+				}
 
 				if (racer.StarTimer <= 0f)
 				{
@@ -2304,6 +2595,11 @@ public class MapScript : IWasmModule
 	private void TriggerBoost(RacerState racer, float duration, string label)
 	{
 		if (racer.SpinOutTimer > 0f) return;
+		if (racer.InkedTimer > 0f)
+		{
+			racer.InkedTimer = 0f;
+			_api.CreateFloatingText("INK CLEANSED!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.0f);
+		}
 		racer.BoostTimer = MathF.Max(racer.BoostTimer, duration);
 		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed);
 		_api.CreateFloatingText(label, racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.75f, 0.15f), 1.2f);
@@ -2318,6 +2614,11 @@ public class MapScript : IWasmModule
 	private void SpinOutRacer(RacerState racer, string reason)
 	{
 		if (racer.SpinOutTimer > 0f) return;
+		if (racer.GoldenMushroomTimer > 0f)
+		{
+			racer.GoldenMushroomTimer = 0f;
+			_api.SetUnitColor(racer.Unit, racer.IsComputer ? new Vector3(0.6f, 0.6f, 0.6f) : new Vector3(1f, 1f, 1f));
+		}
 		racer.SpinOutTimer = 1.05f;
 		racer.BoostTimer = 0f;
 		racer.DriftTimer = 0f;
@@ -2407,8 +2708,10 @@ public class MapScript : IWasmModule
 					foundDraft = true;
 					a.DraftingTimer += delta;
 
-					if (!a.IsComputer && ((int)(_raceElapsed * 5.0f) % 2 == 0))
+					if (!a.IsComputer && ((int)(_raceElapsed * 6.0f) % 2 == 0))
 					{
+						Vector3 midPoint = (a.Position + b.Position) * 0.5f;
+						_api.SpawnExpandingGroundRing(midPoint, 1.8f, 5.0f, 0.16f, new Vector3(0.5f, 0.85f, 1.0f));
 						_api.SpawnExpandingGroundRing(a.Position, 2.2f, 8.0f, 0.2f, new Vector3(0.85f, 0.95f, 1.0f));
 					}
 
@@ -2501,9 +2804,11 @@ public class MapScript : IWasmModule
 			string lapText = racer.Finished ? $"FIN ({racer.FinishTime:F1}s)" : $"Lap {racer.Lap}/{TotalLaps}";
 			string speedText = !racer.IsComputer && !racer.Finished ? $" [{(int)(racer.Speed * 3.6f)} km/h]" : string.Empty;
 			string coinsText = racer.Coins > 0 ? $" | 🪙{racer.Coins}" : string.Empty;
-			string itemText = racer.HeldItem == PowerUpType.None
-				? (racer.ItemRouletteTimer > 0f ? " | [?]" : string.Empty)
-				: $" | [{FormatPowerUpName(racer.HeldItem)}]";
+			string itemText = racer.GoldenMushroomTimer > 0f
+				? " | [GOLDEN FRENZY!]"
+				: (racer.HeldItem == PowerUpType.None
+					? (racer.ItemRouletteTimer > 0f ? " | [?]" : string.Empty)
+					: $" | [{FormatPowerUpName(racer.HeldItem)}]");
 			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{speedText}{coinsText}{itemText}");
 		}
 	}
@@ -2627,6 +2932,7 @@ public class MapScript : IWasmModule
 	{
 		PowerUpType.TurboMushroom => "Mushroom",
 		PowerUpType.TripleMushrooms => "Triple Mushrooms (x3)",
+		PowerUpType.GoldenMushroom => "Golden Mushroom (Frenzy)",
 		PowerUpType.GreenShell => "Green Shell",
 		PowerUpType.TripleGreenShells => "Triple Green Shells (x3)",
 		PowerUpType.RedShell => "Red Shell",
@@ -2634,6 +2940,8 @@ public class MapScript : IWasmModule
 		PowerUpType.BlueShell => "Blue Spiny Shell",
 		PowerUpType.SuperHorn => "Super Horn",
 		PowerUpType.Bobomb => "Bob-omb",
+		PowerUpType.FakeItemBox => "Fake Item Box",
+		PowerUpType.Blooper => "Blooper Ink",
 		PowerUpType.SpikeTrap => "Spike Trap",
 		PowerUpType.LightningBolt => "Lightning",
 		PowerUpType.StarPower => "Star Power",
