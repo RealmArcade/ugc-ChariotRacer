@@ -2,7 +2,7 @@
   "MapName": "Chariot Racer",
   "Author": "RealmArcade",
   "Version": "1.0.0",
-  "Description": "Mario Kart / GlideOn inspired arcade racing proof-of-concept in Realm.",
+  "Description": "Circuito de las brasas. Carrera de tres carriles para uno a ocho jugadores.",
   "Tags": [
     "Racing",
     "Arcade"
@@ -27,11 +27,14 @@
     },
     "Character": {
       "fantasy_warrior_unit_1.rmesh": "c0e16b9c16871a5d2e4ff820d6d25138ba1121feda3db1327bfa7a7116363b6d",
-      "orc_warrior_7.rmesh": "b01affb5917119fb76052db8440e56af2140866c60904729b2ffaecd4324efa2"
+      "orc_warrior_7.rmesh": "b01affb5917119fb76052db8440e56af2140866c60904729b2ffaecd4324efa2",
+      "ember_chariot.rmesh": "a4c4096ad5cebf6a94070d91bbbd9283a808dbf3c8e5c72a905ade2fff56c780"
     },
     "Decal": {
       "acid_drip.rtex": "303aa61310bae34e7f40ed4d2614d772e6fe3a313e1c2bcd7255c2f1c47a5884",
-      "arcane_spark.rtex": "af0f579d808584b4080c97ab2fe6d7a30e24cff6970a37de55ffe79819612aec"
+      "arcane_spark.rtex": "af0f579d808584b4080c97ab2fe6d7a30e24cff6970a37de55ffe79819612aec",
+      "launch_chevrons.rtex": "3751574b9d2ef14d47c5b6d9fab9b403329cb5ba5ab9cf5a73d563a418a153a2",
+      "brake_crosses.rtex": "40e04a0cadab4b3c1e1017795c1c66329d7f802e1c18a6a75131cfdc10284406"
     },
     "Icon": {
       "victory_flag.rtex": "e117e306e33320b3591ee3b7b55a2fcac3aa29419b4c2c8d3e63768dca6eb8c0",

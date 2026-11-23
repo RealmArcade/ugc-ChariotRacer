@@ -1,2950 +1,899 @@
 namespace Realm.Maps;
 
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Realm.Ecs;
+using Realm.Ecs.Components.Core;
 using Realm.MapAPI;
 
 public class MapScript : IWasmModule
 {
-	private const int MaxRacers = 8;
-	private const int TotalLaps = 3;
-	private const int WaypointCount = 16;
-	private const int ItemBoxCount = 8;
-	private const int MaxHazards = 24;
-	private const int MaxProjectiles = 16;
-	private const int NeutralSlotFallback = 23;
-
-	private const float CountdownDurationSeconds = 4.2f;
-	private const float RocketBoostWindowSeconds = 0.6f;
-	private const float BaseMaxSpeed = 18.0f;
-	private const float TurboMaxSpeed = 38.0f;
-	private const float StarMaxSpeed = 40.0f;
-	private const float OffroadMaxSpeed = 10.5f;
-	private const float AccelerationRate = 18.0f;
-	private const float BrakeDecelerationRate = 34.0f;
-	private const float CoastDecelerationRate = 6.0f;
-	private const float BaseTurnRate = 2.6f;
-	private const float DriftTurnRate = 3.6f;
-	private const float BoostTurnRate = 1.35f;
-	private const float BoostDriftTurnRate = 1.8f;
-	private const float BoostTurnInertia = 7.0f;
-	private const float TrackHalfWidth = 12.2f;
-	private const float KartRadius = 1.15f;
-	private const float LeaderboardIntervalSeconds = 0.3f;
-
-	private enum PowerUpType
-	{
-		None = 0,
-		TurboMushroom = 1,
-		GreenShell = 2,
-		RedShell = 3,
-		SpikeTrap = 4,
-		LightningBolt = 5,
-		StarPower = 6,
-		BlueShell = 7,
-		SuperHorn = 8,
-		Bobomb = 9,
-		TripleMushrooms = 10,
-		TripleGreenShells = 11,
-		TripleRedShells = 12,
-		FakeItemBox = 13,
-		GoldenMushroom = 14,
-		Blooper = 15
-	}
-
-	private struct TrackRegion
-	{
-		public float MinX;
-		public float MinZ;
-		public float MaxX;
-		public float MaxZ;
-
-		public TrackRegion(float minX, float minZ, float maxX, float maxZ)
-		{
-			MinX = MathF.Min(minX, maxX);
-			MinZ = MathF.Min(minZ, maxZ);
-			MaxX = MathF.Max(minX, maxX);
-			MaxZ = MathF.Max(minZ, maxZ);
-		}
-
-		public readonly bool Contains(Vector3 pos) =>
-			pos.X >= MinX && pos.X <= MaxX && pos.Z >= MinZ && pos.Z <= MaxZ;
-	}
-
-	private class RacerState
-	{
-		public bool Active;
-		public int PlayerIndex;
-		public bool IsComputer;
-		public string DisplayName = string.Empty;
-		public string ColoredName = string.Empty;
-		public UnitId Unit = UnitId.Invalid;
-
-		public Vector3 Position;
-		public Vector3 StartPosition;
-		public float HeadingRadians;
-		public float StartHeading;
-		public float Speed;
-		public float VisualSpinOffset;
-		public float CurrentTurnVelocity;
-
-		public bool HasSteerTarget;
-		public Vector3 SteerTarget;
-		public float TargetHeading;
-		public float KeySteerInput;
-
-		public float BoostTimer;
-		public float DriftTimer;
-		public float DriftChargeDuration;
-		public float DriftSparkCooldown;
-		public float DraftingTimer;
-		public float DraftingCooldown;
-		public float StuntWindowTimer;
-		public float TireScrubCooldown;
-		public int PreviousRank = 1;
-		public bool IsInBoostCamera;
-		public float ReverseTimer;
-		public bool PendingMiniTurbo;
-		public float SpinOutTimer;
-		public float StarTimer;
-		public float ShockedTimer;
-		public float BrakeTimer;
-		public float BoostPadCooldown;
-		public float StarVfxCooldown;
-		public float TurboVfxCooldown;
-		public float RocketAttemptElapsed = -1f;
-		public float ItemRouletteTimer;
-		public float ItemRouletteTick;
-		public float OffTrackTimer;
-		public float StationaryTimer;
-		public float LapStartTime;
-		public float BestLapTime = float.MaxValue;
-		public float DustVfxCooldown;
-		public float GoldenMushroomTimer;
-		public float GoldenVfxCooldown;
-		public float InkedTimer;
-
-		public PowerUpType HeldItem;
-		public int ItemCharges;
-		public int Coins;
-		public float QuickRecoveryWindow;
-		public float LastCheckpointTime;
-		public int Lap = 1;
-		public int CheckpointStage;
-		public float RaceScore;
-		public int Rank = 1;
-		public bool Finished;
-		public float FinishTime;
-		public int FinishOrder;
-
-		public int AiWaypointIndex;
-		public float AiLaneOffset;
-		public float AiDecisionTimer;
-		public float AiTurboCooldown;
-	}
-
-	private class ItemBoxSlot
-	{
-		public Vector3 Position;
-		public UnitId Unit = UnitId.Invalid;
-		public float RespawnTimer;
-	}
-
-	private class HazardSlot
-	{
-		public bool Active;
-		public UnitId Unit = UnitId.Invalid;
-		public Vector3 Position;
-		public int OwnerPlayerIndex;
-		public bool IsBobomb;
-		public bool IsFakeItemBox;
-		public float BobombFuse;
-		public float PulseTimer;
-		public float GraceTimer;
-		public float RemainingLifetime;
-	}
-
-	private class ShellProjectileSlot
-	{
-		public bool Active;
-		public UnitId Unit = UnitId.Invalid;
-		public Vector3 Position;
-		public float HeadingRadians;
-		public float Speed;
-		public int OwnerPlayerIndex;
-		public bool IsHoming;
-		public bool IsBlueShell;
-		public float WarningTimer;
-		public int BouncesRemaining;
-		public float GraceTimer;
-		public float RemainingLifetime;
-	}
-
-	private struct CoinSlot
-	{
-		public Vector3 Position;
-		public float RespawnTimer;
-		public float PulseCooldown;
-	}
-
-	private struct SpeedRingSlot
-	{
-		public Vector3 Position;
-		public float Cooldown;
-		public float PulseTimer;
-	}
-
-	private const int CoinCount = 12;
-	private readonly CoinSlot[] _coins = new CoinSlot[CoinCount];
-	private SpeedRingSlot _speedRingEast;
-	private SpeedRingSlot _speedRingWest;
-	private float _fastestLapTime = float.MaxValue;
-	private string _fastestLapRacerName = string.Empty;
-	private readonly RacerState[] _racers = new RacerState[MaxRacers];
-	private readonly int[] _rankedIndices = new int[MaxRacers];
-	private readonly ItemBoxSlot[] _itemBoxes = new ItemBoxSlot[ItemBoxCount];
-	private readonly HazardSlot[] _hazards = new HazardSlot[MaxHazards];
-	private readonly ShellProjectileSlot[] _projectiles = new ShellProjectileSlot[MaxProjectiles];
-	private readonly Vector2[] _waypoints = new Vector2[WaypointCount];
-
-	private IGameAPI _api = null!;
-	private TrackRegion _finishRegion;
-	private TrackRegion _checkpoint1Region;
-	private TrackRegion _checkpoint2Region;
-	private TrackRegion _checkpoint3Region;
-	private TrackRegion _boostPadEastRegion;
-	private TrackRegion _boostPadWestRegion;
-	private TrackRegion _boostPadApexEastRegion;
-	private TrackRegion _boostPadApexWestRegion;
-
-	private int _racerCount;
-	private int _neutralSlot = NeutralSlotFallback;
-	private int _finishedCount;
-	private float _countdownRemaining;
-	private int _lastAnnouncedSecond = -1;
-	private bool _raceStarted;
-	private bool _raceEnded;
-	private bool _finalLapTriggered;
-	private float _raceElapsed;
-	private float _leaderboardRefreshTimer;
-	private float _endGameTimer = -1f;
-	private int _winnerRacerIndex = -1;
-
-	public void Initialize(IGameAPI api)
-	{
-		_api = api;
-
-		for (int i = 0; i < MaxRacers; i++)
-		{
-			_racers[i] = new RacerState();
-			_rankedIndices[i] = i;
-		}
-		for (int i = 0; i < MaxHazards; i++) _hazards[i] = new HazardSlot();
-		for (int i = 0; i < MaxProjectiles; i++) _projectiles[i] = new ShellProjectileSlot();
-
-		InitializeTrackWaypoints();
-		LoadTrackRegions();
-		EnsureParticipants();
-		SpawnRacers();
-		SpawnItemBoxes();
-		InitCoins();
-		InitSpeedRings();
-		SetupInitialHudAndLeaderboard();
-
-		_api.SetWeather("clear");
-		_api.SetTimeOfDay(14.0f);
-		_finalLapTriggered = false;
-
-		_api.OnUnitOrdered += HandleUnitOrdered;
-		_api.OnSpellCast += HandleSpellCast;
-		_api.OnPlayerChatMessage += HandlePlayerChatMessage;
-		_api.OnPlayerLeft += HandlePlayerLeft;
-		_api.OnUnitSelected += HandleUnitSelected;
-
-		_countdownRemaining = CountdownDurationSeconds;
-		_lastAnnouncedSecond = 5;
-		_raceStarted = false;
-		_raceEnded = false;
-		_raceElapsed = 0f;
-
-		_api.StartCountdownTimer(CountdownDurationSeconds, "RACE STARTS IN");
-		_api.ShowFeedbackText("GET READY!", new Vector3(1.0f, 0.85f, 0.2f));
-		_api.BroadcastMessage("--- GET READY! ---");
-	}
-
-	public void Update(IGameAPI api, float delta)
-	{
-		if (delta <= 0f) return;
-		if (delta > 0.1f) delta = 0.1f;
-
-		if (!_raceStarted)
-		{
-			UpdateCountdown(delta);
-			return;
-		}
-
-		_raceElapsed += delta;
-
-		if (_endGameTimer > 0f)
-		{
-			_endGameTimer -= delta;
-			if (_endGameTimer <= 0f)
-			{
-				FinalizeMatchOutcome();
-				return;
-			}
-		}
-
-		UpdateRacers(delta);
-		ResolveKartCollisions();
-		UpdateDrafting(delta);
-		UpdateCoins(delta);
-		UpdateSpeedRings(delta);
-		UpdateItemBoxes(delta);
-		UpdateHazards(delta);
-		UpdateProjectiles(delta);
-		UpdateRankings();
-
-		_leaderboardRefreshTimer -= delta;
-		if (_leaderboardRefreshTimer <= 0f)
-		{
-			_leaderboardRefreshTimer = LeaderboardIntervalSeconds;
-			PublishLeaderboard();
-		}
-	}
-
-	private void InitializeTrackWaypoints()
-	{
-		_waypoints[0] = new Vector2(0f, -48f);
-		_waypoints[1] = new Vector2(36f, -48f);
-		_waypoints[2] = new Vector2(64f, -42f);
-		_waypoints[3] = new Vector2(82f, -24f);
-		_waypoints[4] = new Vector2(88f, 0f);
-		_waypoints[5] = new Vector2(82f, 24f);
-		_waypoints[6] = new Vector2(64f, 42f);
-		_waypoints[7] = new Vector2(36f, 48f);
-		_waypoints[8] = new Vector2(0f, 48f);
-		_waypoints[9] = new Vector2(-36f, 48f);
-		_waypoints[10] = new Vector2(-64f, 42f);
-		_waypoints[11] = new Vector2(-82f, 24f);
-		_waypoints[12] = new Vector2(-88f, 0f);
-		_waypoints[13] = new Vector2(-82f, -24f);
-		_waypoints[14] = new Vector2(-64f, -42f);
-		_waypoints[15] = new Vector2(-36f, -48f);
-	}
-
-	private void LoadTrackRegions()
-	{
-		_finishRegion = ReadRegionOrDefault("finish_line", -3f, -61f, 3f, -35f);
-		_checkpoint1Region = ReadRegionOrDefault("checkpoint_1", 74f, -6f, 102f, 6f);
-		_checkpoint2Region = ReadRegionOrDefault("checkpoint_2", -4f, 35f, 4f, 61f);
-		_checkpoint3Region = ReadRegionOrDefault("checkpoint_3", -102f, -6f, -74f, 6f);
-		_boostPadEastRegion = ReadRegionOrDefault("boost_pad_east", 24f, -54f, 32f, -42f);
-		_boostPadWestRegion = ReadRegionOrDefault("boost_pad_west", -32f, 42f, -24f, 54f);
-		_boostPadApexEastRegion = ReadRegionOrDefault("boost_pad_apex_east", 82f, -6f, 92f, 6f);
-		_boostPadApexWestRegion = ReadRegionOrDefault("boost_pad_apex_west", -92f, -6f, -82f, 6f);
-	}
-
-	private TrackRegion ReadRegionOrDefault(string name, float fallbackMinX, float fallbackMinZ, float fallbackMaxX, float fallbackMaxZ)
-	{
-		if (_api.TryGetCoordinate(name, out Vector3 min, out Vector3 max))
-		{
-			return new TrackRegion(min.X, min.Z, max.X, max.Z);
-		}
-		return new TrackRegion(fallbackMinX, fallbackMinZ, fallbackMaxX, fallbackMaxZ);
-	}
-
-	private void EnsureParticipants()
-	{
-		var activePlayers = _api.GetActivePlayers();
-		_racerCount = 0;
-
-		for (int i = 0; i < activePlayers.Length && _racerCount < MaxRacers; i++)
-		{
-			PlayerId p = activePlayers[i];
-			RacerState racer = _racers[_racerCount];
-			racer.Active = true;
-			racer.PlayerIndex = p.Value;
-			racer.IsComputer = p.IsComputer;
-			racer.DisplayName = string.IsNullOrWhiteSpace(p.Name) ? $"Racer {p.Value + 1}" : p.Name;
-			racer.ColoredName = p.ColoredName;
-			_racerCount++;
-		}
-
-		for (int slot = EcsSharedMemory.MAX_PLAYERS - 1; slot >= 0; slot--)
-		{
-			if (!IsPlayerSeated(slot))
-			{
-				_neutralSlot = slot;
-				break;
-			}
-		}
-	}
-
-	private bool IsPlayerSeated(int playerIndex)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			if (_racers[i].PlayerIndex == playerIndex) return true;
-		}
-		return false;
-	}
-
-	private void SpawnRacers()
-	{
-		float startFacing = MathF.PI * 0.5f;
-
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState racer = _racers[i];
-			Vector3 spawn = ResolveStartPosition(racer.PlayerIndex, i);
-			UnitId unit = _api.SpawnUnitForPlayer(UnitIds.ChariotRacer, new Vector2(spawn.X, spawn.Z), racer.PlayerIndex, true, true);
-			if (!unit.IsValid) continue;
-
-			racer.Unit = unit;
-			racer.Position = unit.Position;
-			racer.StartPosition = racer.Position;
-			racer.HeadingRadians = startFacing;
-			racer.StartHeading = startFacing;
-			racer.TargetHeading = startFacing;
-			racer.Speed = 0f;
-			racer.Coins = 0;
-			racer.ItemCharges = 0;
-			racer.GoldenMushroomTimer = 0f;
-			racer.GoldenVfxCooldown = 0f;
-			racer.InkedTimer = 0f;
-			racer.QuickRecoveryWindow = 0f;
-			racer.LastCheckpointTime = 0f;
-			racer.Lap = 1;
-			racer.CheckpointStage = 0;
-			racer.Rank = i + 1;
-			racer.AiWaypointIndex = 0;
-			racer.AiLaneOffset = ((i % 3) - 1) * 3.0f;
-
-			unit.CommandsFrozen = true;
-			unit.Invulnerable = true;
-			unit.HideHealthAndManaBars = true;
-			unit.Speed = 0f;
-			_api.SetUnitLevel(unit, 1);
-			_api.SetUnitFacing(unit, startFacing);
-			_api.SetAbilityState(unit, AbilityIds.UsePowerup, true, false);
-			_api.SetAbilityState(unit, AbilityIds.SteerLeft, false, true);
-			_api.SetAbilityState(unit, AbilityIds.SteerRight, false, true);
-			_api.SetAbilityState(unit, AbilityIds.SteerLeftStop, false, true);
-			_api.SetAbilityState(unit, AbilityIds.SteerRightStop, false, true);
-
-			if (!racer.IsComputer)
-			{
-				PlayerId player = _api.GetPlayer(racer.PlayerIndex);
-				player.SelectUnit(unit);
-				player.SetHudElementVisible(HudElement.ResourceBar, false);
-				ApplyChaseCamera(racer.PlayerIndex, unit);
-				player.SendMessage("CHARIOT RACER: Steer with [A]/[D] or Right-click | [Q] Turbo | [W] Item | [E] Drift | [R] Reverse");
-				player.SendMessage("Tip: Hit [Q] right on GO for a Rocket Start! Chat '-chase' for 3rd person or '-top' for overhead.");
-			}
-		}
-	}
-
-	private Vector3 ResolveStartPosition(int playerIndex, int racerOrder)
-	{
-		Vector3 anchor = _api.GetSpawnAnchor(playerIndex);
-		if (anchor != Vector3.Zero) return anchor;
-
-		anchor = _api.GetSpawnAnchor(playerIndex + 1);
-		if (anchor != Vector3.Zero) return anchor;
-
-		int row = racerOrder / 2;
-		int col = racerOrder % 2;
-		float x = -8.0f - (row * 6.0f) - (col * 2.0f);
-		float z = col == 0 ? -51.0f : -45.0f;
-		return new Vector3(x, _api.GetTerrainHeight(x, z), z);
-	}
-
-	private void ApplyChaseCamera(int playerIndex, UnitId unit, bool reverseView = false, bool highSpeed = false)
-	{
-		if (!unit.IsValid) return;
-		_api.SetPlayerCameraFollowUnit(
-			playerIndex,
-			unit,
-			distance: reverseView ? 12.5f : (highSpeed ? 14.8f : 12.2f),
-			heightOffset: reverseView ? 4.5f : (highSpeed ? 4.8f : 4.3f),
-			pitchDegrees: reverseView ? -15.0f : (highSpeed ? -13.0f : -15.0f),
-			yawOffsetDegrees: reverseView ? 180.0f : 0.0f,
-			alignToUnitFacing: true,
-			smoothing: 0f,
-			lockCameraInput: true);
-	}
-
-	private void ApplyTopDownCamera(int playerIndex, UnitId unit)
-	{
-		if (!unit.IsValid) return;
-		_api.SetPlayerCameraFollowUnit(
-			playerIndex,
-			unit,
-			distance: 14.0f,
-			heightOffset: 22.0f,
-			pitchDegrees: -54.0f,
-			yawOffsetDegrees: 0.0f,
-			alignToUnitFacing: false,
-			smoothing: 7.0f,
-			lockCameraInput: true);
-	}
-
-	private void SpawnItemBoxes()
-	{
-		float[] zSlots = { -54.0f, -50.0f, -46.0f, -42.0f };
-		for (int i = 0; i < 4; i++)
-		{
-			CreateItemBoxSlot(i, 46.0f, zSlots[i]);
-			CreateItemBoxSlot(i + 4, -46.0f, -zSlots[i]);
-		}
-	}
-
-	private void CreateItemBoxSlot(int index, float x, float z)
-	{
-		float y = _api.GetTerrainHeight(x, z);
-		var pos = new Vector3(x, y, z);
-		UnitId box = _api.SpawnUnitForPlayer(UnitIds.ItemCrystal, new Vector2(x, z), _neutralSlot, true, true);
-		if (box.IsValid)
-		{
-			box.CommandsFrozen = true;
-			box.Invulnerable = true;
-			box.HideHealthAndManaBars = true;
-		}
-		_itemBoxes[index] = new ItemBoxSlot
-		{
-			Position = pos,
-			Unit = box,
-			RespawnTimer = 0f
-		};
-	}
-
-	private void InitCoins()
-	{
-		Vector2[] coinLocations =
-		[
-			new Vector2(18f, -48f),
-			new Vector2(-18f, -48f),
-			new Vector2(50f, -45f),
-			new Vector2(75f, -30f),
-			new Vector2(86f, 0f),
-			new Vector2(75f, 30f),
-			new Vector2(18f, 48f),
-			new Vector2(-18f, 48f),
-			new Vector2(-50f, 45f),
-			new Vector2(-75f, 30f),
-			new Vector2(-86f, 0f),
-			new Vector2(-75f, -30f)
-		];
-
-		for (int i = 0; i < CoinCount; i++)
-		{
-			Vector2 loc = coinLocations[i];
-			float y = _api.GetTerrainHeight(loc.X, loc.Y);
-			_coins[i] = new CoinSlot
-			{
-				Position = new Vector3(loc.X, y, loc.Y),
-				RespawnTimer = 0f,
-				PulseCooldown = (i % 3) * 0.45f
-			};
-		}
-	}
-
-	private void InitSpeedRings()
-	{
-		float yEast = _api.GetTerrainHeight(28f, -22f);
-		_speedRingEast = new SpeedRingSlot
-		{
-			Position = new Vector3(28f, yEast, -22f),
-			Cooldown = 0f,
-			PulseTimer = 0.5f
-		};
-
-		float yWest = _api.GetTerrainHeight(-28f, 22f);
-		_speedRingWest = new SpeedRingSlot
-		{
-			Position = new Vector3(-28f, yWest, 22f),
-			Cooldown = 0f,
-			PulseTimer = 1.0f
-		};
-	}
-
-	private void SetupInitialHudAndLeaderboard()
-	{
-		_api.SetLeaderboardVisible("CHARIOT RACER (3 LAPS)", true);
-		PublishLeaderboard();
-
-		_api.AddInstructionsSection(
-			"Controls & Steering",
-			"[b]Steering & Driving:[/b]\n" +
-			"• [b]A / D[/b] — Steer Chariot left / right (or Right-Click on ground to steer)\n" +
-			"• [b]Q[/b] — [b]Turbo Boost[/b] (7.5s high-speed rocket charge, 13s cooldown)\n" +
-			"• [b]W[/b] — [b]Use Item[/b] (Fires held power-up or drops hazard / dash during Frenzy)\n" +
-			"• [b]E[/b] — [b]Drift Hop[/b] (Hold around bends to charge Mini-Turbos)\n" +
-			"• [b]R[/b] — [b]Brake / Reverse[/b] (Stops instantly or backs up out of corners)\n\n" +
-			"[b]Chat Commands:[/b]\n" +
-			"• [b]-chase[/b] — Dynamic Chase Camera\n" +
-			"• [b]-top[/b] — Aerial Elevated Racing Camera\n" +
-			"• [b]-wide[/b] — Cinematic Wide Camera\n" +
-			"• [b]-stuck[/b] — Resets chariot to track center\n" +
-			"• [b]-honk / -spin[/b] — Sound horn / do mid-race trick");
-
-		_api.AddInstructionsSection(
-			"Drifting & Mini-Turbos",
-			"Hold [b][E][/b] around corners to charge sparks:\n\n" +
-			"• [b][color=#40c0ff]Tier 1 (0.7s) — Mini-Turbo[/color][/b]: Blue sparks + chime. Releases a 1.2s boost at 27 m/s.\n" +
-			"• [b][color=#ff8820]Tier 2 (1.5s) — Super Mini-Turbo[/color][/b]: Orange fire + pulse. Releases a 2.2s blast at 35 m/s with screen shake!\n" +
-			"• [b][color=#c040ff]Tier 3 (2.4s) — Ultra Mini-Turbo[/color][/b]: Purple lightning + thunder. Releases a 3.5s super rocket blast at 38 m/s!");
-
-		_api.AddInstructionsSection(
-			"Advanced Techniques",
-			"• [b]Rocket Start[/b]: Hit [b][Q][/b] right as the countdown hits 1 / GO! Warning: pressing too early causes an engine burnout stall!\n\n" +
-			"• [b]Quick Recovery[/b]: Tap [b][Q][/b] or [b][E][/b] within 0.45s of getting hit to instantly snap out of a spin at 14 m/s!\n\n" +
-			"• [b]Track Coins & Speed Rings[/b]: Collect coins (+speed) and hit golden Speed Rings on the straights for instant boosts!\n\n" +
-			"• [b]Directional Aerial Stunts[/b]: Tap [b][E][/b] on boost pads while steering [b][A][/b] or [b][D][/b] for Barrel Rolls or Backflips!\n\n" +
-			"• [b]Slipstream / Drafting[/b]: Tuck in behind a rival's kart for 1.25s to slice the air and trigger a [b]Slipstream Slingshot[/b] at 35 m/s!\n\n" +
-			"• [b]Final Lap Climactic Event[/b]: Lap 3 triggers dusk storm lighting and +10% maximum engine speed!");
-
-		_api.AddInstructionsSection(
-			"Items & Defense",
-			"Drive through glowing item crystals on the track:\n\n" +
-			"• [b]Golden Mushroom[/b]: 6s frenzy of infinite instant dashes and off-road immunity!\n" +
-			"• [b]Fake Item Box[/b]: Sinister decoy crystal; zaps victims and drops their coins!\n" +
-			"• [b]Blooper Ink[/b]: Squirts black ink at all leaders ahead, crippling traction and speed!\n" +
-			"• [b]Triple Items[/b]: x3 Mushrooms or x3 Shells with auto-blocking rear shield!\n" +
-			"• [b]Bob-omb[/b]: Proximity ticking explosive with massive 6.5m shockwave blast!\n" +
-			"• [b]Blue Spiny Shell[/b]: Wings across the map to detonate on the 1st place leader!\n" +
-			"• [b]Super Horn[/b]: Radial sonic blast that shatters incoming shells (including Blue Shells)!\n" +
-			"• [b]Spike Trap / Shells[/b]: Rear protection and tactical obstacle drops!\n" +
-			"• [b]Star Power & Lightning[/b]: Invulnerability and track-wide electricity!");
-	}
-
-	private void UpdateCountdown(float delta)
-	{
-		_countdownRemaining -= delta;
-		int sec = (int)MathF.Ceiling(_countdownRemaining);
-
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState r = _racers[i];
-			if (!r.Active || !r.Unit.IsValid) continue;
-
-			r.Position = r.StartPosition;
-			r.HeadingRadians = r.StartHeading;
-			r.TargetHeading = r.StartHeading;
-			r.Speed = 0f;
-			r.BoostTimer = 0f;
-			r.CurrentTurnVelocity = 0f;
-			r.HasSteerTarget = false;
-			r.KeySteerInput = 0f;
-			r.Unit.Speed = 0f;
-			_api.SetUnitCommandsFrozen(r.Unit, true);
-			_api.IssueStopOrder(r.Unit);
-			_api.TeleportUnit(r.Unit, r.StartPosition);
-			_api.SetUnitFacing(r.Unit, r.StartHeading);
-			_api.SetUnitAnimation(r.Unit, "Idle");
-		}
-
-		if (sec >= 1 && sec <= 3 && sec != _lastAnnouncedSecond)
-		{
-			_lastAnnouncedSecond = sec;
-			_api.SetCountdownTimerLabel($"RACE STARTS IN: {sec}s");
-			Vector3 countColor = sec switch
-			{
-				3 => new Vector3(1.0f, 0.2f, 0.2f),
-				2 => new Vector3(1.0f, 0.55f, 0.15f),
-				1 => new Vector3(1.0f, 0.95f, 0.1f),
-				_ => new Vector3(1.0f, 1.0f, 1.0f)
-			};
-
-			_api.BroadcastMessage($"--- [ {sec} ] ---");
-			_api.ShowFeedbackText($"{sec}", countColor);
-
-			for (int i = 0; i < _racerCount; i++)
-			{
-				RacerState r = _racers[i];
-				if (!r.Active || !r.Unit.IsValid) continue;
-
-				_api.CreateFloatingText($"{sec}", r.Position + new Vector3(0f, 3.2f, 0f), countColor, 1.0f);
-				_api.SpawnExpandingGroundRing(r.Position, 3.0f, 9f, 0.35f, countColor);
-
-				if (!r.IsComputer)
-				{
-					_api.PlayPlayerClickSound(r.PlayerIndex);
-				}
-			}
-		}
-
-		if (_countdownRemaining <= 0f)
-		{
-			_raceStarted = true;
-			_api.StopCountdownTimer();
-			_api.BroadcastMessage("★ ¡GO! RACE 3 LAPS! ★");
-			_api.ShowFeedbackText("★ GO! ★", new Vector3(0.2f, 1.0f, 0.35f));
-
-			for (int i = 0; i < _racerCount; i++)
-			{
-				RacerState r = _racers[i];
-				if (!r.Active || !r.Unit.IsValid) continue;
-
-				_api.SetUnitCommandsFrozen(r.Unit, false);
-				r.Unit.CommandsFrozen = false;
-				r.Unit.Speed = BaseMaxSpeed;
-				r.LapStartTime = _raceElapsed;
-
-				_api.CreateFloatingText("★ GO! ★", r.Position + new Vector3(0f, 3.2f, 0f), new Vector3(0.2f, 1.0f, 0.35f), 1.5f);
-				_api.SpawnExpandingGroundRing(r.Position, 6.0f, 16f, 0.45f, new Vector3(0.2f, 1.0f, 0.35f));
-
-				if (!r.IsComputer)
-				{
-					_api.GetPlayer(r.PlayerIndex).SelectUnit(r.Unit);
-					_api.PlayPlayerClickSound(r.PlayerIndex);
-				}
-
-				if (r.RocketAttemptElapsed >= 0f)
-				{
-					if (r.RocketAttemptElapsed <= 0.85f && r.RocketAttemptElapsed >= 0.08f)
-					{
-						r.BoostTimer = 2.5f;
-						r.Speed = TurboMaxSpeed;
-						_api.CreateFloatingText("★ PERFECT ROCKET START! ★", r.Position + new Vector3(0f, 2.7f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 1.6f);
-						_api.SpawnExpandingGroundRing(r.Position, 7f, 18f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
-						_api.SpawnExpandingBurstSphere(r.Position, 4.0f, 14f, 0.4f, new Vector3(1.0f, 0.7f, 0.1f));
-						_api.TriggerMeshImpulse(r.Unit, 1.4f, 0.35f, 14.0f);
-						if (!r.IsComputer)
-						{
-							_api.ShakePlayerCamera(r.PlayerIndex, 0.7f, 0.4f);
-							_api.PlayPlayerClickSound(r.PlayerIndex);
-						}
-					}
-					else if (r.RocketAttemptElapsed > 1.1f)
-					{
-						r.SpinOutTimer = 0.95f;
-						r.Speed = 0f;
-						_api.CreateFloatingText("⚠ BURNOUT STALL!", r.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.3f, 0.2f), 1.4f);
-						_api.SpawnVisualEffect("fireblast", r.Position, 0.7f);
-						_api.TriggerMeshImpulse(r.Unit, 1.0f, 0.4f, 20.0f);
-						if (!r.IsComputer)
-						{
-							_api.PlayPlayerWarningSound(r.PlayerIndex);
-							_api.ShakePlayerCamera(r.PlayerIndex, 0.5f, 0.3f);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void HandleUnitSelected(UnitId selectedUnit)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState r = _racers[i];
-			if (!r.IsComputer && r.Active && r.Unit.IsValid && selectedUnit != r.Unit)
-			{
-				_api.GetPlayer(r.PlayerIndex).SelectUnit(r.Unit);
-			}
-		}
-	}
-
-	private void HandleUnitOrdered(UnitId unit, string order, Vector3 targetPosition)
-	{
-		RacerState? racer = FindRacerByUnit(unit);
-		if (racer == null || racer.IsComputer) return;
-
-		if (!_raceStarted)
-		{
-			racer.Position = racer.StartPosition;
-			racer.HeadingRadians = racer.StartHeading;
-			racer.TargetHeading = racer.StartHeading;
-			racer.Speed = 0f;
-			racer.Unit.Speed = 0f;
-			_api.SetUnitCommandsFrozen(racer.Unit, true);
-			_api.IssueStopOrder(racer.Unit);
-			_api.TeleportUnit(racer.Unit, racer.StartPosition);
-			return;
-		}
-
-		if (string.Equals(order, "move", StringComparison.OrdinalIgnoreCase) ||
-			string.Equals(order, "move_queued", StringComparison.OrdinalIgnoreCase) ||
-			string.Equals(order, "attack_move", StringComparison.OrdinalIgnoreCase) ||
-			string.Equals(order, "attack_move_queued", StringComparison.OrdinalIgnoreCase))
-		{
-			_api.IssueStopOrder(racer.Unit);
-
-			if (racer.ReverseTimer > 0f)
-			{
-				racer.ReverseTimer = 0f;
-				if (!racer.IsComputer)
-				{
-					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-				}
-			}
-
-			float dx = targetPosition.X - racer.Position.X;
-			float dz = targetPosition.Z - racer.Position.Z;
-			float distSq = dx * dx + dz * dz;
-
-			if (distSq < 0.5f) return;
-
-			float desiredHeading = MathF.Atan2(dx, dz);
-			float angleDiff = WrapAngle(desiredHeading - racer.HeadingRadians);
-
-			// If the player clicks behind the chariot (> 125 degrees away) while driving fast, do not steer backwards.
-			if (MathF.Abs(angleDiff) > 2.2f && racer.Speed > 5.0f)
-			{
-				racer.BrakeTimer = 0.45f;
-				return;
-			}
-
-			// Steer smoothly towards the target heading
-			float maxClamp = racer.Speed > 5.0f ? 1.55f : MathF.PI;
-			float clampedDiff = Math.Clamp(angleDiff, -maxClamp, maxClamp);
-			racer.TargetHeading = WrapAngle(racer.HeadingRadians + clampedDiff);
-			racer.SteerTarget = targetPosition;
-			racer.HasSteerTarget = true;
-			racer.KeySteerInput = 0f;
-		}
-		else if (string.Equals(order, "stop", StringComparison.OrdinalIgnoreCase) ||
-				 string.Equals(order, "hold", StringComparison.OrdinalIgnoreCase))
-		{
-			_api.IssueStopOrder(racer.Unit);
-
-			if (racer.ReverseTimer > 0f)
-			{
-				racer.ReverseTimer = 0f;
-				if (!racer.IsComputer)
-				{
-					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-				}
-			}
-			racer.HasSteerTarget = false;
-			racer.BrakeTimer = 0.6f;
-		}
-	}
-
-	private void HandleSpellCast(UnitId caster, string abilityId, Vector3 targetPosition)
-	{
-		_ = targetPosition;
-		RacerState? racer = FindRacerByUnit(caster);
-		if (racer == null) return;
-
-		if (racer.QuickRecoveryWindow > 0f &&
-			(string.Equals(abilityId, AbilityIds.TurboBoost, StringComparison.OrdinalIgnoreCase) ||
-			 string.Equals(abilityId, AbilityIds.DriftHop, StringComparison.OrdinalIgnoreCase)))
-		{
-			racer.QuickRecoveryWindow = 0f;
-			racer.SpinOutTimer = 0.05f;
-			racer.Speed = 14.0f;
-			_api.CreateFloatingText("★ QUICK RECOVERY! ★", racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(0.2f, 1.0f, 0.6f), 1.2f);
-			_api.SpawnExpandingGroundRing(racer.Position, 3.2f, 10f, 0.25f, new Vector3(0.2f, 1.0f, 0.6f));
-			_api.TriggerMeshImpulse(racer.Unit, 0.9f, 0.25f, 14.0f);
-			if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
-			return;
-		}
-
-		if (string.Equals(abilityId, AbilityIds.TurboBoost, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted)
-			{
-				racer.RocketAttemptElapsed = _countdownRemaining;
-				_api.CreateFloatingText("REV UP!", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.75f, 0.2f), 0.7f);
-				_api.SpawnExpandingGroundRing(racer.Position, 1.8f, 5.0f, 0.2f, new Vector3(1.0f, 0.7f, 0.2f));
-				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
-				return;
-			}
-
-			TriggerBoost(racer, 7.5f, "TURBO BOOST!");
-		}
-		else if (string.Equals(abilityId, AbilityIds.UsePowerup, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted) return;
-			if (racer.GoldenMushroomTimer > 0f)
-			{
-				TriggerBoost(racer, 1.8f, "★ GOLDEN DASH! ★");
-				_api.SpawnExpandingBurstSphere(racer.Position, 4.0f, 14f, 0.35f, new Vector3(1.0f, 0.85f, 0.15f));
-				_api.TriggerMeshImpulse(racer.Unit, 0.7f, 0.18f, 10.0f);
-				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
-				return;
-			}
-			ActivateHeldPowerUp(racer);
-		}
-		else if (string.Equals(abilityId, AbilityIds.DriftHop, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted) return;
-			racer.DriftTimer = 3.5f;
-			racer.DriftChargeDuration = 0f;
-			racer.DriftSparkCooldown = 0.15f;
-			racer.PendingMiniTurbo = true;
-			racer.StuntWindowTimer = 0.55f;
-			_api.TriggerMeshImpulse(racer.Unit, 0.7f, 0.2f, 12.0f);
-			_api.CreateFloatingText("DRIFT HOP!", racer.Position + new Vector3(0f, 2.1f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 0.7f);
-			_api.SpawnExpandingGroundRing(racer.Position, 2.2f, 8f, 0.25f, new Vector3(0.3f, 0.7f, 1.0f));
-		}
-		else if (string.Equals(abilityId, AbilityIds.BrakeReverse, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted) return;
-			racer.ReverseTimer = 1.3f;
-			racer.Speed = 0f;
-			racer.HasSteerTarget = false;
-			racer.CurrentTurnVelocity = 0f;
-			if (!racer.IsComputer)
-			{
-				ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: true);
-			}
-			_api.CreateFloatingText("REVERSE", racer.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.8f, 0.2f), 0.7f);
-		}
-		else if (string.Equals(abilityId, AbilityIds.SteerLeft, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted) return;
-			racer.KeySteerInput = 1.0f;
-		}
-		else if (string.Equals(abilityId, AbilityIds.SteerLeftStop, StringComparison.OrdinalIgnoreCase))
-		{
-			if (racer.KeySteerInput > 0f) racer.KeySteerInput = 0f;
-		}
-		else if (string.Equals(abilityId, AbilityIds.SteerRight, StringComparison.OrdinalIgnoreCase))
-		{
-			if (!_raceStarted) return;
-			racer.KeySteerInput = -1.0f;
-		}
-		else if (string.Equals(abilityId, AbilityIds.SteerRightStop, StringComparison.OrdinalIgnoreCase))
-		{
-			if (racer.KeySteerInput < 0f) racer.KeySteerInput = 0f;
-		}
-	}
-
-	private void HandlePlayerChatMessage(string message, int playerIndex)
-	{
-		RacerState? racer = FindRacerByPlayer(playerIndex);
-		if (racer == null || !racer.Unit.IsValid) return;
-
-		string trimmed = message.Trim().ToLowerInvariant();
-		PlayerId player = _api.GetPlayer(playerIndex);
-
-		if (trimmed == "-top" || trimmed == "-iso")
-		{
-			ApplyTopDownCamera(playerIndex, racer.Unit);
-			player.SendMessage("Camera: Elevated Racing View");
-		}
-		else if (trimmed == "-chase")
-		{
-			ApplyChaseCamera(playerIndex, racer.Unit);
-			player.SendMessage("Camera: Chase View");
-		}
-		else if (trimmed == "-wide")
-		{
-			_api.SetPlayerCameraFollowUnit(playerIndex, racer.Unit, 20f, 8f, -22f, 0f, true, 3.0f, true);
-			player.SendMessage("Camera: Wide Chase View");
-		}
-		else if (trimmed == "-stuck")
-		{
-			RecoverRacerToTrack(racer);
-		}
-		else if (trimmed == "-honk" || trimmed == "-horn" || trimmed == "-beep")
-		{
-			_api.CreateFloatingText("♫ HONK! ♫", racer.Position + new Vector3(0f, 3.0f, 0f), new Vector3(1.0f, 0.85f, 0.2f), 1.2f);
-			_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 8f, 0.2f, new Vector3(1.0f, 0.9f, 0.3f));
-			_api.PlayPlayerClickSound(playerIndex);
-		}
-		else if (trimmed == "-spin" || trimmed == "-trick" || trimmed == "-dance")
-		{
-			_api.TriggerMeshImpulse(racer.Unit, 1.8f, 0.4f, 16.0f);
-			_api.CreateFloatingText("★ SPIN TRICK! ★", racer.Position + new Vector3(0f, 2.8f, 0f), new Vector3(0.4f, 1.0f, 0.9f), 1.2f);
-			_api.SpawnExpandingGroundRing(racer.Position, 3.0f, 9f, 0.25f, new Vector3(0.4f, 1.0f, 0.9f));
-		}
-	}
-
-	private void HandlePlayerLeft(int playerIndex)
-	{
-		RacerState? racer = FindRacerByPlayer(playerIndex);
-		if (racer != null)
-		{
-			racer.IsComputer = true;
-		}
-	}
-
-	private void UpdateRacers(float delta)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState racer = _racers[i];
-			if (!racer.Active || !racer.Unit.IsValid || racer.Unit.IsDead) continue;
-
-			if (racer.BoostPadCooldown > 0f) racer.BoostPadCooldown -= delta;
-			if (racer.ShockedTimer > 0f) racer.ShockedTimer -= delta;
-			if (racer.QuickRecoveryWindow > 0f) racer.QuickRecoveryWindow -= delta;
-
-			if (racer.GoldenMushroomTimer > 0f)
-			{
-				racer.GoldenMushroomTimer -= delta;
-				racer.GoldenVfxCooldown -= delta;
-				if (racer.GoldenVfxCooldown <= 0f)
-				{
-					racer.GoldenVfxCooldown = 0.14f;
-					_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 7.5f, 0.18f, new Vector3(1.0f, 0.9f, 0.2f));
-				}
-				if (racer.GoldenMushroomTimer <= 0f)
-				{
-					racer.HeldItem = PowerUpType.None;
-					_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-					_api.SetUnitColor(racer.Unit, racer.IsComputer ? new Vector3(0.6f, 0.6f, 0.6f) : new Vector3(1f, 1f, 1f));
-					_api.CreateFloatingText("Frenzy Over", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.9f, 0.9f, 0.9f), 1.0f);
-				}
-			}
-
-			if (racer.InkedTimer > 0f)
-			{
-				racer.InkedTimer -= delta;
-				if (racer.BoostTimer > 0f)
-				{
-					racer.InkedTimer = 0f;
-					_api.CreateFloatingText("INK CLEANSED!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.0f);
-				}
-			}
-
-			if (racer.ItemRouletteTimer > 0f)
-			{
-				racer.ItemRouletteTimer -= delta;
-				racer.ItemRouletteTick -= delta;
-				if (racer.ItemRouletteTick <= 0f)
-				{
-					racer.ItemRouletteTick = 0.16f;
-					if (!racer.IsComputer)
-					{
-						_api.PlayPlayerClickSound(racer.PlayerIndex);
-					}
-				}
-
-				if (racer.ItemRouletteTimer <= 0f)
-				{
-					GrantRandomPowerUp(racer);
-				}
-			}
-
-			bool isOffroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
-			if (isOffroad && racer.Speed > 4.0f)
-			{
-				racer.DustVfxCooldown -= delta;
-				if (racer.DustVfxCooldown <= 0f)
-				{
-					racer.DustVfxCooldown = 0.22f;
-					_api.SpawnExpandingGroundRing(racer.Position, 1.4f, 4.5f, 0.18f, new Vector3(0.55f, 0.45f, 0.3f));
-				}
-			}
-
-			if (isOffroad && !racer.Finished)
-			{
-				racer.OffTrackTimer += delta;
-				if (racer.OffTrackTimer > 4.5f)
-				{
-					racer.OffTrackTimer = 0f;
-					RecoverRacerToTrack(racer);
-				}
-			}
-			else
-			{
-				racer.OffTrackTimer = 0f;
-			}
-
-			if (_raceStarted && !racer.Finished && racer.Speed < 1.2f && racer.SpinOutTimer <= 0f && racer.ReverseTimer <= 0f)
-			{
-				racer.StationaryTimer += delta;
-				if (racer.StationaryTimer > 5.5f)
-				{
-					racer.StationaryTimer = 0f;
-					RecoverRacerToTrack(racer);
-				}
-			}
-			else
-			{
-				racer.StationaryTimer = 0f;
-			}
-
-			if (racer.StarTimer > 0f)
-			{
-				racer.StarTimer -= delta;
-				racer.StarVfxCooldown -= delta;
-				if (racer.StarVfxCooldown <= 0f)
-				{
-					racer.StarVfxCooldown = 0.25f;
-					_api.SpawnExpandingGroundRing(racer.Position, 3.2f, 12f, 0.35f, new Vector3(1.0f, 0.9f, 0.2f));
-				}
-			}
-
-			if (racer.BoostTimer > 0f)
-			{
-				racer.BoostTimer -= delta;
-				racer.TurboVfxCooldown -= delta;
-				if (racer.TurboVfxCooldown <= 0f)
-				{
-					racer.TurboVfxCooldown = 0.12f;
-					_api.SpawnVisualEffect("fireblast", racer.Position, 0.85f);
-					_api.SpawnExpandingGroundRing(racer.Position, 2.4f, 8.0f, 0.2f, new Vector3(1.0f, 0.6f, 0.15f));
-				}
-			}
-
-			if (racer.DriftTimer > 0f)
-			{
-				float prevCharge = racer.DriftChargeDuration;
-				racer.DriftTimer -= delta;
-				racer.DriftChargeDuration += delta;
-				racer.DriftSparkCooldown -= delta;
-
-				if (prevCharge < 0.7f && racer.DriftChargeDuration >= 0.7f)
-				{
-					_api.CreateFloatingText("✦ MINI-TURBO! (Blue)", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.25f, 0.85f, 1.0f), 0.75f);
-					_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 8f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
-					if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
-				}
-				else if (prevCharge < 1.5f && racer.DriftChargeDuration >= 1.5f)
-				{
-					_api.CreateFloatingText("✦✦ SUPER MINI-TURBO! (Orange)", racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.6f, 0.15f), 0.85f);
-					_api.SpawnExpandingBurstSphere(racer.Position, 3.5f, 12f, 0.3f, new Vector3(1.0f, 0.55f, 0.15f));
-					if (!racer.IsComputer)
-					{
-						_api.PlayPlayerClickSound(racer.PlayerIndex);
-						_api.ShakePlayerCamera(racer.PlayerIndex, 0.35f, 0.2f);
-					}
-				}
-				else if (prevCharge < 2.4f && racer.DriftChargeDuration >= 2.4f)
-				{
-					_api.CreateFloatingText("✦✦✦ ULTRA MINI-TURBO! (Purple)", racer.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.85f, 0.25f, 1.0f), 1.0f);
-					_api.SpawnExpandingBurstSphere(racer.Position, 4.5f, 15f, 0.35f, new Vector3(0.85f, 0.25f, 1.0f));
-					if (!racer.IsComputer)
-					{
-						_api.PlayPlayerClickSound(racer.PlayerIndex);
-						_api.ShakePlayerCamera(racer.PlayerIndex, 0.55f, 0.3f);
-					}
-				}
-
-				if (racer.DriftSparkCooldown <= 0f)
-				{
-					if (racer.DriftChargeDuration >= 2.4f)
-					{
-						racer.DriftSparkCooldown = 0.09f;
-						_api.SpawnVisualEffect("lightning", racer.Position, 0.7f);
-						_api.SpawnExpandingGroundRing(racer.Position, 3.2f, 11f, 0.18f, new Vector3(0.85f, 0.2f, 1.0f));
-					}
-					else if (racer.DriftChargeDuration >= 1.5f)
-					{
-						racer.DriftSparkCooldown = 0.12f;
-						_api.SpawnVisualEffect("fireblast", racer.Position, 0.5f);
-						_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 9f, 0.2f, new Vector3(1.0f, 0.55f, 0.15f));
-					}
-					else if (racer.DriftChargeDuration >= 0.7f)
-					{
-						racer.DriftSparkCooldown = 0.16f;
-						_api.SpawnExpandingGroundRing(racer.Position, 2.0f, 7f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
-					}
-				}
-
-				if (racer.DriftTimer <= 0f && racer.PendingMiniTurbo)
-				{
-					racer.PendingMiniTurbo = false;
-					if (racer.DriftChargeDuration >= 2.4f)
-					{
-						TriggerBoost(racer, 3.5f, "★ ULTRA MINI-TURBO!! ★");
-						racer.Speed = TurboMaxSpeed;
-						_api.SpawnExpandingBurstSphere(racer.Position, 5.5f, 18f, 0.45f, new Vector3(0.85f, 0.25f, 1.0f));
-						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.4f, new Vector3(0.8f, 0.2f, 1.0f));
-						_api.TriggerMeshImpulse(racer.Unit, 1.5f, 0.4f, 18.0f);
-						if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.8f, 0.4f);
-					}
-					else if (racer.DriftChargeDuration >= 1.5f)
-					{
-						TriggerBoost(racer, 2.2f, "SUPER MINI-TURBO!!");
-						racer.Speed = MathF.Max(racer.Speed, 35.0f);
-						if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.45f, 0.3f);
-					}
-					else if (racer.DriftChargeDuration >= 0.7f)
-					{
-						TriggerBoost(racer, 1.2f, "MINI-TURBO!");
-						racer.Speed = MathF.Max(racer.Speed, 27.0f);
-					}
-					racer.DriftChargeDuration = 0f;
-				}
-			}
-
-			if (racer.StuntWindowTimer > 0f) racer.StuntWindowTimer -= delta;
-			if (racer.TireScrubCooldown > 0f) racer.TireScrubCooldown -= delta;
-
-			if (!racer.IsComputer && racer.ReverseTimer <= 0f)
-			{
-				bool highSpeed = racer.Speed > 24.0f || racer.BoostTimer > 0f;
-				if (highSpeed != racer.IsInBoostCamera)
-				{
-					racer.IsInBoostCamera = highSpeed;
-					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false, highSpeed: highSpeed);
-				}
-			}
-
-			if (racer.BrakeTimer > 0f) racer.BrakeTimer -= delta;
-
-			if (racer.ReverseTimer > 0f)
-			{
-				racer.ReverseTimer -= delta;
-				if (racer.ReverseTimer <= 0f && !racer.IsComputer)
-				{
-					ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-				}
-			}
-
-			if (racer.SpinOutTimer > 0f)
-			{
-				racer.SpinOutTimer -= delta;
-				racer.Speed = MathF.Max(0f, racer.Speed - BrakeDecelerationRate * delta);
-			}
-			else
-			{
-				if (racer.IsComputer || racer.Finished)
-				{
-					UpdateAiSteering(racer, delta);
-				}
-
-				UpdateSteerAndThrottle(racer, delta);
-			}
-
-			AdvanceKartPosition(racer, delta);
-			CheckTrackRegionsAndLaps(racer);
-		}
-	}
-
-	private void UpdateAiSteering(RacerState racer, float delta)
-	{
-		Vector2 wp = _waypoints[racer.AiWaypointIndex];
-		int nextIdx = (racer.AiWaypointIndex + 1) % WaypointCount;
-		Vector2 nextWp = _waypoints[nextIdx];
-		Vector2 dir = nextWp - wp;
-		float len = dir.Length();
-		Vector2 perp = len > 0.001f ? new Vector2(-dir.Y / len, dir.X / len) : Vector2.UnitY;
-		Vector2 aim = wp + perp * racer.AiLaneOffset;
-
-		float distSq = Vector2.DistanceSquared(new Vector2(racer.Position.X, racer.Position.Z), aim);
-		if (distSq < 11.0f * 11.0f)
-		{
-			racer.AiWaypointIndex = nextIdx;
-			racer.AiLaneOffset = _api.RandomFloat(-4.5f, 4.5f);
-		}
-
-		racer.SteerTarget = new Vector3(aim.X, racer.Position.Y, aim.Y);
-		racer.HasSteerTarget = true;
-
-		if (racer.DriftTimer <= 0f && (racer.AiWaypointIndex == 2 || racer.AiWaypointIndex == 3 || racer.AiWaypointIndex == 10 || racer.AiWaypointIndex == 11))
-		{
-			racer.DriftTimer = 1.5f;
-			racer.DriftChargeDuration = 0f;
-			racer.DriftSparkCooldown = 0.16f;
-			racer.PendingMiniTurbo = true;
-			_api.SpawnExpandingGroundRing(racer.Position, 2.0f, 7f, 0.2f, new Vector3(0.2f, 0.85f, 1.0f));
-		}
-
-		if (racer.Finished) return;
-
-		if (racer.AiTurboCooldown > 0f) racer.AiTurboCooldown -= delta;
-
-		racer.AiDecisionTimer -= delta;
-		if (racer.AiDecisionTimer > 0f) return;
-		racer.AiDecisionTimer = _api.RandomFloat(0.6f, 1.3f);
-
-		if (racer.HeldItem != PowerUpType.None)
-		{
-			if (racer.HeldItem == PowerUpType.RedShell || racer.HeldItem == PowerUpType.TripleRedShells)
-			{
-				if (racer.Rank > 1) ActivateHeldPowerUp(racer);
-			}
-			else if (racer.HeldItem == PowerUpType.SpikeTrap || racer.HeldItem == PowerUpType.FakeItemBox)
-			{
-				if (racer.Rank <= 3) ActivateHeldPowerUp(racer);
-			}
-			else
-			{
-				ActivateHeldPowerUp(racer);
-			}
-		}
-		else if (racer.AiTurboCooldown <= 0f)
-		{
-			bool trailing = racer.Rank >= 3;
-			if (_api.RandomInt(0, trailing ? 1 : 4) == 0)
-			{
-				TriggerBoost(racer, trailing ? 2.2f : 1.6f, "AI TURBO");
-				racer.AiTurboCooldown = trailing ? 5.5f : 8.5f;
-			}
-		}
-	}
-
-	private void UpdateSteerAndThrottle(RacerState racer, float delta)
-	{
-		float targetTurnRate = 0f;
-		float maxTurn = racer.BoostTimer > 0f
-			? (racer.DriftTimer > 0f ? BoostDriftTurnRate : BoostTurnRate)
-			: (racer.DriftTimer > 0f ? DriftTurnRate : BaseTurnRate);
-
-		if (racer.InkedTimer > 0f)
-		{
-			maxTurn *= 0.65f;
-		}
-
-		if (racer.IsComputer || racer.Finished)
-		{
-			if (racer.HasSteerTarget)
-			{
-				float dx = racer.SteerTarget.X - racer.Position.X;
-				float dz = racer.SteerTarget.Z - racer.Position.Z;
-				float distSq = dx * dx + dz * dz;
-
-				if (distSq > 0.25f)
-				{
-					float targetYaw = MathF.Atan2(dx, dz);
-					float yawDiff = WrapAngle(targetYaw - racer.HeadingRadians);
-					targetTurnRate = Math.Clamp(yawDiff * (racer.BoostTimer > 0f ? 2.2f : 3.5f), -maxTurn, maxTurn);
-				}
-			}
-		}
-		else
-		{
-			if (racer.ReverseTimer <= 0f)
-			{
-				if (racer.KeySteerInput != 0f)
-				{
-					targetTurnRate = racer.KeySteerInput * maxTurn;
-					racer.HasSteerTarget = false;
-				}
-				else if (racer.HasSteerTarget)
-				{
-					float yawDiff = WrapAngle(racer.TargetHeading - racer.HeadingRadians);
-
-					if (MathF.Abs(yawDiff) < 0.025f)
-					{
-						racer.HasSteerTarget = false;
-					}
-					else
-					{
-						targetTurnRate = Math.Clamp(yawDiff * (racer.BoostTimer > 0f ? 2.5f : 4.5f), -maxTurn, maxTurn);
-					}
-				}
-			}
-		}
-
-		if (racer.BoostTimer > 0f || racer.InkedTimer > 0f)
-		{
-			float inertiaRate = racer.InkedTimer > 0f ? 4.0f : BoostTurnInertia;
-			racer.CurrentTurnVelocity = MoveTowards(racer.CurrentTurnVelocity, targetTurnRate, inertiaRate * delta);
-		}
-		else
-		{
-			racer.CurrentTurnVelocity = targetTurnRate;
-		}
-
-		if (MathF.Abs(racer.CurrentTurnVelocity) > 0.001f)
-		{
-			racer.HeadingRadians = WrapAngle(racer.HeadingRadians + racer.CurrentTurnVelocity * delta);
-			if (MathF.Abs(racer.CurrentTurnVelocity) > 2.0f && racer.Speed > 14.0f && racer.TireScrubCooldown <= 0f)
-			{
-				racer.TireScrubCooldown = 0.25f;
-				_api.SpawnExpandingGroundRing(racer.Position, 1.5f, 6f, 0.18f, new Vector3(0.7f, 0.7f, 0.7f));
-			}
-		}
-
-		bool offroad = !IsOnRoad(racer.Position.X, racer.Position.Z);
-		float targetMaxSpeed = BaseMaxSpeed;
-
-		if (racer.StarTimer > 0f || racer.GoldenMushroomTimer > 0f)
-		{
-			targetMaxSpeed = StarMaxSpeed;
-		}
-		else if (racer.BoostTimer > 0f)
-		{
-			targetMaxSpeed = TurboMaxSpeed;
-		}
-		else if (racer.ShockedTimer > 0f)
-		{
-			targetMaxSpeed = BaseMaxSpeed * 0.5f;
-		}
-		else if (offroad)
-		{
-			targetMaxSpeed = OffroadMaxSpeed;
-		}
-		else if (racer.DriftTimer > 0f)
-		{
-			targetMaxSpeed = BaseMaxSpeed * 0.96f;
-		}
-
-		if (racer.InkedTimer > 0f)
-		{
-			targetMaxSpeed *= 0.85f;
-		}
-
-		targetMaxSpeed += racer.Coins * 0.45f;
-		if (racer.Lap >= TotalLaps) targetMaxSpeed += 2.0f;
-		if (racer.Finished) targetMaxSpeed = BaseMaxSpeed * 0.6f;
-
-		if (racer.BrakeTimer > 0f)
-		{
-			racer.Speed = MathF.Max(2.0f, racer.Speed - BrakeDecelerationRate * delta);
-		}
-		else if (racer.Speed < targetMaxSpeed)
-		{
-			float accel = racer.BoostTimer > 0f || racer.StarTimer > 0f ? AccelerationRate * 3.2f : AccelerationRate;
-			racer.Speed = MathF.Min(targetMaxSpeed, racer.Speed + accel * delta);
-		}
-		else if (racer.Speed > targetMaxSpeed)
-		{
-			racer.Speed = MathF.Max(targetMaxSpeed, racer.Speed - CoastDecelerationRate * 2.0f * delta);
-		}
-	}
-
-	private void AdvanceKartPosition(RacerState racer, float delta)
-	{
-		float forwardX = MathF.Sin(racer.HeadingRadians);
-		float forwardZ = MathF.Cos(racer.HeadingRadians);
-
-		float moveDist = racer.ReverseTimer > 0f ? (-7.0f * delta) : (racer.Speed * delta);
-		float nextX = racer.Position.X + forwardX * moveDist;
-		float nextZ = racer.Position.Z + forwardZ * moveDist;
-
-		if (!_api.IsPointPassable(nextX, nextZ, PathingFlags.Ground))
-		{
-			racer.HasSteerTarget = false;
-			racer.CurrentTurnVelocity = 0f;
-
-			if (racer.Speed > 10.0f)
-			{
-				_api.TriggerMeshImpulse(racer.Unit, 1.25f, 0.3f, 16.0f);
-				_api.SpawnExpandingGroundRing(racer.Position, 2.5f, 7.0f, 0.22f, new Vector3(1.0f, 0.45f, 0.2f));
-				if (!racer.IsComputer)
-				{
-					_api.PlayPlayerWarningSound(racer.PlayerIndex);
-					_api.ShakePlayerCamera(racer.PlayerIndex, 0.5f, 0.25f);
-				}
-			}
-
-			bool canSlideX = _api.IsPointPassable(nextX, racer.Position.Z, PathingFlags.Ground);
-			bool canSlideZ = _api.IsPointPassable(racer.Position.X, nextZ, PathingFlags.Ground);
-
-			if (canSlideX)
-			{
-				nextZ = racer.Position.Z;
-				racer.Speed *= 0.85f;
-			}
-			else if (canSlideZ)
-			{
-				nextX = racer.Position.X;
-				racer.Speed *= 0.85f;
-			}
-			else
-			{
-				nextX = racer.Position.X;
-				nextZ = racer.Position.Z;
-				racer.Speed = 0f;
-				if (racer.BoostTimer > 0f)
-				{
-					racer.BoostTimer = 0f;
-					if (!racer.IsComputer)
-					{
-						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.35f);
-					}
-				}
-				if (racer.ReverseTimer > 0f)
-				{
-					racer.ReverseTimer = 0f;
-					if (!racer.IsComputer)
-					{
-						ApplyChaseCamera(racer.PlayerIndex, racer.Unit, reverseView: false);
-					}
-				}
-			}
-		}
-
-		float nextY = _api.GetTerrainHeight(nextX, nextZ);
-		racer.Position = new Vector3(nextX, nextY, nextZ);
-		_api.TeleportUnit(racer.Unit, racer.Position);
-		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
-		_api.SetUnitAnimation(racer.Unit, racer.Speed > 1.5f || racer.ReverseTimer > 0f ? "Move" : "Idle");
-	}
-
-	private void ResolveKartCollisions()
-	{
-		float minDist = KartRadius * 2.0f;
-		float minDistSq = minDist * minDist;
-
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState a = _racers[i];
-			if (!a.Active || !a.Unit.IsValid) continue;
-
-			for (int j = i + 1; j < _racerCount; j++)
-			{
-				RacerState b = _racers[j];
-				if (!b.Active || !b.Unit.IsValid) continue;
-
-				float dx = b.Position.X - a.Position.X;
-				float dz = b.Position.Z - a.Position.Z;
-				float distSq = dx * dx + dz * dz;
-				if (distSq <= 0.0001f || distSq >= minDistSq) continue;
-
-				float dist = MathF.Sqrt(distSq);
-				float overlap = (minDist - dist) * 0.5f;
-				float nx = dx / dist;
-				float nz = dz / dist;
-
-				if (a.StarTimer > 0f && b.StarTimer <= 0f)
-				{
-					SpinOutRacer(b, "STAR SMASH!");
-				}
-				else if (b.StarTimer > 0f && a.StarTimer <= 0f)
-				{
-					SpinOutRacer(a, "STAR SMASH!");
-				}
-				else if (a.GoldenMushroomTimer > 0f && b.GoldenMushroomTimer <= 0f && a.Speed > 16.0f)
-				{
-					SpinOutRacer(b, "GOLDEN TRAMPLE!");
-					_api.TriggerMeshImpulse(b.Unit, 1.4f, 0.35f, 16.0f);
-				}
-				else if (b.GoldenMushroomTimer > 0f && a.GoldenMushroomTimer <= 0f && b.Speed > 16.0f)
-				{
-					SpinOutRacer(a, "GOLDEN TRAMPLE!");
-					_api.TriggerMeshImpulse(a.Unit, 1.4f, 0.35f, 16.0f);
-				}
-				else
-				{
-					float aForwardX = MathF.Sin(a.HeadingRadians);
-					float aForwardZ = MathF.Cos(a.HeadingRadians);
-					float bBehindA = -(nx * aForwardX + nz * aForwardZ);
-
-					if (bBehindA > 0.55f && b.Speed > 7.0f)
-					{
-						bool hasShield = a.HeldItem == PowerUpType.SpikeTrap ||
-							a.HeldItem == PowerUpType.GreenShell ||
-							a.HeldItem == PowerUpType.TripleGreenShells ||
-							a.HeldItem == PowerUpType.TripleRedShells;
-
-						if (hasShield && a.StarTimer <= 0f)
-						{
-							if (a.ItemCharges > 1)
-							{
-								a.ItemCharges--;
-								_api.CreateFloatingText($"SHIELD BLOCKED! ({a.ItemCharges} left)", a.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
-							}
-							else
-							{
-								a.HeldItem = PowerUpType.None;
-								a.ItemCharges = 0;
-								_api.SetAbilityState(a.Unit, AbilityIds.UsePowerup, true, false);
-								_api.CreateFloatingText("SHIELD BLOCKED!", a.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
-							}
-							_api.SpawnExpandingBurstSphere(a.Position, 3.0f, 10f, 0.3f, new Vector3(0.2f, 1.0f, 0.4f));
-							_api.TriggerMeshImpulse(a.Unit, 1.0f, 0.25f, 14.0f);
-							SpinOutRacer(b, "BLOCKED BY SHIELD!");
-						}
-					}
-					else if (bBehindA < -0.55f && a.Speed > 7.0f)
-					{
-						bool hasShield = b.HeldItem == PowerUpType.SpikeTrap ||
-							b.HeldItem == PowerUpType.GreenShell ||
-							b.HeldItem == PowerUpType.TripleGreenShells ||
-							b.HeldItem == PowerUpType.TripleRedShells;
-
-						if (hasShield && b.StarTimer <= 0f)
-						{
-							if (b.ItemCharges > 1)
-							{
-								b.ItemCharges--;
-								_api.CreateFloatingText($"SHIELD BLOCKED! ({b.ItemCharges} left)", b.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
-							}
-							else
-							{
-								b.HeldItem = PowerUpType.None;
-								b.ItemCharges = 0;
-								_api.SetAbilityState(b.Unit, AbilityIds.UsePowerup, true, false);
-								_api.CreateFloatingText("SHIELD BLOCKED!", b.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.4f), 1.3f);
-							}
-							_api.SpawnExpandingBurstSphere(b.Position, 3.0f, 10f, 0.3f, new Vector3(0.2f, 1.0f, 0.4f));
-							_api.TriggerMeshImpulse(b.Unit, 1.0f, 0.25f, 14.0f);
-							SpinOutRacer(a, "BLOCKED BY SHIELD!");
-						}
-					}
-				}
-
-				if (a.Speed > 8.0f || b.Speed > 8.0f)
-				{
-					_api.TriggerMeshImpulse(a.Unit, 0.6f, 0.2f, 14.0f);
-					_api.TriggerMeshImpulse(b.Unit, 0.6f, 0.2f, 14.0f);
-					if (!a.IsComputer) _api.PlayPlayerClickSound(a.PlayerIndex);
-					if (!b.IsComputer) _api.PlayPlayerClickSound(b.PlayerIndex);
-				}
-
-				TryNudgeRacer(a, -nx * overlap, -nz * overlap);
-				TryNudgeRacer(b, nx * overlap, nz * overlap);
-			}
-		}
-	}
-
-	private void TryNudgeRacer(RacerState racer, float offsetX, float offsetZ)
-	{
-		float tx = racer.Position.X + offsetX;
-		float tz = racer.Position.Z + offsetZ;
-		if (!_api.IsPointPassable(tx, tz, PathingFlags.Ground)) return;
-
-		racer.Position = new Vector3(tx, _api.GetTerrainHeight(tx, tz), tz);
-		_api.TeleportUnit(racer.Unit, racer.Position);
-	}
-
-	private void CheckTrackRegionsAndLaps(RacerState racer)
-	{
-		if (racer.BoostPadCooldown <= 0f &&
-			(_boostPadEastRegion.Contains(racer.Position) ||
-			 _boostPadWestRegion.Contains(racer.Position) ||
-			 _boostPadApexEastRegion.Contains(racer.Position) ||
-			 _boostPadApexWestRegion.Contains(racer.Position)))
-		{
-			racer.BoostPadCooldown = 1.3f;
-			if (racer.StuntWindowTimer > 0f)
-			{
-				racer.StuntWindowTimer = 0f;
-				string stuntLabel;
-				float spinImpulse;
-				if (racer.KeySteerInput < -0.2f)
-				{
-					stuntLabel = "★ BARREL ROLL LEFT STUNT!! ★";
-					spinImpulse = 26.0f;
-				}
-				else if (racer.KeySteerInput > 0.2f)
-				{
-					stuntLabel = "★ BARREL ROLL RIGHT STUNT!! ★";
-					spinImpulse = -26.0f;
-				}
-				else
-				{
-					stuntLabel = "★ 360° AERIAL BACKFLIP!! ★";
-					spinImpulse = 18.0f;
-				}
-
-				_api.TriggerMeshImpulse(racer.Unit, 2.3f, 0.48f, spinImpulse);
-				TriggerBoost(racer, 3.2f, stuntLabel);
-				racer.Speed = TurboMaxSpeed;
-				_api.SpawnExpandingBurstSphere(racer.Position, 5.5f, 18f, 0.45f, new Vector3(0.2f, 1.0f, 0.85f));
-				_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.45f, new Vector3(0.2f, 1.0f, 0.8f));
-				if (!racer.IsComputer) _api.ShakePlayerCamera(racer.PlayerIndex, 0.7f, 0.45f);
-			}
-			else
-			{
-				TriggerBoost(racer, 1.8f, "BOOST PAD!");
-				racer.Speed = MathF.Max(racer.Speed, 34.0f);
-				_api.SpawnExpandingGroundRing(racer.Position, 4.5f, 14f, 0.35f, new Vector3(1.0f, 0.8f, 0.2f));
-			}
-		}
-
-		if (racer.Finished) return;
-
-		if (racer.CheckpointStage == 0 && _checkpoint1Region.Contains(racer.Position))
-		{
-			racer.CheckpointStage = 1;
-			float sectorTime = _raceElapsed - racer.LastCheckpointTime;
-			racer.LastCheckpointTime = _raceElapsed;
-			ShowSectorSplit(racer, 1, sectorTime);
-		}
-		else if (racer.CheckpointStage == 1 && _checkpoint2Region.Contains(racer.Position))
-		{
-			racer.CheckpointStage = 2;
-			float sectorTime = _raceElapsed - racer.LastCheckpointTime;
-			racer.LastCheckpointTime = _raceElapsed;
-			ShowSectorSplit(racer, 2, sectorTime);
-		}
-		else if (racer.CheckpointStage == 2 && _checkpoint3Region.Contains(racer.Position))
-		{
-			racer.CheckpointStage = 3;
-			float sectorTime = _raceElapsed - racer.LastCheckpointTime;
-			racer.LastCheckpointTime = _raceElapsed;
-			ShowSectorSplit(racer, 3, sectorTime);
-		}
-		else if (racer.CheckpointStage == 3 && _finishRegion.Contains(racer.Position))
-		{
-			racer.CheckpointStage = 0;
-			racer.Lap++;
-			racer.LastCheckpointTime = _raceElapsed;
-
-			float lapDuration = _raceElapsed - racer.LapStartTime;
-			racer.LapStartTime = _raceElapsed;
-			if (lapDuration < racer.BestLapTime)
-			{
-				racer.BestLapTime = lapDuration;
-			}
-
-			if (lapDuration < _fastestLapTime && lapDuration > 6.0f)
-			{
-				_fastestLapTime = lapDuration;
-				_fastestLapRacerName = racer.DisplayName;
-				_api.BroadcastMessage($"🏆 NEW ALL-TIME TRACK RECORD: {racer.ColoredName} with {lapDuration:F2}s! 🏆");
-				_api.SpawnExpandingBurstSphere(racer.Position, 6.5f, 20f, 0.5f, new Vector3(1.0f, 0.85f, 0.2f));
-				_api.SpawnExpandingGroundRing(racer.Position, 8.0f, 24f, 0.45f, new Vector3(0.85f, 0.25f, 1.0f));
-			}
-
-			if (racer.Lap > TotalLaps)
-			{
-				racer.Finished = true;
-				racer.FinishTime = _raceElapsed;
-				_finishedCount++;
-				racer.FinishOrder = _finishedCount;
-
-				_api.BroadcastMessage($"{racer.ColoredName} finished in position #{racer.FinishOrder} (Total: {racer.FinishTime:F1}s | Best: {racer.BestLapTime:F1}s)!");
-				_api.CreateFloatingText($"FINISH #{racer.FinishOrder}!", racer.Position + new Vector3(0f, 3.0f, 0f), new Vector3(1.0f, 0.9f, 0.2f), 2.5f);
-				if (!racer.IsComputer)
-				{
-					_api.PlayPlayerClickSound(racer.PlayerIndex);
-					_api.ShowPlayerFeedbackText(racer.PlayerIndex, $"FINISH #{racer.FinishOrder} ({racer.FinishTime:F1}s)", new Vector3(1.0f, 0.85f, 0.15f));
-				}
-
-				if (racer.FinishOrder == 1)
-				{
-					_winnerRacerIndex = FindRacerIndex(racer);
-					_endGameTimer = 2.0f;
-				}
-			}
-			else
-			{
-				_api.SetUnitLevel(racer.Unit, racer.Lap);
-				if (!racer.IsComputer)
-				{
-					_api.PlayPlayerClickSound(racer.PlayerIndex);
-					if (racer.Lap == TotalLaps)
-					{
-						if (!_finalLapTriggered)
-						{
-							_finalLapTriggered = true;
-							_api.SetTimeOfDay(18.5f);
-							_api.SetWeather("rain");
-							_api.BroadcastMessage("⚡ ¡FINAL LAP! INTENSITY AT 120% (+10% MAX SPEED)! ⚡");
-							_api.ShowFeedbackText("⚡ FINAL LAP! ⚡", new Vector3(1.0f, 0.25f, 0.2f));
-						}
-						_api.CreateFloatingText("★ FINAL LAP! FULL THROTTLE! ★", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.85f, 0.1f), 2.2f);
-						_api.SpawnExpandingGroundRing(racer.Position, 7.0f, 20f, 0.5f, new Vector3(1.0f, 0.8f, 0.1f));
-						_api.ShakePlayerCamera(racer.PlayerIndex, 0.6f, 0.45f);
-						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText($"★ FINAL LAP! ({lapDuration:F1}s) ★", new Vector3(1.0f, 0.85f, 0.1f));
-					}
-					else
-					{
-						string lapMsg = $"LAP {racer.Lap} / {TotalLaps} ({lapDuration:F1}s)";
-						_api.GetPlayer(racer.PlayerIndex).ShowFeedbackText(lapMsg, new Vector3(0.3f, 0.95f, 1.0f));
-						_api.GetPlayer(racer.PlayerIndex).SendMessage(lapMsg);
-					}
-				}
-			}
-		}
-
-		float wpProgress = ComputeWaypointProgress(racer.Position, racer.CheckpointStage);
-		racer.RaceScore = racer.Finished
-			? 1000000.0f - racer.FinishTime
-			: (racer.Lap * 100.0f) + (racer.CheckpointStage * 25.0f) + wpProgress;
-	}
-
-	private float ComputeWaypointProgress(Vector3 pos, int checkpointStage)
-	{
-		int startWp = checkpointStage * 4;
-		int endWp = startWp + 4;
-		float bestDistSq = float.MaxValue;
-		int bestWp = startWp;
-
-		for (int i = startWp; i <= endWp; i++)
-		{
-			Vector2 wp = _waypoints[i % WaypointCount];
-			float dx = pos.X - wp.X;
-			float dz = pos.Z - wp.Y;
-			float dSq = dx * dx + dz * dz;
-			if (dSq < bestDistSq)
-			{
-				bestDistSq = dSq;
-				bestWp = i;
-			}
-		}
-
-		return (bestWp - startWp) * 5.0f + MathF.Max(0f, 4.9f - MathF.Sqrt(bestDistSq) * 0.08f);
-	}
-
-	private void ShowSectorSplit(RacerState racer, int sectorNumber, float sectorTime)
-	{
-		if (racer.IsComputer) return;
-
-		RacerState? leader = FindLeaderRacer(-1);
-		if (leader != null && leader != racer && leader.RaceScore > racer.RaceScore)
-		{
-			float gapSeconds = (leader.RaceScore - racer.RaceScore) * 0.05f;
-			_api.CreateFloatingText($"SEC {sectorNumber}: {sectorTime:F1}s (+{gapSeconds:F1}s vs 1st)", racer.Position + new Vector3(0f, 2.7f, 0f), new Vector3(1.0f, 0.85f, 0.2f), 1.5f);
-		}
-		else
-		{
-			_api.CreateFloatingText($"SEC {sectorNumber}: {sectorTime:F1}s (LEADER)", racer.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.25f, 1.0f, 0.45f), 1.5f);
-		}
-		_api.PlayPlayerClickSound(racer.PlayerIndex);
-	}
-
-	private void UpdateCoins(float delta)
-	{
-		for (int i = 0; i < CoinCount; i++)
-		{
-			ref CoinSlot coin = ref _coins[i];
-			if (coin.RespawnTimer > 0f)
-			{
-				coin.RespawnTimer -= delta;
-				continue;
-			}
-
-			coin.PulseCooldown -= delta;
-			if (coin.PulseCooldown <= 0f)
-			{
-				coin.PulseCooldown = 1.6f;
-				_api.SpawnExpandingGroundRing(coin.Position, 1.8f, 3.8f, 0.45f, new Vector3(1.0f, 0.85f, 0.15f));
-			}
-
-			for (int r = 0; r < _racerCount; r++)
-			{
-				RacerState racer = _racers[r];
-				if (!racer.Active || !racer.Unit.IsValid || racer.Finished) continue;
-
-				float dx = racer.Position.X - coin.Position.X;
-				float dz = racer.Position.Z - coin.Position.Z;
-				if (dx * dx + dz * dz > 2.3f * 2.3f) continue;
-
-				coin.RespawnTimer = 7.0f;
-				racer.Coins = Math.Min(10, racer.Coins + 1);
-				racer.Speed = MathF.Min(TurboMaxSpeed, racer.Speed + 1.8f);
-				_api.SpawnExpandingBurstSphere(coin.Position, 2.5f, 9.0f, 0.25f, new Vector3(1.0f, 0.9f, 0.2f));
-				_api.CreateFloatingText($"+1 COIN (x{racer.Coins})", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(1.0f, 0.9f, 0.15f), 1.0f);
-				if (!racer.IsComputer)
-				{
-					_api.PlayPlayerClickSound(racer.PlayerIndex);
-				}
-				break;
-			}
-		}
-	}
-
-	private void UpdateSpeedRings(float delta)
-	{
-		UpdateSingleSpeedRing(ref _speedRingEast, delta);
-		UpdateSingleSpeedRing(ref _speedRingWest, delta);
-	}
-
-	private void UpdateSingleSpeedRing(ref SpeedRingSlot ring, float delta)
-	{
-		if (ring.Cooldown > 0f)
-		{
-			ring.Cooldown -= delta;
-			return;
-		}
-
-		ring.PulseTimer -= delta;
-		if (ring.PulseTimer <= 0f)
-		{
-			ring.PulseTimer = 1.4f;
-			_api.SpawnExpandingGroundRing(ring.Position, 2.2f, 5.5f, 0.35f, new Vector3(1.0f, 0.88f, 0.2f));
-		}
-
-		for (int r = 0; r < _racerCount; r++)
-		{
-			RacerState racer = _racers[r];
-			if (!racer.Active || !racer.Unit.IsValid || racer.Finished) continue;
-
-			float dx = racer.Position.X - ring.Position.X;
-			float dz = racer.Position.Z - ring.Position.Z;
-			if (dx * dx + dz * dz <= 3.4f * 3.4f)
-			{
-				ring.Cooldown = 4.5f;
-				racer.Coins = Math.Min(10, racer.Coins + 1);
-				TriggerBoost(racer, 1.8f, "★ SPEED RING SURGE! ★");
-				racer.Speed = MathF.Max(racer.Speed, 33.0f);
-				_api.SpawnExpandingBurstSphere(ring.Position, 4.5f, 15f, 0.4f, new Vector3(1.0f, 0.9f, 0.2f));
-				_api.SpawnExpandingGroundRing(ring.Position, 6.0f, 18f, 0.35f, new Vector3(1.0f, 0.85f, 0.15f));
-				_api.TriggerMeshImpulse(racer.Unit, 0.8f, 0.2f, 12.0f);
-				if (!racer.IsComputer)
-				{
-					_api.PlayPlayerClickSound(racer.PlayerIndex);
-					_api.ShakePlayerCamera(racer.PlayerIndex, 0.4f, 0.25f);
-				}
-				break;
-			}
-		}
-	}
-
-	private void UpdateItemBoxes(float delta)
-	{
-		for (int i = 0; i < ItemBoxCount; i++)
-		{
-			ItemBoxSlot box = _itemBoxes[i];
-			if (box == null) continue;
-
-			if (!box.Unit.IsValid)
-			{
-				box.RespawnTimer -= delta;
-				if (box.RespawnTimer <= 0f)
-				{
-					UnitId respawned = _api.SpawnUnitForPlayer(UnitIds.ItemCrystal, new Vector2(box.Position.X, box.Position.Z), _neutralSlot, true, true);
-					if (respawned.IsValid)
-					{
-						respawned.CommandsFrozen = true;
-						respawned.Invulnerable = true;
-						respawned.HideHealthAndManaBars = true;
-						box.Unit = respawned;
-					}
-				}
-				continue;
-			}
-
-			for (int r = 0; r < _racerCount; r++)
-			{
-				RacerState racer = _racers[r];
-				if (!racer.Active || !racer.Unit.IsValid) continue;
-
-				float dx = racer.Position.X - box.Position.X;
-				float dz = racer.Position.Z - box.Position.Z;
-				if (dx * dx + dz * dz > 2.4f * 2.4f) continue;
-
-				_api.DestroyUnit(box.Unit, false, false);
-				box.Unit = UnitId.Invalid;
-				box.RespawnTimer = 6.0f;
-				_api.SpawnExpandingBurstSphere(box.Position, 3.2f, 13f, 0.35f, new Vector3(1.0f, 0.85f, 0.2f));
-				_api.TriggerMeshImpulse(racer.Unit, 0.85f, 0.2f, 14.0f);
-				if (!racer.IsComputer) _api.PlayPlayerClickSound(racer.PlayerIndex);
-
-				if (racer.HeldItem == PowerUpType.None && racer.ItemRouletteTimer <= 0f)
-				{
-					racer.ItemRouletteTimer = 1.15f;
-					racer.ItemRouletteTick = 0.16f;
-					if (!racer.IsComputer)
-					{
-						_api.CreateFloatingText("? ROLLING... ?", racer.Position + new Vector3(0f, 2.4f, 0f), new Vector3(0.9f, 0.9f, 0.9f), 0.7f);
-					}
-				}
-				break;
-			}
-		}
-	}
-
-	private void GrantRandomPowerUp(RacerState racer)
-	{
-		int roll = _api.RandomInt(0, 99);
-		PowerUpType item;
-
-		if (_racerCount == 1)
-		{
-			item = roll < 25 ? PowerUpType.TurboMushroom :
-				roll < 45 ? PowerUpType.TripleMushrooms :
-				roll < 60 ? PowerUpType.GoldenMushroom :
-				roll < 75 ? PowerUpType.StarPower :
-				roll < 88 ? PowerUpType.GreenShell :
-				PowerUpType.SuperHorn;
-		}
-		else if (racer.Rank <= 1)
-		{
-			item = roll < 22 ? PowerUpType.FakeItemBox :
-				roll < 42 ? PowerUpType.SpikeTrap :
-				roll < 58 ? PowerUpType.GreenShell :
-				roll < 70 ? PowerUpType.TripleGreenShells :
-				roll < 82 ? PowerUpType.Bobomb :
-				roll < 93 ? PowerUpType.SuperHorn :
-				PowerUpType.TurboMushroom;
-		}
-		else if (racer.Rank >= _racerCount)
-		{
-			item = roll < 22 ? PowerUpType.BlueShell :
-				roll < 40 ? PowerUpType.GoldenMushroom :
-				roll < 56 ? PowerUpType.StarPower :
-				roll < 72 ? PowerUpType.TripleRedShells :
-				roll < 84 ? PowerUpType.LightningBolt :
-				roll < 92 ? PowerUpType.Blooper :
-				PowerUpType.Bobomb;
-		}
-		else
-		{
-			item = roll < 12 ? PowerUpType.TurboMushroom :
-				roll < 22 ? PowerUpType.TripleMushrooms :
-				roll < 32 ? PowerUpType.GoldenMushroom :
-				roll < 44 ? PowerUpType.GreenShell :
-				roll < 54 ? PowerUpType.RedShell :
-				roll < 64 ? PowerUpType.TripleRedShells :
-				roll < 74 ? PowerUpType.Bobomb :
-				roll < 82 ? PowerUpType.FakeItemBox :
-				roll < 90 ? PowerUpType.Blooper :
-				roll < 95 ? PowerUpType.SuperHorn :
-				PowerUpType.StarPower;
-		}
-
-		racer.HeldItem = item;
-		racer.ItemCharges = item switch
-		{
-			PowerUpType.TripleMushrooms => 3,
-			PowerUpType.TripleGreenShells => 3,
-			PowerUpType.TripleRedShells => 3,
-			_ => 1
-		};
-		_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, false, false);
-
-		string label = FormatPowerUpName(item);
-		_api.CreateFloatingText($"+{label}", racer.Position + new Vector3(0f, 2.4f, 0f), new Vector3(1.0f, 0.9f, 0.25f), 1.3f);
-
-		if (!racer.IsComputer)
-		{
-			_api.PlayPlayerClickSound(racer.PlayerIndex);
-			_api.GetPlayer(racer.PlayerIndex).SendMessage($"Item collected: [{label}] — Press [W] to use!");
-		}
-	}
-
-	private void ActivateHeldPowerUp(RacerState racer)
-	{
-		PowerUpType item = racer.HeldItem;
-		if (item == PowerUpType.None) return;
-
-		switch (item)
-		{
-			case PowerUpType.TurboMushroom:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				TriggerBoost(racer, 2.2f, "MUSHROOM BOOST!");
-				break;
-
-			case PowerUpType.TripleMushrooms:
-				racer.ItemCharges--;
-				TriggerBoost(racer, 2.0f, $"MUSHROOM BOOST! ({racer.ItemCharges} left)");
-				if (racer.ItemCharges <= 0)
-				{
-					racer.HeldItem = PowerUpType.None;
-					_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				}
-				break;
-
-			case PowerUpType.GreenShell:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				LaunchShell(racer, isHoming: false, isBlueShell: false);
-				break;
-
-			case PowerUpType.TripleGreenShells:
-				racer.ItemCharges--;
-				LaunchShell(racer, isHoming: false, isBlueShell: false);
-				if (racer.ItemCharges <= 0)
-				{
-					racer.HeldItem = PowerUpType.None;
-					_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				}
-				else
-				{
-					_api.CreateFloatingText($"Green Shell ({racer.ItemCharges} left)", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.2f, 1.0f, 0.4f), 0.8f);
-				}
-				break;
-
-			case PowerUpType.RedShell:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				LaunchShell(racer, isHoming: true, isBlueShell: false);
-				break;
-
-			case PowerUpType.TripleRedShells:
-				racer.ItemCharges--;
-				LaunchShell(racer, isHoming: true, isBlueShell: false);
-				if (racer.ItemCharges <= 0)
-				{
-					racer.HeldItem = PowerUpType.None;
-					_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				}
-				else
-				{
-					_api.CreateFloatingText($"Red Shell ({racer.ItemCharges} left)", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(1.0f, 0.3f, 0.2f), 0.8f);
-				}
-				break;
-
-			case PowerUpType.BlueShell:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				LaunchShell(racer, isHoming: true, isBlueShell: true);
-				break;
-
-			case PowerUpType.SuperHorn:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				ActivateSuperHorn(racer);
-				break;
-
-			case PowerUpType.SpikeTrap:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				DropHazardBehind(racer, isBobomb: false);
-				break;
-
-			case PowerUpType.Bobomb:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				DropHazardBehind(racer, isBobomb: true);
-				break;
-
-			case PowerUpType.FakeItemBox:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				DropHazardBehind(racer, isBobomb: false, isFakeBox: true);
-				break;
-
-			case PowerUpType.GoldenMushroom:
-				racer.GoldenMushroomTimer = 6.0f;
-				TriggerBoost(racer, 2.5f, "★ GOLDEN MUSHROOM FRENZY! ★");
-				_api.SetUnitColor(racer.Unit, new Vector3(1.0f, 0.95f, 0.2f));
-				_api.BroadcastMessage($"{racer.ColoredName} triggered a GOLDEN MUSHROOM FRENZY!");
-				break;
-
-			case PowerUpType.Blooper:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				ActivateBlooper(racer);
-				break;
-
-			case PowerUpType.LightningBolt:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				CastLightningShock(racer);
-				break;
-
-			case PowerUpType.StarPower:
-				racer.HeldItem = PowerUpType.None;
-				_api.SetAbilityState(racer.Unit, AbilityIds.UsePowerup, true, false);
-				racer.StarTimer = 4.5f;
-				racer.SpinOutTimer = 0f;
-				racer.VisualSpinOffset = 0f;
-				racer.ShockedTimer = 0f;
-				_api.CreateFloatingText("STAR POWER!", racer.Position + new Vector3(0f, 2.8f, 0f), new Vector3(1.0f, 0.95f, 0.2f), 1.6f);
-				_api.BroadcastMessage($"{racer.ColoredName} activated Star Power!");
-				break;
-		}
-	}
-
-	private void LaunchShell(RacerState racer, bool isHoming, bool isBlueShell)
-	{
-		for (int i = 0; i < MaxProjectiles; i++)
-		{
-			ShellProjectileSlot slot = _projectiles[i];
-			if (slot.Active) continue;
-
-			float spawnX = racer.Position.X + MathF.Sin(racer.HeadingRadians) * 2.2f;
-			float spawnZ = racer.Position.Z + MathF.Cos(racer.HeadingRadians) * 2.2f;
-			UnitId proj = _api.SpawnUnitForPlayer(UnitIds.ShellProjectile, new Vector2(spawnX, spawnZ), _neutralSlot, false, true);
-			if (proj.IsValid)
-			{
-				proj.CommandsFrozen = true;
-				proj.Invulnerable = true;
-				proj.HideHealthAndManaBars = true;
-				Vector3 shellColor = isBlueShell
-					? new Vector3(0.15f, 0.65f, 1.0f)
-					: (isHoming ? new Vector3(1.0f, 0.25f, 0.2f) : new Vector3(0.2f, 1.0f, 0.35f));
-				_api.SetUnitColor(proj, shellColor);
-			}
-
-			slot.Active = true;
-			slot.Unit = proj;
-			slot.Position = new Vector3(spawnX, _api.GetTerrainHeight(spawnX, spawnZ), spawnZ);
-			slot.HeadingRadians = racer.HeadingRadians;
-			slot.Speed = isBlueShell ? 44.0f : (isHoming ? 32.0f : 34.0f);
-			slot.OwnerPlayerIndex = racer.PlayerIndex;
-			slot.IsHoming = isHoming || isBlueShell;
-			slot.IsBlueShell = isBlueShell;
-			slot.WarningTimer = 0f;
-			slot.BouncesRemaining = isBlueShell ? 0 : (isHoming ? 1 : 3);
-			slot.GraceTimer = 0.2f;
-			slot.RemainingLifetime = isBlueShell ? 14.0f : 5.0f;
-
-			if (isBlueShell)
-			{
-				_api.BroadcastMessage($"⚡ {racer.ColoredName} launched a BLUE SPINY SHELL!");
-			}
-			return;
-		}
-	}
-
-	private void ActivateSuperHorn(RacerState racer)
-	{
-		_api.SpawnExpandingBurstSphere(racer.Position, 6.5f, 18.0f, 0.45f, new Vector3(1.0f, 0.2f, 0.85f));
-		_api.SpawnExpandingGroundRing(racer.Position, 7.5f, 20.0f, 0.4f, new Vector3(1.0f, 0.3f, 0.8f));
-		_api.TriggerMeshImpulse(racer.Unit, 1.3f, 0.35f, 16.0f);
-		_api.CreateFloatingText("★ SUPER HORN SONIC BLAST! ★", racer.Position + new Vector3(0f, 3.0f, 0f), new Vector3(1.0f, 0.3f, 0.9f), 1.5f);
-		_api.BroadcastMessage($"{racer.ColoredName} sounded the SUPER HORN!");
-
-		for (int p = 0; p < MaxProjectiles; p++)
-		{
-			ShellProjectileSlot proj = _projectiles[p];
-			if (!proj.Active) continue;
-			float dx = proj.Position.X - racer.Position.X;
-			float dz = proj.Position.Z - racer.Position.Z;
-			if (dx * dx + dz * dz <= 6.5f * 6.5f)
-			{
-				ClearProjectile(proj);
-				_api.CreateFloatingText("SHELL DEFLECTED!", racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.2f);
-			}
-		}
-
-		for (int h = 0; h < MaxHazards; h++)
-		{
-			HazardSlot haz = _hazards[h];
-			if (!haz.Active) continue;
-			float dx = haz.Position.X - racer.Position.X;
-			float dz = haz.Position.Z - racer.Position.Z;
-			if (dx * dx + dz * dz <= 6.5f * 6.5f)
-			{
-				ClearHazard(haz);
-			}
-		}
-
-		for (int r = 0; r < _racerCount; r++)
-		{
-			RacerState rival = _racers[r];
-			if (!rival.Active || rival.PlayerIndex == racer.PlayerIndex || rival.StarTimer > 0f) continue;
-			float dx = rival.Position.X - racer.Position.X;
-			float dz = rival.Position.Z - racer.Position.Z;
-			if (dx * dx + dz * dz <= 6.5f * 6.5f)
-			{
-				SpinOutRacer(rival, "SUPER HORN!");
-			}
-		}
-	}
-
-	private RacerState? FindLeaderRacer(int excludedPlayerIndex)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState r = _racers[_rankedIndices[i]];
-			if (!r.Active || !r.Unit.IsValid || r.Finished) continue;
-			if (r.PlayerIndex != excludedPlayerIndex) return r;
-		}
-		return null;
-	}
-
-	private void ActivateBlooper(RacerState caster)
-	{
-		_api.BroadcastMessage($"{caster.ColoredName} released BLOOPER INK!");
-		_api.SpawnExpandingBurstSphere(caster.Position, 5.0f, 16.0f, 0.4f, new Vector3(0.1f, 0.1f, 0.15f));
-		_api.CreateFloatingText("★ BLOOPER SQUIRT! ★", caster.Position + new Vector3(0f, 2.8f, 0f), new Vector3(0.2f, 0.2f, 0.3f), 1.5f);
-
-		for (int r = 0; r < _racerCount; r++)
-		{
-			RacerState rival = _racers[r];
-			if (!rival.Active || !rival.Unit.IsValid || rival.StarTimer > 0f || rival.Finished) continue;
-			if (rival.Rank < caster.Rank || (_racerCount <= 2 && rival.PlayerIndex != caster.PlayerIndex))
-			{
-				rival.InkedTimer = 4.5f;
-				_api.CreateFloatingText("⚠ INKED! TRACTION SLIPPING! ⚠", rival.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.2f, 0.2f, 0.2f), 1.8f);
-				_api.SpawnVisualEffect("lightning", rival.Position, 0.8f);
-				_api.SpawnExpandingGroundRing(rival.Position, 3.0f, 9.0f, 0.3f, new Vector3(0.12f, 0.12f, 0.15f));
-				if (!rival.IsComputer)
-				{
-					_api.PlayPlayerWarningSound(rival.PlayerIndex);
-					_api.ShakePlayerCamera(rival.PlayerIndex, 0.4f, 0.3f);
-				}
-			}
-		}
-	}
-
-	private void DropHazardBehind(RacerState racer, bool isBobomb = false, bool isFakeBox = false)
-	{
-		for (int i = 0; i < MaxHazards; i++)
-		{
-			HazardSlot slot = _hazards[i];
-			if (slot.Active) continue;
-
-			float offset = isBobomb && racer.Speed > 10.0f ? 4.5f : -2.4f;
-			float dropX = racer.Position.X + MathF.Sin(racer.HeadingRadians) * offset;
-			float dropZ = racer.Position.Z + MathF.Cos(racer.HeadingRadians) * offset;
-			string unitTemplate = isFakeBox ? UnitIds.ItemCrystal : UnitIds.TrackHazard;
-			UnitId hazardUnit = _api.SpawnUnitForPlayer(unitTemplate, new Vector2(dropX, dropZ), _neutralSlot, false, true);
-			if (hazardUnit.IsValid)
-			{
-				hazardUnit.CommandsFrozen = true;
-				hazardUnit.Invulnerable = true;
-				hazardUnit.HideHealthAndManaBars = true;
-				if (isBobomb)
-				{
-					_api.SetUnitColor(hazardUnit, new Vector3(0.12f, 0.12f, 0.15f));
-				}
-				else if (isFakeBox)
-				{
-					_api.SetUnitColor(hazardUnit, new Vector3(1.0f, 0.2f, 0.2f));
-				}
-			}
-
-			slot.Active = true;
-			slot.Unit = hazardUnit;
-			slot.Position = new Vector3(dropX, _api.GetTerrainHeight(dropX, dropZ), dropZ);
-			slot.OwnerPlayerIndex = racer.PlayerIndex;
-			slot.IsBobomb = isBobomb;
-			slot.IsFakeItemBox = isFakeBox;
-			slot.BobombFuse = 4.0f;
-			slot.PulseTimer = 0.5f;
-			slot.GraceTimer = 0.6f;
-			slot.RemainingLifetime = isBobomb ? 4.2f : (isFakeBox ? 30.0f : 25.0f);
-
-			if (isBobomb)
-			{
-				_api.CreateFloatingText("BOB-OMB PLANTED!", slot.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.35f, 0.1f), 1.0f);
-			}
-			else if (isFakeBox)
-			{
-				_api.CreateFloatingText("FAKE ITEM BOX DEPLOYED!", slot.Position + new Vector3(0f, 2.2f, 0f), new Vector3(1.0f, 0.3f, 0.3f), 1.0f);
-			}
-			return;
-		}
-	}
-
-	private void DetonateBobomb(HazardSlot slot)
-	{
-		_api.SpawnVisualEffect("fireblast", slot.Position, 2.2f);
-		_api.SpawnExpandingBurstSphere(slot.Position, 6.5f, 20f, 0.5f, new Vector3(1.0f, 0.35f, 0.1f));
-		_api.SpawnExpandingGroundRing(slot.Position, 7.5f, 22f, 0.45f, new Vector3(1.0f, 0.45f, 0.1f));
-		_api.BroadcastMessage("💥 BOB-OMB DETONATED!");
-
-		for (int r = 0; r < _racerCount; r++)
-		{
-			RacerState rival = _racers[r];
-			if (!rival.Active || !rival.Unit.IsValid || rival.StarTimer > 0f) continue;
-
-			float dx = rival.Position.X - slot.Position.X;
-			float dz = rival.Position.Z - slot.Position.Z;
-			if (dx * dx + dz * dz <= 6.0f * 6.0f)
-			{
-				SpinOutRacer(rival, "BOB-OMB BLAST!");
-				_api.TriggerMeshImpulse(rival.Unit, 2.2f, 0.5f, 22.0f);
-				if (!rival.IsComputer)
-				{
-					_api.ShakePlayerCamera(rival.PlayerIndex, 1.2f, 0.6f);
-				}
-			}
-		}
-
-		for (int p = 0; p < MaxProjectiles; p++)
-		{
-			ShellProjectileSlot proj = _projectiles[p];
-			if (!proj.Active) continue;
-			float dx = proj.Position.X - slot.Position.X;
-			float dz = proj.Position.Z - slot.Position.Z;
-			if (dx * dx + dz * dz <= 6.0f * 6.0f)
-			{
-				ClearProjectile(proj);
-			}
-		}
-
-		ClearHazard(slot);
-	}
-
-	private void CastLightningShock(RacerState caster)
-	{
-		_api.BroadcastMessage($"{caster.ColoredName} unleashed LIGHTNING SHOCK!");
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState rival = _racers[i];
-			if (!rival.Active || rival.PlayerIndex == caster.PlayerIndex || rival.StarTimer > 0f) continue;
-
-			rival.ShockedTimer = 2.0f;
-			SpinOutRacer(rival, "ZAP!");
-			_api.SpawnVisualEffect("lightning", rival.Position, 1.2f);
-			if (!rival.IsComputer)
-			{
-				_api.ShakePlayerCamera(rival.PlayerIndex, 0.9f, 0.45f);
-			}
-		}
-	}
-
-	private void UpdateHazards(float delta)
-	{
-		for (int i = 0; i < MaxHazards; i++)
-		{
-			HazardSlot slot = _hazards[i];
-			if (!slot.Active) continue;
-
-			slot.RemainingLifetime -= delta;
-			if (slot.GraceTimer > 0f) slot.GraceTimer -= delta;
-
-			if (slot.IsBobomb)
-			{
-				slot.BobombFuse -= delta;
-				slot.PulseTimer -= delta;
-				if (slot.PulseTimer <= 0f)
-				{
-					slot.PulseTimer = Math.Max(0.12f, slot.BobombFuse * 0.2f);
-					_api.SpawnExpandingGroundRing(slot.Position, 1.5f, 4.5f, 0.15f, new Vector3(1.0f, 0.25f, 0.1f));
-				}
-
-				bool proximityTrigger = false;
-				for (int r = 0; r < _racerCount; r++)
-				{
-					RacerState rState = _racers[r];
-					if (!rState.Active || !rState.Unit.IsValid) continue;
-					if (slot.GraceTimer > 0f && rState.PlayerIndex == slot.OwnerPlayerIndex) continue;
-
-					float dx = rState.Position.X - slot.Position.X;
-					float dz = rState.Position.Z - slot.Position.Z;
-					if (dx * dx + dz * dz <= 3.6f * 3.6f)
-					{
-						proximityTrigger = true;
-						break;
-					}
-				}
-
-				if (slot.BobombFuse <= 0f || proximityTrigger)
-				{
-					DetonateBobomb(slot);
-					continue;
-				}
-				continue;
-			}
-
-			if (slot.IsFakeItemBox)
-			{
-				slot.PulseTimer -= delta;
-				if (slot.PulseTimer <= 0f)
-				{
-					slot.PulseTimer = 1.3f;
-					_api.SpawnExpandingGroundRing(slot.Position, 1.6f, 4.2f, 0.25f, new Vector3(1.0f, 0.2f, 0.2f));
-				}
-			}
-
-			if (slot.RemainingLifetime <= 0f)
-			{
-				ClearHazard(slot);
-				continue;
-			}
-
-			for (int r = 0; r < _racerCount; r++)
-			{
-				RacerState racer = _racers[r];
-				if (!racer.Active || !racer.Unit.IsValid) continue;
-				if (slot.GraceTimer > 0f && racer.PlayerIndex == slot.OwnerPlayerIndex) continue;
-
-				float dx = racer.Position.X - slot.Position.X;
-				float dz = racer.Position.Z - slot.Position.Z;
-				if (dx * dx + dz * dz > 1.9f * 1.9f) continue;
-
-				if (slot.IsFakeItemBox)
-				{
-					if (racer.StarTimer <= 0f)
-					{
-						SpinOutRacer(racer, "FAKE ITEM BOX!");
-						_api.SpawnVisualEffect("lightning", slot.Position, 1.2f);
-						_api.SpawnExpandingBurstSphere(slot.Position, 4.5f, 16f, 0.4f, new Vector3(1.0f, 0.2f, 0.2f));
-						_api.SpawnExpandingGroundRing(slot.Position, 5.5f, 18f, 0.35f, new Vector3(1.0f, 0.35f, 0.1f));
-						_api.TriggerMeshImpulse(racer.Unit, 1.5f, 0.35f, 16.0f);
-						if (!racer.IsComputer)
-						{
-							_api.ShakePlayerCamera(racer.PlayerIndex, 0.8f, 0.4f);
-							_api.PlayPlayerWarningSound(racer.PlayerIndex);
-						}
-					}
-					ClearHazard(slot);
-					break;
-				}
-
-				if (racer.StarTimer <= 0f)
-				{
-					SpinOutRacer(racer, "TRAPPED!");
-				}
-				ClearHazard(slot);
-				break;
-			}
-		}
-	}
-
-	private void UpdateProjectiles(float delta)
-	{
-		for (int i = 0; i < MaxProjectiles; i++)
-		{
-			ShellProjectileSlot slot = _projectiles[i];
-			if (!slot.Active) continue;
-
-			slot.RemainingLifetime -= delta;
-			if (slot.GraceTimer > 0f) slot.GraceTimer -= delta;
-
-			if (slot.RemainingLifetime <= 0f)
-			{
-				ClearProjectile(slot);
-				continue;
-			}
-
-			if (slot.IsBlueShell)
-			{
-				RacerState? leader = FindLeaderRacer(slot.OwnerPlayerIndex);
-				if (leader != null)
-				{
-					float desired = MathF.Atan2(leader.Position.X - slot.Position.X, leader.Position.Z - slot.Position.Z);
-					float diff = WrapAngle(desired - slot.HeadingRadians);
-					float maxTurn = 6.0f * delta;
-					slot.HeadingRadians = WrapAngle(slot.HeadingRadians + Math.Clamp(diff, -maxTurn, maxTurn));
-
-					slot.WarningTimer -= delta;
-					if (slot.WarningTimer <= 0f)
-					{
-						slot.WarningTimer = 0.45f;
-						_api.SpawnVisualEffect("lightning", slot.Position, 0.5f);
-						if (!leader.IsComputer)
-						{
-							_api.CreateFloatingText("⚠ BLUE SHELL INCOMING! ⚠", leader.Position + new Vector3(0f, 3.5f, 0f), new Vector3(1.0f, 0.25f, 0.2f), 0.5f);
-							_api.PlayPlayerWarningSound(leader.PlayerIndex);
-							_api.ShakePlayerCamera(leader.PlayerIndex, 0.4f, 0.2f);
-						}
-					}
-
-					float tdx = leader.Position.X - slot.Position.X;
-					float tdz = leader.Position.Z - slot.Position.Z;
-					if (tdx * tdx + tdz * tdz <= 3.2f * 3.2f)
-					{
-						_api.SpawnVisualEffect("fireblast", leader.Position, 1.8f);
-						_api.SpawnExpandingBurstSphere(leader.Position, 7.5f, 22.0f, 0.55f, new Vector3(0.15f, 0.65f, 1.0f));
-						_api.SpawnExpandingGroundRing(leader.Position, 8.5f, 24.0f, 0.5f, new Vector3(0.2f, 0.5f, 1.0f));
-						_api.TriggerMeshImpulse(leader.Unit, 2.5f, 0.6f, 22.0f);
-						_api.BroadcastMessage($"💥 BLUE SHELL DETONATED ON {leader.ColoredName}!");
-						if (leader.StarTimer <= 0f)
-						{
-							SpinOutRacer(leader, "BLUE SHELL!");
-						}
-						ClearProjectile(slot);
-						continue;
-					}
-				}
-			}
-			else if (slot.IsHoming)
-			{
-				RacerState? target = FindClosestRacer(slot.Position, slot.OwnerPlayerIndex);
-				if (target != null)
-				{
-					float desired = MathF.Atan2(target.Position.X - slot.Position.X, target.Position.Z - slot.Position.Z);
-					float diff = WrapAngle(desired - slot.HeadingRadians);
-					float maxTurn = 4.2f * delta;
-					slot.HeadingRadians = WrapAngle(slot.HeadingRadians + Math.Clamp(diff, -maxTurn, maxTurn));
-				}
-			}
-
-			float fx = MathF.Sin(slot.HeadingRadians);
-			float fz = MathF.Cos(slot.HeadingRadians);
-			float nextX = slot.Position.X + fx * slot.Speed * delta;
-			float nextZ = slot.Position.Z + fz * slot.Speed * delta;
-
-			if (!_api.IsPointPassable(nextX, nextZ, PathingFlags.Ground))
-			{
-				if (slot.BouncesRemaining <= 0)
-				{
-					ClearProjectile(slot);
-					continue;
-				}
-				slot.BouncesRemaining--;
-
-				bool bounceX = !_api.IsPointPassable(nextX, slot.Position.Z, PathingFlags.Ground);
-				if (bounceX)
-				{
-					fx = -fx;
-					nextX = slot.Position.X;
-				}
-				else
-				{
-					fz = -fz;
-					nextZ = slot.Position.Z;
-				}
-				slot.HeadingRadians = MathF.Atan2(fx, fz);
-			}
-
-			slot.Position = new Vector3(nextX, _api.GetTerrainHeight(nextX, nextZ), nextZ);
-			if (slot.Unit.IsValid)
-			{
-				_api.TeleportUnit(slot.Unit, slot.Position);
-				_api.SetUnitFacing(slot.Unit, WrapAngle(slot.HeadingRadians));
-			}
-
-			for (int r = 0; r < _racerCount; r++)
-			{
-				RacerState racer = _racers[r];
-				if (!racer.Active || !racer.Unit.IsValid) continue;
-				if (slot.GraceTimer > 0f && racer.PlayerIndex == slot.OwnerPlayerIndex) continue;
-
-				float dx = racer.Position.X - slot.Position.X;
-				float dz = racer.Position.Z - slot.Position.Z;
-				if (dx * dx + dz * dz > 2.1f * 2.1f) continue;
-
-				if (racer.StarTimer <= 0f)
-				{
-					SpinOutRacer(racer, "SHELL HIT!");
-				}
-				ClearProjectile(slot);
-				break;
-			}
-		}
-	}
-
-	private void ClearHazard(HazardSlot slot)
-	{
-		if (slot.Unit.IsValid)
-		{
-			_api.SpawnExpandingBurstSphere(slot.Position, 2.5f, 10f, 0.3f, new Vector3(1.0f, 0.5f, 0.1f));
-			_api.DestroyUnit(slot.Unit, false, false);
-		}
-		slot.Unit = UnitId.Invalid;
-		slot.Active = false;
-	}
-
-	private void ClearProjectile(ShellProjectileSlot slot)
-	{
-		if (slot.Unit.IsValid)
-		{
-			_api.SpawnExpandingBurstSphere(slot.Position, 2.8f, 12f, 0.3f, slot.IsHoming ? new Vector3(1.0f, 0.25f, 0.2f) : new Vector3(0.2f, 1.0f, 0.35f));
-			_api.DestroyUnit(slot.Unit, false, false);
-		}
-		slot.Unit = UnitId.Invalid;
-		slot.Active = false;
-	}
-
-	private void TriggerBoost(RacerState racer, float duration, string label)
-	{
-		if (racer.SpinOutTimer > 0f) return;
-		if (racer.InkedTimer > 0f)
-		{
-			racer.InkedTimer = 0f;
-			_api.CreateFloatingText("INK CLEANSED!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.3f, 1.0f, 0.5f), 1.0f);
-		}
-		racer.BoostTimer = MathF.Max(racer.BoostTimer, duration);
-		racer.Speed = MathF.Max(racer.Speed, TurboMaxSpeed);
-		_api.CreateFloatingText(label, racer.Position + new Vector3(0f, 2.5f, 0f), new Vector3(1.0f, 0.75f, 0.15f), 1.2f);
-		_api.SpawnExpandingGroundRing(racer.Position, 5.0f, 16f, 0.35f, new Vector3(1.0f, 0.6f, 0.1f));
-		_api.SpawnVisualEffect("fireblast", racer.Position, 1.4f);
-		if (!racer.IsComputer)
-		{
-			_api.ShakePlayerCamera(racer.PlayerIndex, 0.65f, 0.45f);
-		}
-	}
-
-	private void SpinOutRacer(RacerState racer, string reason)
-	{
-		if (racer.SpinOutTimer > 0f) return;
-		if (racer.GoldenMushroomTimer > 0f)
-		{
-			racer.GoldenMushroomTimer = 0f;
-			_api.SetUnitColor(racer.Unit, racer.IsComputer ? new Vector3(0.6f, 0.6f, 0.6f) : new Vector3(1f, 1f, 1f));
-		}
-		racer.SpinOutTimer = 1.05f;
-		racer.BoostTimer = 0f;
-		racer.DriftTimer = 0f;
-		racer.PendingMiniTurbo = false;
-		racer.HasSteerTarget = false;
-		racer.KeySteerInput = 0f;
-		racer.CurrentTurnVelocity = 0f;
-
-		if (racer.Coins > 0)
-		{
-			int lost = Math.Min(3, racer.Coins);
-			racer.Coins -= lost;
-			_api.CreateFloatingText($"-{lost} COINS!", racer.Position + new Vector3(0f, 3.2f, 0f), new Vector3(1.0f, 0.3f, 0.2f), 1.2f);
-		}
-
-		_api.CreateFloatingText(reason, racer.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.25f, 0.25f), 1.2f);
-		_api.TriggerMeshImpulse(racer.Unit, 1.4f, 0.4f, 18.0f);
-		if (!racer.IsComputer)
-		{
-			_api.PlayPlayerWarningSound(racer.PlayerIndex);
-			_api.ShakePlayerCamera(racer.PlayerIndex, 0.7f, 0.35f);
-		}
-	}
-
-	private void RecoverRacerToTrack(RacerState racer)
-	{
-		int wpIndex = FindClosestWaypointIndex(racer.Position);
-		Vector2 wp = _waypoints[wpIndex];
-		Vector2 nextWp = _waypoints[(wpIndex + 1) % WaypointCount];
-
-		racer.Position = new Vector3(wp.X, _api.GetTerrainHeight(wp.X, wp.Y), wp.Y);
-		racer.HeadingRadians = MathF.Atan2(nextWp.X - wp.X, nextWp.Y - wp.Y);
-		racer.TargetHeading = racer.HeadingRadians;
-		racer.Speed = 6.0f;
-		racer.ReverseTimer = 0f;
-		racer.HasSteerTarget = false;
-		racer.KeySteerInput = 0f;
-		racer.CurrentTurnVelocity = 0f;
-		_api.TeleportUnit(racer.Unit, racer.Position);
-		_api.SetUnitFacing(racer.Unit, racer.HeadingRadians);
-		_api.SpawnExpandingBurstSphere(racer.Position, 3.5f, 12f, 0.35f, new Vector3(0.3f, 0.8f, 1.0f));
-		_api.TriggerMeshImpulse(racer.Unit, 1.0f, 0.3f, 12.0f);
-		if (!racer.IsComputer)
-		{
-			ApplyChaseCamera(racer.PlayerIndex, racer.Unit);
-			_api.PlayPlayerClickSound(racer.PlayerIndex);
-		}
-		_api.CreateFloatingText("RECOVER!", racer.Position + new Vector3(0f, 2.3f, 0f), new Vector3(0.4f, 0.9f, 1.0f), 1.0f);
-	}
-
-	private void UpdateDrafting(float delta)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState a = _racers[i];
-			if (!a.Active || !a.Unit.IsValid || a.SpinOutTimer > 0f || a.Finished) continue;
-
-			if (a.DraftingCooldown > 0f) a.DraftingCooldown -= delta;
-
-			bool foundDraft = false;
-			float forwardX = MathF.Sin(a.HeadingRadians);
-			float forwardZ = MathF.Cos(a.HeadingRadians);
-
-			for (int j = 0; j < _racerCount; j++)
-			{
-				if (i == j) continue;
-				RacerState b = _racers[j];
-				if (!b.Active || !b.Unit.IsValid || b.Finished) continue;
-
-				float dx = b.Position.X - a.Position.X;
-				float dz = b.Position.Z - a.Position.Z;
-				float distSq = dx * dx + dz * dz;
-
-				if (distSq < 6.25f || distSq > 121.0f) continue;
-
-				float dist = MathF.Sqrt(distSq);
-				float dirX = dx / dist;
-				float dirZ = dz / dist;
-				float dot = forwardX * dirX + forwardZ * dirZ;
-
-				float bForwardX = MathF.Sin(b.HeadingRadians);
-				float bForwardZ = MathF.Cos(b.HeadingRadians);
-				float facingDot = forwardX * bForwardX + forwardZ * bForwardZ;
-
-				if (dot > 0.84f && facingDot > 0.7f && a.Speed > 10.0f)
-				{
-					foundDraft = true;
-					a.DraftingTimer += delta;
-
-					if (!a.IsComputer && ((int)(_raceElapsed * 6.0f) % 2 == 0))
-					{
-						Vector3 midPoint = (a.Position + b.Position) * 0.5f;
-						_api.SpawnExpandingGroundRing(midPoint, 1.8f, 5.0f, 0.16f, new Vector3(0.5f, 0.85f, 1.0f));
-						_api.SpawnExpandingGroundRing(a.Position, 2.2f, 8.0f, 0.2f, new Vector3(0.85f, 0.95f, 1.0f));
-					}
-
-					if (a.DraftingTimer >= 1.25f && a.DraftingCooldown <= 0f)
-					{
-						a.DraftingTimer = 0f;
-						a.DraftingCooldown = 5.5f;
-						TriggerBoost(a, 2.0f, "SLIPSTREAM!!");
-						a.Speed = MathF.Max(a.Speed, 35.0f);
-						_api.SpawnVisualEffect("fireblast", a.Position, 1.3f);
-						if (!a.IsComputer)
-						{
-							_api.CreateFloatingText("SLIPSTREAM SLINGSHOT!", a.Position + new Vector3(0f, 2.7f, 0f), new Vector3(0.3f, 1.0f, 0.85f), 1.4f);
-							_api.ShakePlayerCamera(a.PlayerIndex, 0.4f, 0.3f);
-						}
-					}
-					break;
-				}
-			}
-
-			if (!foundDraft)
-			{
-				a.DraftingTimer = MathF.Max(0f, a.DraftingTimer - delta * 1.8f);
-			}
-		}
-	}
-
-	private void UpdateRankings()
-	{
-		for (int i = 0; i < _racerCount; i++) _rankedIndices[i] = i;
-
-		for (int i = 0; i < _racerCount - 1; i++)
-		{
-			for (int j = i + 1; j < _racerCount; j++)
-			{
-				if (_racers[_rankedIndices[j]].RaceScore > _racers[_rankedIndices[i]].RaceScore)
-				{
-					int tmp = _rankedIndices[i];
-					_rankedIndices[i] = _rankedIndices[j];
-					_rankedIndices[j] = tmp;
-				}
-			}
-		}
-
-		for (int rank = 0; rank < _racerCount; rank++)
-		{
-			RacerState r = _racers[_rankedIndices[rank]];
-			int newRank = rank + 1;
-			if (!r.IsComputer && r.PreviousRank != newRank && _raceStarted && !r.Finished)
-			{
-				if (newRank < r.PreviousRank)
-				{
-					if (newRank == 1)
-					{
-						_api.CreateFloatingText("★ 1ST PLACE - RACE LEADER! ★", r.Position + new Vector3(0f, 2.8f, 0f), new Vector3(1.0f, 0.85f, 0.15f), 1.5f);
-					}
-					else
-					{
-						_api.CreateFloatingText($"▲ OVERTAKE! {GetRankOrdinal(newRank)} Place", r.Position + new Vector3(0f, 2.6f, 0f), new Vector3(0.25f, 1.0f, 0.4f), 1.2f);
-					}
-				}
-				else if (newRank > r.PreviousRank)
-				{
-					_api.CreateFloatingText($"▼ PASSED! {GetRankOrdinal(newRank)} Place", r.Position + new Vector3(0f, 2.6f, 0f), new Vector3(1.0f, 0.4f, 0.2f), 1.2f);
-				}
-			}
-			r.Rank = newRank;
-			r.PreviousRank = newRank;
-		}
-	}
-
-	private static string GetRankOrdinal(int rank) => rank switch
-	{
-		1 => "1st",
-		2 => "2nd",
-		3 => "3rd",
-		4 => "4th",
-		5 => "5th",
-		6 => "6th",
-		7 => "7th",
-		8 => "8th",
-		_ => $"{rank}th"
-	};
-
-	private void PublishLeaderboard()
-	{
-		for (int rank = 0; rank < _racerCount; rank++)
-		{
-			RacerState racer = _racers[_rankedIndices[rank]];
-			string lapText = racer.Finished ? $"FIN ({racer.FinishTime:F1}s)" : $"Lap {racer.Lap}/{TotalLaps}";
-			string speedText = !racer.IsComputer && !racer.Finished ? $" [{(int)(racer.Speed * 3.6f)} km/h]" : string.Empty;
-			string coinsText = racer.Coins > 0 ? $" | 🪙{racer.Coins}" : string.Empty;
-			string itemText = racer.GoldenMushroomTimer > 0f
-				? " | [GOLDEN FRENZY!]"
-				: (racer.HeldItem == PowerUpType.None
-					? (racer.ItemRouletteTimer > 0f ? " | [?]" : string.Empty)
-					: $" | [{FormatPowerUpName(racer.HeldItem)}]");
-			_api.SetLeaderboardValue($"#{rank + 1}", $"{racer.ColoredName} — {lapText}{speedText}{coinsText}{itemText}");
-		}
-	}
-
-	private void FinalizeMatchOutcome()
-	{
-		if (_raceEnded) return;
-		_raceEnded = true;
-
-		_api.SetSummaryTableHeaders("Racer", "Rank", "Total Time", "Best Lap", "Status");
-		for (int rank = 0; rank < _racerCount; rank++)
-		{
-			RacerState racer = _racers[_rankedIndices[rank]];
-			string totalTime = racer.Finished ? $"{racer.FinishTime:F1}s" : $"DNF (Lap {Math.Min(racer.Lap, TotalLaps)})";
-			string bestLap = racer.BestLapTime < 999f ? $"{racer.BestLapTime:F1}s" : "--";
-			string status = rank == 0 ? "★ WINNER ★" : $"Finished #{rank + 1}";
-			_api.SetSummaryTableRow(racer.ColoredName, $"#{rank + 1}", totalTime, bestLap, status);
-		}
-		_api.ShowSummaryTable("Chariot Racer - Grand Prix Results", true);
-
-		if (_winnerRacerIndex < 0) return;
-
-		RacerState winner = _racers[_winnerRacerIndex];
-		_api.TriggerPlayerVictory(winner.PlayerIndex);
-		for (int i = 0; i < _racerCount; i++)
-		{
-			if (i == _winnerRacerIndex) continue;
-			_api.TriggerPlayerDefeat(_racers[i].PlayerIndex, $"{winner.DisplayName} won the race!");
-		}
-	}
-
-	private bool IsOnRoad(float wx, float wz)
-	{
-		float cx = Math.Clamp(wx, -40.0f, 40.0f);
-		float dx = wx - cx;
-		float distFromSpine = MathF.Sqrt(dx * dx + wz * wz);
-		return MathF.Abs(distFromSpine - 48.0f) <= TrackHalfWidth;
-	}
-
-	private RacerState? FindClosestRacer(Vector3 origin, int excludedPlayerIndex)
-	{
-		RacerState? best = null;
-		float bestDistSq = 48.0f * 48.0f;
-
-		for (int i = 0; i < _racerCount; i++)
-		{
-			RacerState candidate = _racers[i];
-			if (!candidate.Active || candidate.PlayerIndex == excludedPlayerIndex) continue;
-
-			float dx = candidate.Position.X - origin.X;
-			float dz = candidate.Position.Z - origin.Z;
-			float dSq = dx * dx + dz * dz;
-			if (dSq < bestDistSq)
-			{
-				bestDistSq = dSq;
-				best = candidate;
-			}
-		}
-		return best;
-	}
-
-	private int FindClosestWaypointIndex(Vector3 pos)
-	{
-		float bestDistSq = float.MaxValue;
-		int bestIdx = 0;
-		for (int i = 0; i < WaypointCount; i++)
-		{
-			float dx = pos.X - _waypoints[i].X;
-			float dz = pos.Z - _waypoints[i].Y;
-			float dSq = dx * dx + dz * dz;
-			if (dSq < bestDistSq)
-			{
-				bestDistSq = dSq;
-				bestIdx = i;
-			}
-		}
-		return bestIdx;
-	}
-
-	private RacerState? FindRacerByUnit(UnitId unit)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			if (_racers[i].Unit.Value == unit.Value) return _racers[i];
-		}
-		return null;
-	}
-
-	private RacerState? FindRacerByPlayer(int playerIndex)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			if (_racers[i].PlayerIndex == playerIndex) return _racers[i];
-		}
-		return null;
-	}
-
-	private int FindRacerIndex(RacerState target)
-	{
-		for (int i = 0; i < _racerCount; i++)
-		{
-			if (ReferenceEquals(_racers[i], target)) return i;
-		}
-		return -1;
-	}
-
-	private static float MoveTowards(float current, float target, float maxDelta)
-	{
-		if (MathF.Abs(target - current) <= maxDelta) return target;
-		return current + MathF.Sign(target - current) * maxDelta;
-	}
-
-	private static float WrapAngle(float radians)
-	{
-		while (radians > MathF.PI) radians -= MathF.PI * 2.0f;
-		while (radians < -MathF.PI) radians += MathF.PI * 2.0f;
-		return radians;
-	}
-
-	private static string FormatPowerUpName(PowerUpType item) => item switch
-	{
-		PowerUpType.TurboMushroom => "Mushroom",
-		PowerUpType.TripleMushrooms => "Triple Mushrooms (x3)",
-		PowerUpType.GoldenMushroom => "Golden Mushroom (Frenzy)",
-		PowerUpType.GreenShell => "Green Shell",
-		PowerUpType.TripleGreenShells => "Triple Green Shells (x3)",
-		PowerUpType.RedShell => "Red Shell",
-		PowerUpType.TripleRedShells => "Triple Red Shells (x3)",
-		PowerUpType.BlueShell => "Blue Spiny Shell",
-		PowerUpType.SuperHorn => "Super Horn",
-		PowerUpType.Bobomb => "Bob-omb",
-		PowerUpType.FakeItemBox => "Fake Item Box",
-		PowerUpType.Blooper => "Blooper Ink",
-		PowerUpType.SpikeTrap => "Spike Trap",
-		PowerUpType.LightningBolt => "Lightning",
-		PowerUpType.StarPower => "Star Power",
-		_ => "None"
-	};
+    private const int Laps = 3;
+    private const float LaneWidth = 3.5f;
+    private const float RoadEdge = 1.5f * LaneWidth;
+    private const float ShoulderEdge = RoadEdge + 3.75f;
+    private const int SamplesPerBend = 12;
+    private const float CruiseSpeed = 13.5f;
+    private const float BoostSpeed = 21.5f;
+    private const float GapWidth = 8;
+    private const float DraftSeconds = 1.5f;
+    private const float BumperSpacing = 1.45f;
+    private const string CrystalAbility = AbilityIds.Holylight;
+    private enum Power { None, Grip, Shield, FrostBolt, Disruptor, Shockwave, Blackout, Mine }
+    private sealed class Crystal
+    {
+        public Vector3 Position;
+        public UnitId Model;
+        public float RespawnAt;
+    }
+    private static readonly Vector3 Cyan = new(0.15f, 0.95f, 1);
+    private static readonly Vector3 Amber = new(1, 0.46f, 0.12f);
+
+    private sealed class Racer
+    {
+        public UnitId Unit;
+        public int Seat, Lane, NextGate;
+        public bool Computer, Charged = true;
+        public float Distance, Offset, Speed, Boost, Drag, Finish = float.PositiveInfinity;
+        public int PlannedGate = -1;
+        public int AnnouncedGate = -1;
+        public Racer? Ahead;
+        public float Gap, Draft, DecisionDelay, LapStart, BestLap = float.PositiveInfinity;
+        public float FrameDistance, FrameOffset, FrameSpeed;
+        public bool FrameFinished;
+        public bool LaunchAttempted, LaunchReady, StartedLap;
+        public float Runout;
+        public bool LeftHeld, RightHeld;
+        public bool Withdrawn;
+        public float Heading, TravelHeading, YawRate, Steering, RearSlip;
+        public Power StoredPower;
+        public Vector3 WorldPosition;
+        public float GripUntil, ShieldUntil, JamUntil;
+        public Racer? Target;
+        public float Checkpoint, JumpLip, FlightTime, FlightHeight, TakeoffHeight, AirForward, AirSide;
+        public bool Flying, OnLaunchPad;
+        public string DriveAnimation = "";
+        public int CompletedLaps;
+        public string Name = "";
+    }
+
+    private readonly record struct Gate(float Distance, int Lane);
+    private readonly List<Racer> racers = new();
+    private readonly List<Vector2> road = new();
+    private readonly List<float> lengths = new();
+    private readonly List<Vector2> normals = new();
+    private readonly List<Gate> gates = new();
+    private readonly List<float> waypoints = new();
+    private readonly List<float> jumpLips = new();
+    private readonly List<(float Start, int Side)> cliffEdges = new();
+    private readonly record struct Mine(Vector3 Position, int Owner, float Expires, int Sign);
+    private readonly List<Mine> mines = new();
+    private readonly List<Crystal> crystals = new();
+    private readonly string[] boardRows = new string[8];
+    private IGameAPI game = null!;
+    private float Length => lengths[^1];
+    private float clock, nextBoard;
+    private int countdownDigit, startSign;
+    private float nextCrystalCheck;
+    private bool ended;
+    private float podiumUntil;
+
+    public void Initialize(IGameAPI api)
+    {
+        game = api;
+        game.DisableShroud();
+        game.SetDayNightCycleEnabled(false);
+        game.SetTimeOfDay(15);
+        BuildRoad();
+        if (road.Count == 0)
+        {
+            game.BroadcastMessage("El circuito necesita al menos cuatro regiones consecutivas desde ruta_01.");
+            ended = true;
+            return;
+        }
+
+        for (int seat = 1; seat <= 8; seat++)
+            if (game.GetPlayer(seat).IsActive)
+                AddRacer(seat, IsComputer(seat));
+
+        game.OnSpellCast += OnAbility;
+        game.OnPlayerLeft += seat => {
+            var racer = racers.Find(r => r.Seat == seat);
+            if (racer == null || racer.Withdrawn || float.IsFinite(racer.Finish)) return;
+            racer.Withdrawn = true;
+            game.DestroyUnit(racer.Unit, false, false);
+        };
+        // The editor attaches a local client after the authority has loaded the map.
+        clock = racers.Exists(r => !r.Computer) ? -12 : -5;
+        AddCrystal(10, -LaneWidth);
+        AddCrystal(10, LaneWidth);
+        for (int i = 3; i < waypoints.Count; i += 6)
+        {
+            AddCrystal(waypoints[i], 0);
+            AddCrystal(waypoints[i], i % 2 == 0 ? -LaneWidth : LaneWidth);
+        }
+        game.SetLeaderboardVisible("Circuito de las brasas", true);
+        PublishBoard();
+    }
+
+    private static unsafe bool IsComputer(int seat) =>
+        EcsSharedMemory.GetComponent<ScriptPlayer>(ComponentIds.ScriptPlayer, seat)->IsComputer;
+
+    // The editor regions define the racing line. ruta_01 is the finish.
+    private void BuildRoad()
+    {
+        var nodes = new List<Vector2>();
+        for (int i = 1; game.TryGetCoordinate($"ruta_{i:00}", out var region); i++)
+        {
+            var p = (region.Min + region.Max) * 0.5f;
+            nodes.Add(new(p.X, p.Z));
+        }
+        if (nodes.Count < 4) return;
+        int n = nodes.Count;
+        float distance = 0;
+        for (int i = 0; i < n; i++)
+        {
+            Vector2 a = nodes[(i + n - 1) % n], b = nodes[i];
+            Vector2 c = nodes[(i + 1) % n], d = nodes[(i + 2) % n];
+            for (int j = 0; j < SamplesPerBend; j++)
+            {
+                float t = (float)j / SamplesPerBend;
+                Vector2 p = 0.5f * (2*b + (c-a)*t + (2*a-5*b+4*c-d)*t*t + (3*b-a-3*c+d)*t*t*t);
+                if (road.Count > 0)
+                {
+                    float step = Vector2.Distance(road[^1], p);
+                    if (step < 0.001f) continue;
+                    distance += step;
+                }
+                road.Add(p);
+                lengths.Add(distance);
+                if (j == 0)
+                {
+                    waypoints.Add(distance);
+                    if (game.TryGetCoordinate($"salto_{i+1:00}", out _)) jumpLips.Add(distance + 14);
+                    if (game.TryGetCoordinate($"barranco_der_{i+1:00}", out _)) cliffEdges.Add((distance, 1));
+                    if (game.TryGetCoordinate($"barranco_izq_{i+1:00}", out _)) cliffEdges.Add((distance, -1));
+                }
+                if (j == 0 && i % 3 == 2)
+                    gates.Add(new(distance, (i / 3 + 2) % 3 - 1));
+            }
+        }
+        if (road.Count < 4) { road.Clear(); return; }
+        lengths.Add(distance + Vector2.Distance(road[^1], road[0]));
+        road.Add(road[0]);
+        for (int i = 0; i < road.Count - 1; i++)
+        {
+            Vector2 tangent = Vector2.Normalize(road[i + 1] - road[(i + road.Count - 2) % (road.Count - 1)]);
+            normals.Add(new(-tangent.Y, tangent.X));
+        }
+        normals.Add(normals[0]);
+        gates.Insert(0, new(22, -1)); // A choice of lanes on the opening straight.
+        Stripe(0, -RoadEdge, RoadEdge, Vector3.One, 0.5f);
+    }
+
+    private static int HazardLane(Gate g) => g.Lane == 1 ? -1 : g.Lane + 1;
+
+    private Vector2 Sample(float distance, float offset, out Vector2 forward)
+    {
+        float s = distance % Length;
+        if (s < 0) s += Length;
+        int i = lengths.BinarySearch(s);
+        if (i < 0) i = ~i - 1;
+        i = Math.Clamp(i, 0, road.Count - 2);
+        float t = (s - lengths[i]) / (lengths[i + 1] - lengths[i]);
+        Vector2 normal = Vector2.Normalize(Vector2.Lerp(normals[i], normals[i + 1], t));
+        forward = new(normal.Y, -normal.X);
+        return Vector2.Lerp(road[i], road[i + 1], t) + normal * offset;
+    }
+
+    private void Stripe(float distance, float left, float right, Vector3 color, float width) =>
+        game.DrawLineOnTerrain(Sample(distance, left, out _), Sample(distance, right, out _), color, 3600, width);
+
+    private void AddRacer(int seat, bool computer)
+    {
+        // Project the authored grid onto the approach straight, keeping its head start and lane.
+        Vector3 anchor = game.GetSpawnAnchor(seat);
+        Vector2 origin = Sample(0, 0, out var forward);
+        Vector2 delta = new Vector2(anchor.X, anchor.Z) - origin;
+        float offset = Vector2.Dot(delta, new(-forward.Y, forward.X));
+        var r = new Racer { Seat = seat, Computer = computer, Name = game.GetPlayerName(seat),
+            Lane = Math.Clamp((int)MathF.Round(offset / LaneWidth), -1, 1),
+            Distance = Math.Clamp(Vector2.Dot(delta, forward), -24, -1) };
+        r.Offset = r.Lane * LaneWidth;
+        Vector2 start = Sample(r.Distance, r.Offset, out var startDirection);
+        r.Heading = MathF.Atan2(startDirection.X, startDirection.Y);
+        r.TravelHeading = r.Heading;
+        r.Unit = game.SpawnUnitForPlayer(UnitIds.ChariotRacer, start, seat, executeSpawnShader: false, bypassPopulation: true);
+        if (!r.Unit.IsValid) return;
+        racers.Add(r);
+        r.Unit.Invulnerable = true;
+        game.SetUnitCommandsFrozen(r.Unit, true);
+        r.Unit.Speed = 0;
+        r.Unit.HideHealthAndManaBars = true;
+        game.SetAbilityState(r.Unit, AbilityIds.SteerLeftStop, false, true);
+        game.SetAbilityState(r.Unit, AbilityIds.SteerRightStop, false, true);
+        game.SetAbilityState(r.Unit, CrystalAbility, true, false);
+        game.SetAbilityState(r.Unit, AbilityIds.Fireball, true, true);
+        Place(r);
+        game.SetUnitColor(r.Unit, game.GetPlayerColor(seat));
+        if (computer) return;
+        var player = game.GetPlayer(seat);
+        BindDriver(r);
+        player.SetHudElementVisible(HudElement.ResourceBar, false);
+        player.SendMessage(game.Translate("Hold A or D to steer. Release to drive straight. Q: boost.", seat));
+        player.SendMessage(game.Translate("Tap Q just before the start for a quick launch.", seat));
+    }
+
+    private void BindDriver(Racer r)
+    {
+        game.GetPlayer(r.Seat).SelectUnit(r.Unit);
+        game.SetPlayerCameraFollowUnit(r.Seat, r.Unit, 10, 4.6f, -26, 0, true, 7, true);
+    }
+
+    private void Place(Racer r)
+    {
+        Vector2 p = Sample(r.Distance + r.Runout, r.Offset, out var dir);
+        float height = r.Flying ? r.FlightHeight : game.GetTerrainHeight(p.X, p.Y);
+        r.WorldPosition = new(p.X, height, p.Y);
+        game.TeleportUnit(r.Unit, r.WorldPosition);
+        game.SetUnitFacing(r.Unit, r.Computer || float.IsFinite(r.Finish) ? MathF.Atan2(dir.X, dir.Y) : r.Heading);
+        string animation;
+        if (r.Flying)
+            animation = r.FlightTime < (r.OnLaunchPad ? 8.2f : 1.5f) / 22 ? "Climb" : "Descend";
+        else if (r.Speed < 0.6f || float.IsFinite(r.Finish))
+            animation = "Idle";
+        else
+        {
+            Vector2 front = p + dir;
+            Vector2 rear = p - dir;
+            float rise = game.GetTerrainHeight(front.X, front.Y) - game.GetTerrainHeight(rear.X, rear.Y);
+            Sample(r.Distance + 1, 0, out var next);
+            float turn = r.Computer ? r.Speed * (dir.Y * next.X - dir.X * next.Y) : r.YawRate;
+            animation = rise > 0.32f ? "Climb" : rise < -0.32f ? "Descend" :
+                turn > 0.32f ? "LeanLeft" : turn < -0.32f ? "LeanRight" :
+                r.Boost > 0 || r.OnLaunchPad ? "Surge" : "Drive";
+        }
+        if (animation != r.DriveAnimation)
+        {
+            r.DriveAnimation = animation;
+            game.SetUnitAnimation(r.Unit, "Loop:" + animation);
+        }
+    }
+
+    private void OnAbility(UnitId unit, string ability, Vector3 target)
+    {
+        if (ended || podiumUntil > 0) return;
+        foreach (var r in racers)
+        {
+            if (r.Unit != unit || float.IsFinite(r.Finish)) continue;
+            if (ability == AbilityIds.SteerLeft) r.LeftHeld = true;
+            if (ability == AbilityIds.SteerRight) r.RightHeld = true;
+            if (ability == AbilityIds.SteerLeftStop) r.LeftHeld = false;
+            if (ability == AbilityIds.SteerRightStop) r.RightHeld = false;
+            if (clock < 0)
+            {
+                if (ability == AbilityIds.TurboBoost && !r.LaunchAttempted)
+                {
+                    r.LaunchAttempted = true;
+                    r.LaunchReady = clock >= -0.65f;
+                    Notify(r, r.LaunchReady ? "Launch primed!" : "Too early", r.LaunchReady ? Cyan : Amber);
+                }
+                return;
+            }
+            if (ability == AbilityIds.TurboBoost) Boost(r);
+            if (ability == AbilityIds.Fireball) ChooseTarget(r);
+            if (ability == CrystalAbility) UsePower(r);
+            break;
+        }
+    }
+
+    private void Boost(Racer r)
+    {
+        if (!r.Charged || r.Boost > 0 || r.JamUntil > clock) return;
+        r.Charged = false;
+        game.SetAbilityState(r.Unit, AbilityIds.TurboBoost, true, false);
+        r.Boost = 2;
+        game.SpawnExpandingGroundRing(r.Unit.Position, 1, 5, 0.3f, Cyan);
+    }
+
+    private void Notify(Racer r, string key, Vector3 color)
+    {
+        if (!r.Computer) game.ShowPlayerFeedbackText(r.Seat, game.Translate(key, r.Seat), color);
+    }
+
+    private void AddCrystal(float distance, float offset)
+    {
+        var p = Sample(distance, offset, out _);
+        var crystal = new Crystal { Position = new(p.X, game.GetTerrainHeight(p.X, p.Y), p.Y) };
+        SpawnCrystal(crystal);
+        crystals.Add(crystal);
+    }
+
+    private void SpawnCrystal(Crystal c)
+    {
+        c.Model = game.SpawnUnitForPlayer(UnitIds.Kevin, new Vector2(c.Position.X, c.Position.Z), 0, false, true);
+        if (c.Model.IsValid)
+        {
+            c.Model.Invulnerable = true;
+            c.Model.HideHealthAndManaBars = true;
+            game.SetUnitCommandsFrozen(c.Model, true);
+        }
+    }
+
+    private static bool Racing(Racer r) => !r.Withdrawn && !float.IsFinite(r.Finish);
+    private static bool Directed(Power p) => p == Power.FrostBolt || p == Power.Disruptor;
+
+    private void UpdateCrystals()
+    {
+        if (clock < nextCrystalCheck) return;
+        nextCrystalCheck = clock + 0.06f;
+        foreach (var c in crystals)
+        {
+            if (!c.Model.IsValid)
+            {
+                if (clock >= c.RespawnAt) SpawnCrystal(c);
+                continue;
+            }
+            Racer? winner = null;
+            float closest = 4;
+            foreach (var r in racers)
+            {
+                if (!Racing(r) || r.Flying || r.StoredPower != Power.None) continue;
+                float distance = Vector3.DistanceSquared(r.WorldPosition, c.Position);
+                if (distance < closest || (winner != null && distance == closest && r.Seat < winner.Seat))
+                {
+                    closest = distance;
+                    winner = r;
+                }
+            }
+            if (winner == null) continue;
+            game.DestroyUnit(c.Model, false, false);
+            c.Model = UnitId.Invalid;
+            c.RespawnAt = clock + 7;
+            CollectPower(winner, c.Position);
+        }
+        for (int i = mines.Count - 1; i >= 0; i--)
+        {
+            var mine = mines[i];
+            var victim = clock < mine.Expires ? racers.Find(r => r.Seat != mine.Owner && Racing(r) && !r.Flying &&
+                Vector3.DistanceSquared(r.WorldPosition, mine.Position) <= 4) : null;
+            if (victim == null && clock < mine.Expires) continue;
+            if (victim != null) Hit(victim, Power.Mine);
+            game.DestroyStaticText(mine.Sign);
+            mines.RemoveAt(i);
+        }
+    }
+
+    private static string PowerName(Power power) => power switch
+    {
+        Power.Grip => "Rally tyres", Power.Shield => "Ember shield",
+        Power.FrostBolt => "Frost bolt", Power.Disruptor => "Disruptor dart",
+        Power.Shockwave => "Shockwave", Power.Blackout => "Blackout", Power.Mine => "Ember mine", _ => ""
+    };
+
+    private void CollectPower(Racer r, Vector3 position)
+    {
+        bool opponents = racers.Exists(other => other != r && Racing(other));
+        r.StoredPower = (Power)game.RandomInt((int)Power.Grip, (int)(opponents ? Power.Mine : Power.Shield));
+        r.Target = null;
+        game.SetAbilityState(r.Unit, CrystalAbility, false, false);
+        game.SetAbilityState(r.Unit, AbilityIds.Fireball, !Directed(r.StoredPower), !Directed(r.StoredPower));
+        string name = game.Translate(PowerName(r.StoredPower), r.Seat);
+        game.CreateFloatingText(name, position, Cyan, 2);
+        game.SpawnExpandingGroundRing(position, 0.4f, 2, 0.3f, Cyan);
+        if (r.Computer) return;
+        string message = name + "  " + (Directed(r.StoredPower) ? game.Translate("F: choose rival; E: fire", r.Seat) : "[E]");
+        game.ShowPlayerFeedbackText(r.Seat, message, Cyan);
+        game.GetPlayer(r.Seat).SendMessage(message);
+    }
+
+    private void ChooseTarget(Racer r)
+    {
+        if (!Directed(r.StoredPower)) return;
+        int seat = r.Target?.Seat ?? r.Seat;
+        for (int step = 1; step <= 8; step++)
+        {
+            int next = (seat - 1 + step) % 8 + 1;
+            var target = racers.Find(o => o.Seat == next && o != r && Racing(o));
+            if (target == null) continue;
+            r.Target = target;
+            if (!r.Computer) game.ShowPlayerFeedbackText(r.Seat, "[E] → " + target.Name, Amber);
+            return;
+        }
+        r.Target = null;
+    }
+
+    private void Hit(Racer victim, Power power)
+    {
+        game.SpawnExpandingGroundRing(victim.Unit.Position, 0.5f, 3, 0.35f, Amber);
+        if (victim.ShieldUntil > clock) { Notify(victim, "Ember shield", Cyan); return; }
+        if (power == Power.Disruptor || power == Power.Blackout)
+        {
+            victim.Boost = 0;
+            victim.JamUntil = Math.Max(victim.JamUntil, clock + (power == Power.Disruptor ? 5 : 2.5f));
+        }
+        else
+        {
+            victim.Drag = Math.Max(victim.Drag, power == Power.Mine ? 2 : power == Power.FrostBolt ? 1.6f : 0.8f);
+            victim.Boost = 0;
+        }
+        Notify(victim, PowerName(power), Amber);
+    }
+
+    private void UsePower(Racer r)
+    {
+        var power = r.StoredPower;
+        if (power == Power.None || r.Flying) return;
+        if (Directed(power))
+        {
+            if (r.Computer && (r.Target == null || !Racing(r.Target))) ChooseTarget(r);
+            if (r.Target != null && Racing(r.Target))
+            {
+                var from = r.WorldPosition + Vector3.UnitY;
+                var to = r.Target.WorldPosition + Vector3.UnitY;
+                if (power == Power.Disruptor)
+                    game.SpawnProjectile("arrow", from, to, Math.Max(50, Vector3.Distance(from, to) * 8));
+                else
+                    game.SpawnChainBeam("lightning", new[] { from, to }, 0.4f, 1, 0.1f, 0.08f, Cyan);
+                Hit(r.Target, power);
+            }
+            else if (racers.Exists(o => o != r && Racing(o)))
+            {
+                Notify(r, "Choose a rival with F", Amber);
+                return;
+            }
+        }
+        else if (power == Power.Grip) r.GripUntil = clock + 4;
+        else if (power == Power.Shield)
+        {
+            r.Drag = 0;
+            r.JamUntil = 0;
+            r.ShieldUntil = clock + 6;
+        }
+        else if (power == Power.Mine)
+        {
+            Vector2 p = Sample(r.Distance - 1.8f, r.Offset, out _);
+            Vector3 position = new(p.X, game.GetTerrainHeight(p.X, p.Y), p.Y);
+            int sign = game.CreateStaticText("✹", position - 3 * Vector3.UnitY, Amber, 180);
+            mines.Add(new(position, r.Seat, clock + 14, sign));
+        }
+        else
+        {
+            foreach (var other in racers)
+                if (other != r && Racing(other)) Hit(other, power);
+        }
+        Notify(r, PowerName(power), Cyan);
+        r.StoredPower = Power.None;
+        r.Target = null;
+        game.SetAbilityState(r.Unit, CrystalAbility, true, false);
+        game.SetAbilityState(r.Unit, AbilityIds.Fireball, true, true);
+    }
+
+    private void Recharge(Racer r, string message)
+    {
+        if (r.Charged) return;
+        r.Charged = true;
+        r.Draft = 0;
+        game.SetAbilityState(r.Unit, AbilityIds.TurboBoost, false, false);
+        Notify(r, message, Cyan);
+        if (!r.Computer) game.PlayPlayerClickSound(r.Seat);
+    }
+
+    public void Update(IGameAPI api, float delta)
+    {
+        if (ended || delta <= 0) return;
+        float previous = clock;
+        clock += delta;
+        if (clock <= 0)
+        {
+            int digit = (int)MathF.Ceiling(-clock);
+            if (digit >= 1 && digit <= 5 && digit != countdownDigit)
+            {
+                countdownDigit = digit;
+                if (startSign == 0)
+                {
+                    Vector2 line = Sample(3, 0, out _);
+                    startSign = game.CreateStaticText(digit.ToString(), new(line.X, game.GetTerrainHeight(line.X, line.Y), line.Y), Amber, 260);
+                }
+                else game.SetStaticText(startSign, digit.ToString());
+                game.StartCountdownTimer(-clock, "Salida");
+                foreach (var r in racers)
+                    if (!r.Withdrawn && !r.Computer)
+                    {
+                        if (digit == 5) BindDriver(r);
+                        game.ShowPlayerFeedbackText(r.Seat, digit.ToString(), Amber);
+                    }
+            }
+            return;
+        }
+        if (podiumUntil > 0)
+        {
+            foreach (var r in racers)
+                if (!r.Withdrawn) Park(r, delta);
+            if (clock >= podiumUntil)
+            {
+                ended = true;
+                game.TriggerPlayerVictory(racers[0].Seat);
+            }
+            return;
+        }
+        if (previous <= 0)
+        {
+            game.StopCountdownTimer();
+            if (startSign != 0) game.DestroyStaticText(startSign);
+            foreach (var r in racers)
+            {
+                if (!r.Withdrawn && !r.Computer) BindDriver(r);
+                if (r.LaunchReady || (r.Computer && game.RandomFloat(0, 1) < 0.35f))
+                    r.Speed = CruiseSpeed;
+                Notify(r, "Go!", Cyan);
+            }
+        }
+        delta = Math.Min(clock, delta);
+        UpdateCrystals();
+        // Snapshot all gaps before moving anyone, so changing the standings cannot change traffic.
+        foreach (var r in racers)
+        {
+            r.FrameDistance = r.Distance;
+            r.FrameOffset = r.Offset;
+            r.FrameSpeed = r.Speed;
+            r.FrameFinished = float.IsFinite(r.Finish) || r.Withdrawn;
+        }
+        foreach (var r in racers)
+        {
+            r.Gap = LaneGap(r, r.Offset, out r.Ahead);
+        }
+        foreach (var r in racers)
+        {
+            if (r.Withdrawn) continue;
+            if (float.IsFinite(r.Finish)) Park(r, delta);
+            else Advance(r, delta);
+        }
+
+        if (clock >= nextBoard)
+        {
+            nextBoard = clock + 0.4f;
+            PublishBoard();
+        }
+        if (!racers.TrueForAll(r => r.Withdrawn || float.IsFinite(r.Finish))) return;
+        if (!racers.Exists(r => float.IsFinite(r.Finish))) { ended = true; return; }
+        podiumUntil = clock + 5;
+        PublishBoard();
+        game.SetSummaryTableHeaders("Puesto", "Auriga", "Tiempo", "Mejor vuelta");
+        for (int i = 0; i < racers.Count; i++)
+            game.SetSummaryTableRow($"{i+1}", racers[i].Name, racers[i].Withdrawn ? "Retirado" : RaceTime(racers[i].Finish),
+                float.IsFinite(racers[i].BestLap) ? RaceTime(racers[i].BestLap) : "—");
+        game.ShowSummaryTable("Circuito de las brasas", true);
+    }
+
+    private void Park(Racer r, float dt)
+    {
+        // Pull clear of the finish line, leaving room for the following racers.
+        float stall = 2 + 1.6f * ((r.Seat - 1) / 2);
+        float side = (RoadEdge + 1.4f) * (r.Seat % 2 == 0 ? 1 : -1);
+        if (r.Runout >= stall && r.Offset == side) return;
+        r.Runout = Math.Min(stall, r.Runout + 3 * dt);
+        r.Offset += Math.Clamp(side - r.Offset, -2 * dt, 2 * dt);
+        Place(r);
+    }
+
+    private float LaneGap(Racer r, float offset, out Racer? ahead)
+    {
+        ahead = null;
+        float nearest = float.PositiveInfinity;
+        foreach (var other in racers)
+        {
+            if (other == r || other.FrameFinished || Math.Abs(other.FrameOffset - offset) > 1.05f) continue;
+            float gap = (other.FrameDistance - r.FrameDistance) % Length;
+            if (gap < 0) gap += Length;
+            if (gap == 0 && other.Seat > r.Seat) continue;
+            if (gap >= nearest) continue;
+            nearest = gap;
+            ahead = other;
+        }
+        return nearest;
+    }
+
+    private void DriveComputer(Racer r, Gate gate, float toGate, float dt)
+    {
+        r.DecisionDelay -= dt;
+        if (toGate < 16 && r.PlannedGate != r.NextGate)
+        {
+            r.PlannedGate = r.NextGate;
+            // The three lane indices sum to zero.
+            int safe = -gate.Lane - HazardLane(gate);
+            r.Lane = !r.Charged || game.RandomFloat(0, 1) < 0.55f ? gate.Lane : safe;
+        }
+        // Stay in the wake until charged, then look for space on either side.
+        if (r.Charged && r.Gap < 3.8f && toGate > 4 && r.DecisionDelay <= 0 &&
+            Math.Abs(r.Offset - r.Lane * LaneWidth) < 0.25f)
+        {
+            int best = r.Lane;
+            float room = r.Gap;
+            for (int lane = -1; lane <= 1; lane++)
+            {
+                if (Math.Abs(lane - r.Lane) != 1 || (toGate < 16 && lane == HazardLane(gate))) continue;
+                float opening = LaneGap(r, lane * LaneWidth, out _);
+                if (opening > room + 1) { best = lane; room = opening; }
+            }
+            r.Lane = best;
+            r.DecisionDelay = 1.0f;
+        }
+        if (r.Charged && r.Gap > 4 && r.Drag <= 0 &&
+            (toGate < 18 || r.Distance > Laps * Length - 14 || r.DecisionDelay > 0))
+            Boost(r);
+    }
+
+    private static string RaceTime(float seconds)
+    {
+        int ticks = (int)MathF.Round(seconds * 100);
+        return $"{ticks / 6000}:{ticks / 100 % 60:00}.{ticks % 100:00}";
+    }
+
+    private void Advance(Racer r, float dt)
+    {
+        if (r.Computer) UsePower(r);
+        if (r.Flying)
+        {
+            Fly(r, dt);
+            return;
+        }
+        int lap = r.CompletedLaps;
+        if (gates.Count > 0)
+        {
+            Gate gate = gates[r.NextGate % gates.Count];
+            float toGate = (r.NextGate / gates.Count) * Length + gate.Distance - r.Distance;
+            if (r.Computer) DriveComputer(r, gate, toGate, dt);
+            else if (toGate < 16 && r.AnnouncedGate != r.NextGate)
+            {
+                r.AnnouncedGate = r.NextGate;
+                Notify(r, gate.Lane switch { -1 => "Recharge: left", 0 => "Recharge: centre", _ => "Recharge: right" }, Cyan);
+            }
+        }
+
+        bool drafting = r.Gap <= 4.5f && r.Speed > 3 && r.Distance > 0 && r.Drag <= 0 && r.Boost <= 0;
+        if (!r.Charged)
+        {
+            r.Draft = drafting ? r.Draft + dt : Math.Max(0, r.Draft - 2 * dt);
+            if (r.Draft >= DraftSeconds) Recharge(r, "Slipstream charged! Change lane and boost.");
+        }
+        float dirt = Math.Clamp((Math.Abs(r.Offset) - RoadEdge) / 0.8f, 0, 1);
+        bool boosting = r.Boost > 0;
+        float targetSpeed = r.Drag > 0 ? 2.8f : boosting ? BoostSpeed : drafting ? CruiseSpeed + 0.45f : CruiseSpeed;
+        if (r.LeftHeld && r.RightHeld) targetSpeed = Math.Min(4, targetSpeed);
+        if (r.ShieldUntil <= clock) targetSpeed *= 1 - 0.48f * dirt;
+        // Tyres scrubbing sideways bleed speed. A straight exit preserves momentum.
+        float slip = MathF.IEEERemainder(r.Heading - r.TravelHeading, MathF.Tau);
+        targetSpeed *= 1 - 0.16f * MathF.Sin(slip) * MathF.Sin(slip);
+        float deceleration = r.LeftHeld && r.RightHeld ? 14 : 9;
+        r.Speed += Math.Clamp(targetSpeed - r.Speed, -deceleration * dt, (boosting ? 14 : 8.5f) * dt);
+        if (r.Ahead != null && r.Gap < BumperSpacing + 0.6f)
+        {
+            float clearance = Math.Max(0, r.Gap - BumperSpacing);
+            r.Speed = Math.Min(r.Speed, r.Ahead.FrameSpeed + clearance * 2);
+        }
+        r.Boost = Math.Max(0, r.Boost - dt);
+        r.Drag = Math.Max(0, r.Drag - dt);
+        float previousDistance = r.Distance;
+        if (r.Computer)
+        {
+            foreach (float lip in jumpLips)
+            {
+                float ahead = (lip - r.Distance) % Length;
+                if (ahead < 0) ahead += Length;
+                if (ahead < 24) r.Lane = 0;
+            }
+            r.Offset += Math.Clamp(r.Lane * LaneWidth - r.Offset, -3*dt, 3*dt);
+            r.Distance += r.Speed * dt;
+        }
+        else
+            Steer(r, dt, dirt, boosting, slip);
+        float progress = r.Distance - previousDistance;
+        float lapBase = MathF.Floor(r.Distance / Length) * Length;
+        foreach (float point in waypoints)
+            if (previousDistance < lapBase + point && r.Distance >= lapBase + point)
+                r.Checkpoint = lapBase + point;
+        foreach (var edge in cliffEdges)
+        {
+            float along = r.Distance - lapBase - edge.Start;
+            if (along < 0 || along > 26 || r.Offset * edge.Side < RoadEdge + 1.75f) continue;
+            var rim = Sample(r.Distance, edge.Side * RoadEdge, out _);
+            r.OnLaunchPad = false;
+            r.Flying = true;
+            r.FlightTime = 0;
+            r.TakeoffHeight = r.FlightHeight = game.GetTerrainHeight(rim.X, rim.Y);
+            r.AirForward = progress / dt;
+            r.AirSide = edge.Side * 3;
+            Place(r);
+            return;
+        }
+        foreach (float localLip in jumpLips)
+        {
+            float lip = lapBase + localLip;
+            if (r.Distance < lip - 8) continue;
+            if (r.Distance < lip && !r.OnLaunchPad && progress > 0 && Math.Abs(r.Offset) <= 1.65f)
+            {
+                r.OnLaunchPad = true;
+                r.Speed = Math.Max(16, r.Speed);
+                game.SpawnExpandingGroundRing(r.Unit.Position, 0.4f, 2, 0.3f, Cyan);
+            }
+            if (r.OnLaunchPad && r.Distance < lip && (Math.Abs(r.Offset) > 1.75f || progress <= 0))
+                r.OnLaunchPad = false;
+            if (r.Distance >= lip && r.Distance < lip + GapWidth)
+            {
+                bool forward = previousDistance < lip;
+                r.OnLaunchPad &= forward;
+                r.JumpLip = lip;
+                r.FlightTime = 0;
+                var edge = Sample(forward ? lip - 2 : lip + GapWidth + 2, r.Offset, out var tangent);
+                r.TakeoffHeight = r.FlightHeight = game.GetTerrainHeight(edge.X, edge.Y);
+                float angle = r.Computer ? 0 : r.TravelHeading - MathF.Atan2(tangent.X, tangent.Y);
+                r.AirForward = forward ? Math.Max(0, MathF.Cos(angle)) * (r.OnLaunchPad ? Math.Max(16, r.Speed) : r.Speed) : 0;
+                r.AirSide = -MathF.Sin(angle) * r.Speed;
+                r.Flying = true;
+                break;
+            }
+        }
+        if (gates.Count > 0)
+        {
+            Gate gate = gates[r.NextGate % gates.Count];
+            float center = (r.NextGate / gates.Count) * Length + gate.Distance;
+            if (previousDistance > center + 3.7f)
+                r.NextGate++;
+            else if (progress > 0 && !r.Flying && r.Distance >= center - 3.7f)
+            {
+                if (Math.Abs(r.Offset - gate.Lane * LaneWidth) <= 1.65f)
+                {
+                    Recharge(r, "Boost ready [Q]");
+                    r.Speed = Math.Max(r.Speed, CruiseSpeed + 3);
+                    game.SpawnExpandingGroundRing(r.Unit.Position, 0.4f, 2, 0.3f, Cyan);
+                    r.NextGate++;
+                }
+                else if (Math.Abs(r.Offset - HazardLane(gate) * LaneWidth) <= 1.65f)
+                {
+                    r.NextGate++;
+                    if (r.ShieldUntil <= clock)
+                    {
+                        r.Drag = 1.4f;
+                        r.Boost = 0;
+                        r.Draft = 0;
+                        Notify(r, "Hot coals", Amber);
+                    }
+                }
+            }
+        }
+        if (!r.StartedLap && previousDistance < 0 && r.Distance >= 0)
+        {
+            r.LapStart = clock - dt * r.Distance / progress;
+            r.StartedLap = true;
+        }
+        if (previousDistance < (lap + 1) * Length && r.Distance >= (lap + 1) * Length)
+        {
+            r.CompletedLaps++;
+            float crossing = clock - dt * (r.Distance - (lap + 1) * Length) / progress;
+            float split = crossing - r.LapStart;
+            r.BestLap = Math.Min(r.BestLap, split);
+            r.LapStart = crossing;
+            if (lap + 1 == Laps)
+            {
+                r.Finish = crossing;
+                r.Distance = Laps * Length;
+                Notify(r, "Finished!", Cyan);
+                game.SpawnExpandingGroundRing(r.Unit.Position, 0.5f, 3, 0.5f, Cyan);
+            }
+            else if (!r.Computer)
+            {
+                string key = lap + 2 == Laps ? "Final lap!   {0}" : "Lap {1}/{2}   {0}";
+                game.ShowPlayerFeedbackText(r.Seat,
+                    string.Format(game.Translate(key, r.Seat), RaceTime(split), lap + 2, Laps), Cyan);
+            }
+        }
+        Place(r);
+    }
+
+    private void Fly(Racer r, float dt)
+    {
+        r.FlightTime += dt;
+        r.Distance += r.AirForward * dt;
+        r.Offset = Math.Clamp(r.Offset + r.AirSide * dt, -ShoulderEdge, ShoulderEdge);
+        float lift = r.OnLaunchPad ? 8.2f : 1.5f;
+        r.FlightHeight = r.TakeoffHeight + r.FlightTime * (lift - 11 * r.FlightTime);
+        r.Boost = Math.Max(0, r.Boost - dt);
+        if (r.OnLaunchPad && r.Distance >= r.JumpLip + GapWidth && r.FlightTime > lift / 22)
+        {
+            Vector2 landing = Sample(r.Distance, r.Offset, out _);
+            float ground = game.GetTerrainHeight(landing.X, landing.Y);
+            if (r.FlightHeight >= ground - 0.6f && r.FlightHeight <= ground + 0.5f)
+            {
+                r.Flying = r.OnLaunchPad = false;
+                r.RearSlip = Math.Max(r.RearSlip, Math.Clamp(Math.Abs(r.AirSide) / 9, 0, 0.65f));
+                float lapBase = MathF.Floor(r.Distance / Length) * Length;
+                foreach (float point in waypoints)
+                    if (lapBase + point <= r.Distance && lapBase + point > r.Checkpoint)
+                        r.Checkpoint = lapBase + point;
+            }
+        }
+        if (r.Flying && r.FlightHeight < r.TakeoffHeight - 1)
+        {
+            r.AirForward = r.AirSide = 0;
+            if (r.FlightHeight < r.TakeoffHeight - 9)
+            {
+                r.Distance = r.Checkpoint;
+                r.Offset = 0;
+                Sample(r.Distance, 0, out var facing);
+                r.Heading = r.TravelHeading = MathF.Atan2(facing.X, facing.Y);
+                r.Speed = r.YawRate = r.Boost = r.Drag = r.Draft = 0;
+                r.Steering = r.RearSlip = 0;
+                r.OnLaunchPad = r.Flying = false;
+                Notify(r, "Waypoint", Amber);
+            }
+        }
+        Place(r);
+    }
+
+    private void Steer(Racer r, float dt, float dirt, bool boosting, float slip)
+    {
+        int turn = (r.LeftHeld ? 1 : 0) - (r.RightHeld ? 1 : 0);
+        bool braking = r.LeftHeld && r.RightHeld;
+        // Braking in a turn keeps the wheels angled briefly while weight moves forward.
+        float steeringRate = braking ? 1.8f : turn == 0 ? 5.5f : 7;
+        r.Steering += Math.Clamp(turn - r.Steering, -steeringRate * dt, steeringRate * dt);
+        float roadGrip = (1 - 0.32f * dirt) * (clock < r.GripUntil ? 1.65f : 1);
+        float lateralLoad = Math.Abs(r.YawRate) * r.Speed / ((boosting ? 12 : 20) * roadGrip);
+        float breakaway = Math.Clamp((lateralLoad - (braking ? 0.5f : 0.85f)) * 0.95f, 0, 1);
+        bool correcting = turn * slip < -0.08f;
+        float gripResponse = breakaway > r.RearSlip ? 4.5f : correcting ? 4 : 1.6f;
+        r.RearSlip += (breakaway - r.RearSlip) * (1 - MathF.Exp(-gripResponse * dt));
+        float steeringAuthority = Math.Clamp(r.Speed / 3, 0, 1);
+        float slideYaw = Math.Clamp(slip, -0.9f, 0.9f) * r.RearSlip * (braking ? 1.2f : 0.7f);
+        float yawDemand = steeringAuthority * (r.Steering * (boosting ? 2.65f : 2.25f) /
+            (1 + Math.Abs(slip) * 0.55f) + slideYaw);
+        float yawResponse = boosting ? 3.4f : 6.2f;
+        r.YawRate += (yawDemand - r.YawRate) * (1 - MathF.Exp(-yawResponse * dt));
+        r.Heading = MathF.IEEERemainder(r.Heading + r.YawRate * dt, MathF.Tau);
+
+        // Available lateral acceleration bounds how fast the velocity vector can turn.
+        // Under boost more of the tyre grip is spent accelerating; loose dirt also reduces grip.
+        float lateralAcceleration = (boosting ? 8.8f : 17.0f) * roadGrip * (1 - 0.36f * r.RearSlip);
+        float maxTurn = lateralAcceleration * dt / Math.Max(1, r.Speed);
+        float headingError = MathF.IEEERemainder(r.Heading - r.TravelHeading, MathF.Tau);
+        float correction = headingError * (1 - MathF.Exp(-(boosting ? 1.5f : 3.25f) * dt));
+        r.TravelHeading = MathF.IEEERemainder(r.TravelHeading + Math.Clamp(correction, -maxTurn, maxTurn), MathF.Tau);
+        Vector2 travel = new Vector2(MathF.Sin(r.TravelHeading), MathF.Cos(r.TravelHeading)) * (r.Speed * dt);
+        // Express the driver's world-space motion in road coordinates for timing and barriers.
+        // The outside of a bend takes more metres to cover than its centre line.
+        Vector2 ahead = Sample(r.Distance + 0.05f, r.Offset, out _);
+        Vector2 behind = Sample(r.Distance - 0.05f, r.Offset, out _);
+        Vector2 along = (ahead - behind) / 0.1f;
+        Sample(r.Distance, 0, out var tangent);
+        Vector2 normal = new(-tangent.Y, tangent.X);
+        float step = Vector2.Dot(travel, tangent) / Math.Max(0.35f, Vector2.Dot(along, tangent));
+        r.Distance += step;
+        r.Offset = Math.Clamp(r.Offset + Vector2.Dot(travel - along * step, normal), -ShoulderEdge, ShoulderEdge);
+    }
+
+    private void PublishBoard()
+    {
+        racers.Sort((a,b) => {
+            if (a.Withdrawn != b.Withdrawn) return a.Withdrawn ? 1 : -1;
+            int result = a.Finish.CompareTo(b.Finish);
+            if (result == 0) result = b.Distance.CompareTo(a.Distance);
+            return result == 0 ? a.Seat.CompareTo(b.Seat) : result;
+        });
+        for (int i = 0; i < racers.Count; i++)
+        {
+            var r = racers[i];
+            string drive = r.Boost > 0 ? "»»" : r.Charged ? "[Q]" :
+                r.Draft > 0 ? $"{(int)(100*r.Draft/DraftSeconds)}%" : "—";
+            string status = r.Withdrawn ? "Retirado" : float.IsFinite(r.Finish) ? RaceTime(r.Finish) :
+                $"{1 + r.CompletedLaps}/{Laps}   {drive}";
+            if (r.StoredPower != Power.None) status += "   [E] " + game.Translate(PowerName(r.StoredPower), r.Seat) +
+                (r.Target == null ? "" : " → " + r.Target.Name);
+            string row = $"{r.Name}   {status}";
+            if (boardRows[i] == row) continue;
+            boardRows[i] = row;
+            game.SetLeaderboardValue($"#{i+1}", row);
+        }
+    }
 }

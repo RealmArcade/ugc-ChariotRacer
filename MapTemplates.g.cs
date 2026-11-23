@@ -12,9 +12,6 @@ public static class UnitIds
 	public const string Chad = "unit/chad";
 	public const string Kevin = "unit/kevin";
 	public const string ChariotRacer = "unit/chariot_racer";
-	public const string ItemCrystal = "unit/item_crystal";
-	public const string TrackHazard = "unit/track_hazard";
-	public const string ShellProjectile = "unit/shell_projectile";
 }
 
 public static class BuildingIds
@@ -41,9 +38,6 @@ public static class AbilityIds
 	public const string Holylight = "ability/holylight";
 	public const string Lightning = "ability/lightning";
 	public const string TurboBoost = "ability/turbo_boost";
-	public const string UsePowerup = "ability/use_powerup";
-	public const string DriftHop = "ability/drift_hop";
-	public const string BrakeReverse = "ability/brake_reverse";
 	public const string SteerLeft = "ability/steer_left";
 	public const string SteerRight = "ability/steer_right";
 	public const string SteerLeftStop = "ability/steer_left_stop";

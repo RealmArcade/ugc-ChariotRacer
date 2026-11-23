@@ -1,5220 +1,1439 @@
 {
-  "Width": 128,
-  "Depth": 128,
+  "Width": 224,
+  "Depth": 224,
   "Units": [],
   "Props": [
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": -106.024,
+      "PosY": 18,
+      "PosZ": -101.709,
+      "RotationY": 113.807,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": -99.566,
+      "PosY": 17.999998,
+      "PosZ": -87.07,
+      "RotationY": 113.807,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 124.992,
+      "PosY": 20,
+      "PosZ": -176.504,
+      "RotationY": -102.886,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 128.56,
+      "PosY": 19.999962,
+      "PosZ": -192.101,
+      "RotationY": -102.886,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 179.062,
+      "PosY": 17,
+      "PosZ": -10.768,
+      "RotationY": 162.639,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 194.333,
+      "PosY": 16.999998,
+      "PosZ": -5.993,
+      "RotationY": 162.639,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 83.933,
+      "PosY": 22,
+      "PosZ": 164.401,
+      "RotationY": 37.818,
+      "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
+      "PosX": 71.294,
+      "PosY": 21.999945,
+      "PosZ": 174.211,
+      "RotationY": 37.818,
+      "Scale": 0.9
     },
     {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 0,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.8
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 24,
-      "PosY": 1,
-      "PosZ": -34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 2.55607,
-      "PosZ": 34.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 0,
-      "PosY": 3.5,
-      "PosZ": 61.5,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
-    },
-    {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -123.649,
+      "PosY": 13.982001,
+      "PosZ": -97.979,
+      "RotationY": 93.722,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -81.007,
+      "PosY": 15.831053,
+      "PosZ": -108.179,
+      "RotationY": 90.105,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -122.351,
+      "PosY": 13.992997,
+      "PosZ": -78.021,
+      "RotationY": 93.722,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 74,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -80.982,
+      "PosY": 15.889374,
+      "PosZ": -94.179,
+      "RotationY": 90.105,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -113.747,
+      "PosY": 3.0028584,
+      "PosZ": -167.003,
+      "RotationY": -88.55,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -174.148,
+      "PosY": 3.0243013,
+      "PosZ": -135.285,
+      "RotationY": -9.875,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -114.253,
+      "PosY": 3.0032773,
+      "PosZ": -186.997,
+      "RotationY": -88.55,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -49.731,
+      "PosY": 13.995525,
+      "PosZ": -70.124,
+      "RotationY": 29.182,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -79.152,
+      "PosY": 8.997587,
+      "PosZ": -33.964,
+      "RotationY": -94.862,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -32.269,
+      "PosY": 13.995154,
+      "PosZ": -79.876,
+      "RotationY": 29.182,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -193.852,
+      "PosY": 2.9995263,
+      "PosZ": -138.715,
+      "RotationY": -9.875,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -30.715,
+      "PosY": 4.0258784,
+      "PosZ": -167.376,
+      "RotationY": -105.753,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -177.635,
+      "PosY": 0.016129384,
+      "PosZ": -35.481,
+      "RotationY": -48.43,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -80.848,
+      "PosY": 8.996811,
+      "PosZ": -14.036,
+      "RotationY": -94.862,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -164.365,
+      "PosY": 0.031605877,
+      "PosZ": -20.519,
+      "RotationY": -48.43,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -25.285,
+      "PosY": 4.0075736,
+      "PosZ": -186.624,
+      "RotationY": -105.753,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -157.935,
+      "PosY": 7.052068,
+      "PosZ": 35.481,
+      "RotationY": 72.15,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -74.376,
+      "PosY": 21.945595,
+      "PosZ": 51.529,
+      "RotationY": 40.32,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 49.865,
+      "PosY": 15.954949,
+      "PosZ": -177.105,
+      "RotationY": -65.576,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -164.065,
+      "PosY": 6.9907265,
+      "PosZ": 54.519,
+      "RotationY": 72.15,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 58.135,
+      "PosY": 15.950694,
+      "PosZ": -158.895,
+      "RotationY": -65.576,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -89.624,
+      "PosY": 21.929028,
+      "PosZ": 64.471,
+      "RotationY": 40.32,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -70.645,
+      "PosY": 21.476017,
+      "PosZ": 65.384,
+      "RotationY": 23.783,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -67.254,
+      "PosY": 21.06467,
+      "PosZ": 76.151,
+      "RotationY": 11.006,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 81.14,
+      "PosY": 22.912632,
+      "PosZ": -80.33,
+      "RotationY": -170.389,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -66.427,
+      "PosY": 21.694231,
+      "PosZ": 85.435,
+      "RotationY": -2.019,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 96.817,
+      "PosY": 22.446873,
+      "PosZ": -82.985,
+      "RotationY": -170.389,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 97.515,
+      "PosY": 21.62447,
+      "PosZ": -86.877,
+      "RotationY": 160.286,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -68.662,
+      "PosY": 21.4105,
+      "PosZ": 95.513,
+      "RotationY": -25.205,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -105.816,
+      "PosY": 14.960828,
+      "PosZ": 101.07,
+      "RotationY": -96.801,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 99.277,
+      "PosY": 22.243599,
+      "PosZ": -79.15,
+      "RotationY": -137.392,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 100.86,
+      "PosY": 16.436571,
+      "PosZ": -83.67,
+      "RotationY": -170.389,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -73.839,
+      "PosY": 21.18103,
+      "PosZ": 102.702,
+      "RotationY": -43.637,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 104.354,
+      "PosY": 22.292662,
+      "PosZ": -74.865,
+      "RotationY": -124.371,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 29.222,
+      "PosY": 8.9853735,
+      "PosZ": 64.791,
+      "RotationY": -151.376,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -192.887,
+      "PosY": 16.932957,
+      "PosZ": 99.415,
+      "RotationY": -27.288,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 104.098,
+      "PosY": 17.828903,
+      "PosZ": -180.07,
+      "RotationY": -89.191,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 112.126,
+      "PosY": 22.216171,
+      "PosZ": -70.611,
+      "RotationY": -113.424,
+      "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -175.113,
+      "PosY": 16.891994,
+      "PosZ": 108.585,
+      "RotationY": -27.288,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 46.778,
+      "PosY": 8.935918,
+      "PosZ": 55.209,
+      "RotationY": -151.376,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 103.9,
+      "PosY": 17.862871,
+      "PosZ": -194.069,
+      "RotationY": -89.191,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -108.184,
+      "PosY": 14.979819,
+      "PosZ": 120.93,
+      "RotationY": -96.801,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 95.089,
+      "PosY": 0.027549814,
+      "PosZ": 5,
+      "RotationY": 89.49,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 94.911,
+      "PosY": 0.045531187,
+      "PosZ": 25,
+      "RotationY": 89.49,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 150.087,
+      "PosY": 15.956143,
+      "PosZ": -165.29,
+      "RotationY": -119.424,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 160.258,
+      "PosY": 6.051453,
+      "PosZ": -122.273,
+      "RotationY": 111.976,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 20.351,
+      "PosY": 17.935379,
+      "PosZ": 129.357,
+      "RotationY": 105.363,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 167.742,
+      "PosY": 6.0060625,
+      "PosZ": -103.727,
+      "RotationY": 111.976,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 159.913,
+      "PosY": 15.960382,
+      "PosZ": -182.71,
+      "RotationY": -119.424,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -140.452,
+      "PosY": 3.9955902,
+      "PosZ": 168.121,
+      "RotationY": 81.095,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 164.539,
+      "PosY": 13.050174,
+      "PosZ": -58.618,
+      "RotationY": -110.251,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 171.461,
+      "PosY": 12.988606,
+      "PosZ": -77.382,
+      "RotationY": -110.251,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 124.554,
+      "PosY": 19.919468,
+      "PosZ": 57.121,
+      "RotationY": -98.938,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -53.126,
+      "PosY": 3.0153959,
+      "PosZ": 175.038,
+      "RotationY": 84.985,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 25.649,
+      "PosY": 17.8815,
+      "PosZ": 148.643,
+      "RotationY": 105.363,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 121.446,
+      "PosY": 19.897015,
+      "PosZ": 76.879,
+      "RotationY": -98.938,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -143.548,
+      "PosY": 3.996768,
+      "PosZ": 187.879,
+      "RotationY": 81.095,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 169.289,
+      "PosY": 12.922159,
+      "PosZ": 4.633,
+      "RotationY": 140.455,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 183.202,
+      "PosY": 14.889135,
+      "PosZ": -30.76,
+      "RotationY": -177.978,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": -54.874,
+      "PosY": 3.0038266,
+      "PosZ": 194.962,
+      "RotationY": 84.985,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 197.194,
+      "PosY": 14.844171,
+      "PosZ": -31.254,
+      "RotationY": -177.978,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 184.711,
+      "PosY": 12.950464,
+      "PosZ": 17.367,
+      "RotationY": 140.455,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 99.94,
+      "PosY": 19.080988,
+      "PosZ": 176.442,
+      "RotationY": 72.901,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 97.128,
+      "PosY": 19.86064,
+      "PosZ": 178.521,
+      "RotationY": 65.4,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 91.301,
+      "PosY": 19.879185,
+      "PosZ": 191.251,
+      "RotationY": 65.4,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 94.06,
+      "PosY": 18.92005,
+      "PosZ": 195.558,
+      "RotationY": 72.901,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 174.192,
+      "PosY": 4.063246,
+      "PosZ": 139.048,
+      "RotationY": 168.743,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 102,
-      "PosY": 1,
-      "PosZ": 0,
-      "RotationY": 0,
-      "Scale": 1.4
+      "PosX": 193.808,
+      "PosY": 4.011699,
+      "PosZ": 142.952,
+      "RotationY": 168.743,
+      "Scale": 0.55
     }
   ],
-  "Decals": [],
+  "Decals": [
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -77.517,
+      "PosY": 14.945,
+      "PosZ": -104.466,
+      "RotationX": 0,
+      "RotationY": 82.062,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -187.448,
+      "PosY": 3,
+      "PosZ": -137.6,
+      "RotationX": 0,
+      "RotationY": -9.875,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -60.045,
+      "PosY": 3.388,
+      "PosZ": -178.346,
+      "RotationX": 0,
+      "RotationY": -86.109,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -80,
+      "PosY": 9,
+      "PosZ": -24,
+      "RotationX": 0,
+      "RotationY": -94.862,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 15.43,
+      "PosY": 10.012,
+      "PosZ": -154.473,
+      "RotationX": 0,
+      "RotationY": -97.063,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -189.465,
+      "PosY": 3,
+      "PosZ": 12.491,
+      "RotationX": 0,
+      "RotationY": 8.067,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -79.331,
+      "PosY": 22,
+      "PosZ": 55.735,
+      "RotationX": 0,
+      "RotationY": 40.32,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -150,
+      "PosY": 10,
+      "PosZ": 86,
+      "RotationX": 0,
+      "RotationY": -96.975,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 110.704,
+      "PosY": 14,
+      "PosZ": -113.251,
+      "RotationX": 0,
+      "RotationY": 111.725,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 34.928,
+      "PosY": 9,
+      "PosZ": 61.677,
+      "RotationX": 0,
+      "RotationY": -151.376,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 155,
+      "PosY": 16,
+      "PosZ": -174,
+      "RotationX": 0,
+      "RotationY": -119.424,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 169.211,
+      "PosY": 13,
+      "PosZ": -71.284,
+      "RotationX": 0,
+      "RotationY": -110.251,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 137,
+      "PosY": 3,
+      "PosZ": 30,
+      "RotationX": 0,
+      "RotationY": 91.26,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -142.542,
+      "PosY": 4,
+      "PosZ": 181.458,
+      "RotationX": 0,
+      "RotationY": 81.095,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": -11.885,
+      "PosY": 8.006,
+      "PosZ": 166.051,
+      "RotationX": 0,
+      "RotationY": 122.591,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 170.697,
+      "PosY": 10,
+      "PosZ": 89.769,
+      "RotationX": 0,
+      "RotationY": -140.396,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/acid_drip",
+      "PosX": 97,
+      "PosY": 18.945,
+      "PosZ": 186,
+      "RotationX": 0,
+      "RotationY": 72.901,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -87.216,
+      "PosY": 17.604,
+      "PosZ": -100.326,
+      "RotationX": 0,
+      "RotationY": 103.198,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -78,
+      "PosY": 14.945,
+      "PosZ": -101,
+      "RotationX": 0,
+      "RotationY": 82.062,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -180.552,
+      "PosY": 3.011,
+      "PosZ": -136.4,
+      "RotationX": 0,
+      "RotationY": -9.875,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -60.283,
+      "PosY": 3.388,
+      "PosZ": -181.838,
+      "RotationX": 0,
+      "RotationY": -86.109,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -79.703,
+      "PosY": 9.006,
+      "PosZ": -27.487,
+      "RotationX": 0,
+      "RotationY": -94.862,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 14.57,
+      "PosY": 10,
+      "PosZ": -147.527,
+      "RotationX": 0,
+      "RotationY": -97.063,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -182.535,
+      "PosY": 2.996,
+      "PosZ": 11.509,
+      "RotationX": 0,
+      "RotationY": 8.067,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -82,
+      "PosY": 22,
+      "PosZ": 58,
+      "RotationX": 0,
+      "RotationY": 40.32,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -149.575,
+      "PosY": 10,
+      "PosZ": 82.526,
+      "RotationX": 0,
+      "RotationY": -96.975,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 112,
+      "PosY": 14,
+      "PosZ": -110,
+      "RotationX": 0,
+      "RotationY": 111.725,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 38,
+      "PosY": 9,
+      "PosZ": 60,
+      "RotationX": 0,
+      "RotationY": -151.376,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 110.293,
+      "PosY": 19.604,
+      "PosZ": -186.879,
+      "RotationX": 0,
+      "RotationY": -94.14,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 156.719,
+      "PosY": 16,
+      "PosZ": -177.049,
+      "RotationX": 0,
+      "RotationY": -119.424,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 166.789,
+      "PosY": 13,
+      "PosZ": -64.716,
+      "RotationX": 0,
+      "RotationY": -110.251,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -141.458,
+      "PosY": 3.992,
+      "PosZ": 174.542,
+      "RotationX": 0,
+      "RotationY": 81.095,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 137.077,
+      "PosY": 3,
+      "PosZ": 33.499,
+      "RotationX": 0,
+      "RotationY": 91.26,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": -10,
+      "PosY": 8,
+      "PosZ": 169,
+      "RotationX": 0,
+      "RotationY": 122.591,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 189.994,
+      "PosY": 16.604,
+      "PosZ": -24.715,
+      "RotationX": 0,
+      "RotationY": 175.154,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 165.303,
+      "PosY": 10.007,
+      "PosZ": 94.231,
+      "RotationX": 0,
+      "RotationY": -140.396,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 88.899,
+      "PosY": 21.604,
+      "PosZ": 181.553,
+      "RotationX": 0,
+      "RotationY": 51.996,
+      "RotationZ": 0,
+      "Scale": 1
+    },
+    {
+      "TemplateId": "decal/arcane_spark",
+      "PosX": 95.971,
+      "PosY": 18.945,
+      "PosZ": 189.345,
+      "RotationX": 0,
+      "RotationY": 72.901,
+      "RotationZ": 0,
+      "Scale": 1
+    }
+  ],
   "Vfx": [],
-  "CameraBoundsLeft": -120,
-  "CameraBoundsRight": 120,
-  "CameraBoundsTop": -120,
-  "CameraBoundsBottom": 120,
+  "CameraBoundsLeft": -216,
+  "CameraBoundsRight": 216,
+  "CameraBoundsTop": -216,
+  "CameraBoundsBottom": 216,
   "SkyboxPath": "jade_shrine.rtex",
   "Coordinates": [
     {
-      "Name": "boost_pad_east",
-      "MinX": 24,
-      "MinZ": -54,
-      "MaxX": 32,
-      "MaxZ": -42
+      "Name": "barranco_der_35",
+      "MinX": -74.7,
+      "MinZ": 92.3,
+      "MaxX": -73.3,
+      "MaxZ": 93.7
     },
     {
-      "Name": "boost_pad_west",
-      "MinX": -32,
-      "MinZ": 42,
-      "MaxX": -24,
-      "MaxZ": 54
+      "Name": "barranco_izq_10",
+      "MinX": 90.3,
+      "MinZ": -82.7,
+      "MaxX": 91.7,
+      "MaxZ": -81.3
     },
     {
-      "Name": "checkpoint_1",
-      "MinX": 74,
-      "MinZ": -6,
-      "MaxX": 102,
-      "MaxZ": 6
+      "Name": "ruta_01",
+      "MinX": -82.7,
+      "MinZ": -177.7,
+      "MaxX": -81.3,
+      "MaxZ": -176.3
     },
     {
-      "Name": "checkpoint_2",
-      "MinX": -4,
-      "MinZ": 35,
-      "MaxX": 4,
-      "MaxZ": 61
+      "Name": "ruta_02",
+      "MinX": -28.7,
+      "MinZ": -177.7,
+      "MaxX": -27.3,
+      "MaxZ": -176.3
     },
     {
-      "Name": "checkpoint_3",
-      "MinX": -102,
-      "MinZ": -6,
-      "MaxX": -74,
-      "MaxZ": 6
+      "Name": "ruta_03",
+      "MinX": 14.3,
+      "MinZ": -151.7,
+      "MaxX": 15.7,
+      "MaxZ": -150.3
     },
     {
-      "Name": "finish_line",
-      "MinX": -3,
-      "MinZ": -61,
-      "MaxX": 3,
-      "MaxZ": -35
+      "Name": "ruta_04",
+      "MinX": 53.3,
+      "MinZ": -168.7,
+      "MaxX": 54.7,
+      "MaxZ": -167.3
+    },
+    {
+      "Name": "ruta_05",
+      "MinX": 100.3,
+      "MinZ": -187.7,
+      "MaxX": 101.7,
+      "MaxZ": -186.3
+    },
+    {
+      "Name": "ruta_06",
+      "MinX": 154.3,
+      "MinZ": -174.7,
+      "MaxX": 155.7,
+      "MaxZ": -173.3
+    },
+    {
+      "Name": "ruta_07",
+      "MinX": 182.3,
+      "MinZ": -141.7,
+      "MaxX": 183.7,
+      "MaxZ": -140.3
+    },
+    {
+      "Name": "ruta_08",
+      "MinX": 163.3,
+      "MinZ": -113.7,
+      "MaxX": 164.7,
+      "MaxZ": -112.3
+    },
+    {
+      "Name": "ruta_09",
+      "MinX": 111.3,
+      "MinZ": -110.7,
+      "MaxX": 112.7,
+      "MaxZ": -109.3
+    },
+    {
+      "Name": "ruta_10",
+      "MinX": 90.3,
+      "MinZ": -82.7,
+      "MaxX": 91.7,
+      "MaxZ": -81.3
+    },
+    {
+      "Name": "ruta_11",
+      "MinX": 119.3,
+      "MinZ": -62.7,
+      "MaxX": 120.7,
+      "MaxZ": -61.3
+    },
+    {
+      "Name": "ruta_12",
+      "MinX": 167.3,
+      "MinZ": -68.7,
+      "MaxX": 168.7,
+      "MaxZ": -67.3
+    },
+    {
+      "Name": "ruta_13",
+      "MinX": 189.3,
+      "MinZ": -34.7,
+      "MaxX": 190.7,
+      "MaxZ": -33.3
+    },
+    {
+      "Name": "ruta_14",
+      "MinX": 176.3,
+      "MinZ": 10.3,
+      "MaxX": 177.7,
+      "MaxZ": 11.7
+    },
+    {
+      "Name": "ruta_15",
+      "MinX": 136.3,
+      "MinZ": 29.3,
+      "MaxX": 137.7,
+      "MaxZ": 30.7
+    },
+    {
+      "Name": "ruta_16",
+      "MinX": 94.3,
+      "MinZ": 14.3,
+      "MaxX": 95.7,
+      "MaxZ": 15.7
+    },
+    {
+      "Name": "ruta_17",
+      "MinX": 48.3,
+      "MinZ": 30.3,
+      "MaxX": 49.7,
+      "MaxZ": 31.7
+    },
+    {
+      "Name": "ruta_18",
+      "MinX": 37.3,
+      "MinZ": 59.3,
+      "MaxX": 38.7,
+      "MaxZ": 60.7
+    },
+    {
+      "Name": "ruta_19",
+      "MinX": 72.3,
+      "MinZ": 74.3,
+      "MaxX": 73.7,
+      "MaxZ": 75.7
+    },
+    {
+      "Name": "ruta_20",
+      "MinX": 122.3,
+      "MinZ": 66.3,
+      "MaxX": 123.7,
+      "MaxZ": 67.7
+    },
+    {
+      "Name": "ruta_21",
+      "MinX": 167.3,
+      "MinZ": 91.3,
+      "MaxX": 168.7,
+      "MaxZ": 92.7
+    },
+    {
+      "Name": "ruta_22",
+      "MinX": 183.3,
+      "MinZ": 140.3,
+      "MaxX": 184.7,
+      "MaxZ": 141.7
+    },
+    {
+      "Name": "ruta_23",
+      "MinX": 150.3,
+      "MinZ": 176.3,
+      "MaxX": 151.7,
+      "MaxZ": 177.7
+    },
+    {
+      "Name": "ruta_24",
+      "MinX": 96.3,
+      "MinZ": 185.3,
+      "MaxX": 97.7,
+      "MaxZ": 186.7
+    },
+    {
+      "Name": "ruta_25",
+      "MinX": 60.3,
+      "MinZ": 150.3,
+      "MaxX": 61.7,
+      "MaxZ": 151.7
+    },
+    {
+      "Name": "ruta_26",
+      "MinX": 22.3,
+      "MinZ": 138.3,
+      "MaxX": 23.7,
+      "MaxZ": 139.7
+    },
+    {
+      "Name": "ruta_27",
+      "MinX": -10.7,
+      "MinZ": 168.3,
+      "MaxX": -9.3,
+      "MaxZ": 169.7
+    },
+    {
+      "Name": "ruta_28",
+      "MinX": -54.7,
+      "MinZ": 184.3,
+      "MaxX": -53.3,
+      "MaxZ": 185.7
+    },
+    {
+      "Name": "ruta_29",
+      "MinX": -100.7,
+      "MinZ": 162.3,
+      "MaxX": -99.3,
+      "MaxZ": 163.7
+    },
+    {
+      "Name": "ruta_30",
+      "MinX": -142.7,
+      "MinZ": 177.3,
+      "MaxX": -141.3,
+      "MaxZ": 178.7
+    },
+    {
+      "Name": "ruta_31",
+      "MinX": -182.7,
+      "MinZ": 147.3,
+      "MaxX": -181.3,
+      "MaxZ": 148.7
+    },
+    {
+      "Name": "ruta_32",
+      "MinX": -184.7,
+      "MinZ": 103.3,
+      "MaxX": -183.3,
+      "MaxZ": 104.7
+    },
+    {
+      "Name": "ruta_33",
+      "MinX": -150.7,
+      "MinZ": 85.3,
+      "MaxX": -149.3,
+      "MaxZ": 86.7
+    },
+    {
+      "Name": "ruta_34",
+      "MinX": -107.7,
+      "MinZ": 110.3,
+      "MaxX": -106.3,
+      "MaxZ": 111.7
+    },
+    {
+      "Name": "ruta_35",
+      "MinX": -74.7,
+      "MinZ": 92.3,
+      "MaxX": -73.3,
+      "MaxZ": 93.7
+    },
+    {
+      "Name": "ruta_36",
+      "MinX": -82.7,
+      "MinZ": 57.3,
+      "MaxX": -81.3,
+      "MaxZ": 58.7
+    },
+    {
+      "Name": "ruta_37",
+      "MinX": -124.7,
+      "MinZ": 33.3,
+      "MaxX": -123.3,
+      "MaxZ": 34.7
+    },
+    {
+      "Name": "ruta_38",
+      "MinX": -161.7,
+      "MinZ": 44.3,
+      "MaxX": -160.3,
+      "MaxZ": 45.7
+    },
+    {
+      "Name": "ruta_39",
+      "MinX": -186.7,
+      "MinZ": 11.3,
+      "MaxX": -185.3,
+      "MaxZ": 12.7
+    },
+    {
+      "Name": "ruta_40",
+      "MinX": -171.7,
+      "MinZ": -28.7,
+      "MaxX": -170.3,
+      "MaxZ": -27.3
+    },
+    {
+      "Name": "ruta_41",
+      "MinX": -125.7,
+      "MinZ": -42.7,
+      "MaxX": -124.3,
+      "MaxZ": -41.3
+    },
+    {
+      "Name": "ruta_42",
+      "MinX": -80.7,
+      "MinZ": -24.7,
+      "MaxX": -79.3,
+      "MaxZ": -23.3
+    },
+    {
+      "Name": "ruta_43",
+      "MinX": -42.7,
+      "MinZ": -37.7,
+      "MaxX": -41.3,
+      "MaxZ": -36.3
+    },
+    {
+      "Name": "ruta_44",
+      "MinX": -41.7,
+      "MinZ": -75.7,
+      "MaxX": -40.3,
+      "MaxZ": -74.3
+    },
+    {
+      "Name": "ruta_45",
+      "MinX": -78.7,
+      "MinZ": -101.7,
+      "MaxX": -77.3,
+      "MaxZ": -100.3
+    },
+    {
+      "Name": "ruta_46",
+      "MinX": -123.7,
+      "MinZ": -88.7,
+      "MaxX": -122.3,
+      "MaxZ": -87.3
+    },
+    {
+      "Name": "ruta_47",
+      "MinX": -163.7,
+      "MinZ": -98.7,
+      "MaxX": -162.3,
+      "MaxZ": -97.3
+    },
+    {
+      "Name": "ruta_48",
+      "MinX": -184.7,
+      "MinZ": -137.7,
+      "MaxX": -183.3,
+      "MaxZ": -136.3
+    },
+    {
+      "Name": "ruta_49",
+      "MinX": -150.7,
+      "MinZ": -174.7,
+      "MaxX": -149.3,
+      "MaxZ": -173.3
+    },
+    {
+      "Name": "ruta_50",
+      "MinX": -114.7,
+      "MinZ": -177.7,
+      "MaxX": -113.3,
+      "MaxZ": -176.3
+    },
+    {
+      "Name": "salto_05",
+      "MinX": 100.3,
+      "MinZ": -187.7,
+      "MaxX": 101.7,
+      "MaxZ": -186.3
+    },
+    {
+      "Name": "salto_13",
+      "MinX": 189.3,
+      "MinZ": -34.7,
+      "MaxX": 190.7,
+      "MaxZ": -33.3
+    },
+    {
+      "Name": "salto_24",
+      "MinX": 96.3,
+      "MinZ": 185.3,
+      "MaxX": 97.7,
+      "MaxZ": 186.7
+    },
+    {
+      "Name": "salto_45",
+      "MinX": -78.7,
+      "MinZ": -101.7,
+      "MaxX": -77.3,
+      "MaxZ": -100.3
     }
   ],
   "SpawnAnchors": [
     {
-      "Player": 0,
-      "PosX": -8,
-      "PosZ": -51
-    },
-    {
       "Player": 1,
-      "PosX": -10,
-      "PosZ": -45
+      "PosX": -84.619,
+      "PosZ": -180.507
     },
     {
       "Player": 2,
-      "PosX": -14,
-      "PosZ": -51
+      "PosX": -84.625,
+      "PosZ": -177.007
     },
     {
       "Player": 3,
-      "PosX": -16,
-      "PosZ": -45
+      "PosX": -84.631,
+      "PosZ": -173.507
     },
     {
       "Player": 4,
-      "PosX": -20,
-      "PosZ": -51
+      "PosX": -89.311,
+      "PosZ": -180.544
     },
     {
       "Player": 5,
-      "PosX": -22,
-      "PosZ": -45
+      "PosX": -89.35,
+      "PosZ": -177.044
     },
     {
       "Player": 6,
-      "PosX": -26,
-      "PosZ": -51
+      "PosX": -89.389,
+      "PosZ": -173.545
     },
     {
       "Player": 7,
-      "PosX": -28,
-      "PosZ": -45
+      "PosX": -94.02,
+      "PosZ": -180.61
+    },
+    {
+      "Player": 8,
+      "PosX": -94.074,
+      "PosZ": -177.11
     }
   ]
 }
