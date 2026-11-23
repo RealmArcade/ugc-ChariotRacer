@@ -9,7 +9,14 @@ using Realm.MapAPI;
 
 public class MapScript : IWasmModule
 {
-    private const int Laps = 3;
+    private static readonly int[] LapOptions = { 1, 2, 3, 5 };
+    private int lapOption = 2;
+    private int Laps => LapOptions[lapOption];
+    private const string PickLaps = "ability/garage_laps", PickCar = "ability/garage_car", StartRace = "ability/garage_start";
+    private static readonly string[] Cars = { UnitIds.ChariotRacer, "unit/aguja", "unit/mastodonte" };
+    private static readonly string[] CarNames = { "Ember", "Needle", "Mastodon" };
+    private bool garage;
+    private float garageTime;
     private const float LaneWidth = 3.5f;
     private const float RoadEdge = 1.5f * LaneWidth;
     private const float ShoulderEdge = RoadEdge + 3.75f;
@@ -54,7 +61,7 @@ public class MapScript : IWasmModule
         public float Checkpoint, JumpLip, FlightTime, FlightHeight, TakeoffHeight, AirForward, AirSide;
         public bool Flying, OnLaunchPad;
         public string DriveAnimation = "";
-        public int CompletedLaps;
+        public int CompletedLaps, Car;
         public string Name = "";
     }
 
@@ -88,7 +95,7 @@ public class MapScript : IWasmModule
         BuildRoad();
         if (road.Count == 0)
         {
-            game.BroadcastMessage("El circuito necesita al menos cuatro regiones consecutivas desde ruta_01.");
+            game.BroadcastMessage("The circuit requires at least four consecutive regions starting at waypoint_01.");
             ended = true;
             return;
         }
@@ -103,9 +110,10 @@ public class MapScript : IWasmModule
             if (racer == null || racer.Withdrawn || float.IsFinite(racer.Finish)) return;
             racer.Withdrawn = true;
             game.DestroyUnit(racer.Unit, false, false);
+            if (garage) RefreshGarage();
         };
-        // The editor attaches a local client after the authority has loaded the map.
-        clock = racers.Exists(r => !r.Computer) ? -12 : -5;
+        clock = -5;
+        garage = Director() != null;
         AddCrystal(10, -LaneWidth);
         AddCrystal(10, LaneWidth);
         for (int i = 3; i < waypoints.Count; i += 6)
@@ -113,18 +121,18 @@ public class MapScript : IWasmModule
             AddCrystal(waypoints[i], 0);
             AddCrystal(waypoints[i], i % 2 == 0 ? -LaneWidth : LaneWidth);
         }
-        game.SetLeaderboardVisible("Circuito de las brasas", true);
-        PublishBoard();
+        if (garage) RefreshGarage();
+        else OpenRace();
     }
 
     private static unsafe bool IsComputer(int seat) =>
         EcsSharedMemory.GetComponent<ScriptPlayer>(ComponentIds.ScriptPlayer, seat)->IsComputer;
 
-    // The editor regions define the racing line. ruta_01 is the finish.
+    // The editor regions define the racing line. waypoint_01 is the finish.
     private void BuildRoad()
     {
         var nodes = new List<Vector2>();
-        for (int i = 1; game.TryGetCoordinate($"ruta_{i:00}", out var region); i++)
+        for (int i = 1; game.TryGetCoordinate($"waypoint_{i:00}", out var region); i++)
         {
             var p = (region.Min + region.Max) * 0.5f;
             nodes.Add(new(p.X, p.Z));
@@ -151,9 +159,9 @@ public class MapScript : IWasmModule
                 if (j == 0)
                 {
                     waypoints.Add(distance);
-                    if (game.TryGetCoordinate($"salto_{i+1:00}", out _)) jumpLips.Add(distance + 14);
-                    if (game.TryGetCoordinate($"barranco_der_{i+1:00}", out _)) cliffEdges.Add((distance, 1));
-                    if (game.TryGetCoordinate($"barranco_izq_{i+1:00}", out _)) cliffEdges.Add((distance, -1));
+                    if (game.TryGetCoordinate($"jump_{i+1:00}", out _)) jumpLips.Add(distance + 14);
+                    if (game.TryGetCoordinate($"right_cliff_{i+1:00}", out _)) cliffEdges.Add((distance, 1));
+                    if (game.TryGetCoordinate($"left_cliff_{i+1:00}", out _)) cliffEdges.Add((distance, -1));
                 }
                 if (j == 0 && i % 3 == 2)
                     gates.Add(new(distance, (i / 3 + 2) % 3 - 1));
@@ -204,9 +212,15 @@ public class MapScript : IWasmModule
         Vector2 start = Sample(r.Distance, r.Offset, out var startDirection);
         r.Heading = MathF.Atan2(startDirection.X, startDirection.Y);
         r.TravelHeading = r.Heading;
-        r.Unit = game.SpawnUnitForPlayer(UnitIds.ChariotRacer, start, seat, executeSpawnShader: false, bypassPopulation: true);
+        r.Unit = game.SpawnUnitForPlayer(Cars[0], start, seat, executeSpawnShader: false, bypassPopulation: true);
         if (!r.Unit.IsValid) return;
         racers.Add(r);
+        ConfigureCar(r);
+        if (!computer) game.GetPlayer(seat).SetHudElementVisible(HudElement.ResourceBar, false);
+    }
+
+    private void ConfigureCar(Racer r)
+    {
         r.Unit.Invulnerable = true;
         game.SetUnitCommandsFrozen(r.Unit, true);
         r.Unit.Speed = 0;
@@ -216,19 +230,87 @@ public class MapScript : IWasmModule
         game.SetAbilityState(r.Unit, CrystalAbility, true, false);
         game.SetAbilityState(r.Unit, AbilityIds.Fireball, true, true);
         Place(r);
-        game.SetUnitColor(r.Unit, game.GetPlayerColor(seat));
-        if (computer) return;
-        var player = game.GetPlayer(seat);
-        BindDriver(r);
-        player.SetHudElementVisible(HudElement.ResourceBar, false);
-        player.SendMessage(game.Translate("Hold A or D to steer. Release to drive straight. Q: boost.", seat));
-        player.SendMessage(game.Translate("Tap Q just before the start for a quick launch.", seat));
+        game.SetUnitColor(r.Unit, Vector3.One);
+    }
+
+    private Racer? Director() => racers.Find(r => !r.Computer && !r.Withdrawn);
+
+    private void SetGarageControls(Racer r, bool open, bool director)
+    {
+        game.SetAbilityState(r.Unit, PickCar, !open, !open);
+        game.SetAbilityState(r.Unit, PickLaps, !open || !director, !open || !director);
+        game.SetAbilityState(r.Unit, StartRace, !open || !director, !open || !director);
+        game.SetAbilityState(r.Unit, AbilityIds.TurboBoost, open, open);
+        game.SetAbilityState(r.Unit, AbilityIds.SteerLeft, open, open);
+        game.SetAbilityState(r.Unit, AbilityIds.SteerRight, open, open);
+        game.SetAbilityState(r.Unit, CrystalAbility, true, open);
+    }
+
+    private void RefreshGarage()
+    {
+        var director = Director();
+        if (director == null) { OpenRace(); return; }
+        game.SetLeaderboardVisible("Garage", true);
+        game.SetLeaderboardValue("Laps [Z]", $"{Laps}   ·   1 / 2 / 3 / 5");
+        game.SetLeaderboardValue("Start [C]", director.Name);
+        foreach (var r in racers)
+        {
+            if (!r.Withdrawn && !r.Computer)
+            {
+                SetGarageControls(r, true, r == director);
+                BindDriver(r);
+            }
+            game.SetLeaderboardValue($"P{r.Seat} · {r.Name} [X]", r.Withdrawn ? "Retired" : CarNames[r.Car]);
+        }
+    }
+
+    private void GarageAction(Racer r, string ability)
+    {
+        if (r.Computer || r.Withdrawn) return;
+        if (ability == PickCar)
+        {
+            int next = (r.Car + 1) % Cars.Length;
+            var pos = Sample(r.Distance, r.Offset, out _);
+            var replacement = game.SpawnUnitForPlayer(Cars[next], pos, r.Seat, false, true);
+            if (!replacement.IsValid) return;
+            var previous = r.Unit;
+            r.Unit = replacement;
+            r.Car = next;
+            r.DriveAnimation = "";
+            ConfigureCar(r);
+            SetGarageControls(r, true, r == Director());
+            game.DestroyUnit(previous, false, false);
+            BindDriver(r);
+            game.SetLeaderboardValue($"P{r.Seat} · {r.Name} [X]", CarNames[next]);
+        }
+        else if (r == Director() && ability == PickLaps)
+        {
+            lapOption = (lapOption + 1) % LapOptions.Length;
+            game.SetLeaderboardValue("Laps [Z]", $"{Laps}   ·   1 / 2 / 3 / 5");
+        }
+        else if (r == Director() && ability == StartRace) OpenRace();
+    }
+
+    private void OpenRace()
+    {
+        garage = false;
+        clock = -5;
+        game.ClearLeaderboard();
+        foreach (var r in racers)
+        {
+            if (r.Withdrawn) continue;
+            SetGarageControls(r, false, false);
+            if (!r.Computer) BindDriver(r);
+        }
+        game.SetLeaderboardVisible("Ember Circuit", true);
+        PublishBoard();
     }
 
     private void BindDriver(Racer r)
     {
         game.GetPlayer(r.Seat).SelectUnit(r.Unit);
-        game.SetPlayerCameraFollowUnit(r.Seat, r.Unit, 10, 4.6f, -26, 0, true, 7, true);
+        game.SetPlayerCameraFollowUnit(r.Seat, r.Unit, garage ? 5 : 10, garage ? 2.4f : 4.6f,
+            garage ? -18 : -26, garage ? 130 : 0, true, 7, true);
     }
 
     private void Place(Racer r)
@@ -267,6 +349,7 @@ public class MapScript : IWasmModule
         foreach (var r in racers)
         {
             if (r.Unit != unit || float.IsFinite(r.Finish)) continue;
+            if (garage) { GarageAction(r, ability); return; }
             if (ability == AbilityIds.SteerLeft) r.LeftHeld = true;
             if (ability == AbilityIds.SteerRight) r.RightHeld = true;
             if (ability == AbilityIds.SteerLeftStop) r.LeftHeld = false;
@@ -483,6 +566,14 @@ public class MapScript : IWasmModule
     public void Update(IGameAPI api, float delta)
     {
         if (ended || delta <= 0) return;
+        if (garage)
+        {
+            // Rebind once after the editor client has received its initial unit snapshot.
+            float before = garageTime;
+            garageTime += delta;
+            if (before < 7 && garageTime >= 7) RefreshGarage();
+            return;
+        }
         float previous = clock;
         clock += delta;
         if (clock <= 0)
@@ -497,7 +588,7 @@ public class MapScript : IWasmModule
                     startSign = game.CreateStaticText(digit.ToString(), new(line.X, game.GetTerrainHeight(line.X, line.Y), line.Y), Amber, 260);
                 }
                 else game.SetStaticText(startSign, digit.ToString());
-                game.StartCountdownTimer(-clock, "Salida");
+                game.StartCountdownTimer(-clock, "Race Start");
                 foreach (var r in racers)
                     if (!r.Withdrawn && !r.Computer)
                     {
@@ -560,11 +651,11 @@ public class MapScript : IWasmModule
         if (!racers.Exists(r => float.IsFinite(r.Finish))) { ended = true; return; }
         podiumUntil = clock + 5;
         PublishBoard();
-        game.SetSummaryTableHeaders("Puesto", "Auriga", "Tiempo", "Mejor vuelta");
+        game.SetSummaryTableHeaders("Place", "Driver", "Time", "Best Lap");
         for (int i = 0; i < racers.Count; i++)
-            game.SetSummaryTableRow($"{i+1}", racers[i].Name, racers[i].Withdrawn ? "Retirado" : RaceTime(racers[i].Finish),
+            game.SetSummaryTableRow($"{i+1}", racers[i].Name, racers[i].Withdrawn ? "Retired" : RaceTime(racers[i].Finish),
                 float.IsFinite(racers[i].BestLap) ? RaceTime(racers[i].BestLap) : "—");
-        game.ShowSummaryTable("Circuito de las brasas", true);
+        game.ShowSummaryTable("Ember Circuit", true);
     }
 
     private void Park(Racer r, float dt)
@@ -886,7 +977,7 @@ public class MapScript : IWasmModule
             var r = racers[i];
             string drive = r.Boost > 0 ? "»»" : r.Charged ? "[Q]" :
                 r.Draft > 0 ? $"{(int)(100*r.Draft/DraftSeconds)}%" : "—";
-            string status = r.Withdrawn ? "Retirado" : float.IsFinite(r.Finish) ? RaceTime(r.Finish) :
+            string status = r.Withdrawn ? "Retired" : float.IsFinite(r.Finish) ? RaceTime(r.Finish) :
                 $"{1 + r.CompletedLaps}/{Laps}   {drive}";
             if (r.StoredPower != Power.None) status += "   [E] " + game.Translate(PowerName(r.StoredPower), r.Seat) +
                 (r.Target == null ? "" : " → " + r.Target.Name);

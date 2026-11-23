@@ -1002,396 +1002,396 @@
   "SkyboxPath": "jade_shrine.rtex",
   "Coordinates": [
     {
-      "Name": "barranco_der_35",
-      "MinX": -74.7,
-      "MinZ": 92.3,
-      "MaxX": -73.3,
-      "MaxZ": 93.7
+      "Name": "jump_05",
+      "MinX": 100.3,
+      "MinZ": -187.7,
+      "MaxX": 101.7,
+      "MaxZ": -186.3
     },
     {
-      "Name": "barranco_izq_10",
+      "Name": "jump_13",
+      "MinX": 189.3,
+      "MinZ": -34.7,
+      "MaxX": 190.7,
+      "MaxZ": -33.3
+    },
+    {
+      "Name": "jump_24",
+      "MinX": 96.3,
+      "MinZ": 185.3,
+      "MaxX": 97.7,
+      "MaxZ": 186.7
+    },
+    {
+      "Name": "jump_45",
+      "MinX": -78.7,
+      "MinZ": -101.7,
+      "MaxX": -77.3,
+      "MaxZ": -100.3
+    },
+    {
+      "Name": "left_cliff_10",
       "MinX": 90.3,
       "MinZ": -82.7,
       "MaxX": 91.7,
       "MaxZ": -81.3
     },
     {
-      "Name": "ruta_01",
+      "Name": "right_cliff_35",
+      "MinX": -74.7,
+      "MinZ": 92.3,
+      "MaxX": -73.3,
+      "MaxZ": 93.7
+    },
+    {
+      "Name": "waypoint_01",
       "MinX": -82.7,
       "MinZ": -177.7,
       "MaxX": -81.3,
       "MaxZ": -176.3
     },
     {
-      "Name": "ruta_02",
+      "Name": "waypoint_02",
       "MinX": -28.7,
       "MinZ": -177.7,
       "MaxX": -27.3,
       "MaxZ": -176.3
     },
     {
-      "Name": "ruta_03",
+      "Name": "waypoint_03",
       "MinX": 14.3,
       "MinZ": -151.7,
       "MaxX": 15.7,
       "MaxZ": -150.3
     },
     {
-      "Name": "ruta_04",
+      "Name": "waypoint_04",
       "MinX": 53.3,
       "MinZ": -168.7,
       "MaxX": 54.7,
       "MaxZ": -167.3
     },
     {
-      "Name": "ruta_05",
+      "Name": "waypoint_05",
       "MinX": 100.3,
       "MinZ": -187.7,
       "MaxX": 101.7,
       "MaxZ": -186.3
     },
     {
-      "Name": "ruta_06",
+      "Name": "waypoint_06",
       "MinX": 154.3,
       "MinZ": -174.7,
       "MaxX": 155.7,
       "MaxZ": -173.3
     },
     {
-      "Name": "ruta_07",
+      "Name": "waypoint_07",
       "MinX": 182.3,
       "MinZ": -141.7,
       "MaxX": 183.7,
       "MaxZ": -140.3
     },
     {
-      "Name": "ruta_08",
+      "Name": "waypoint_08",
       "MinX": 163.3,
       "MinZ": -113.7,
       "MaxX": 164.7,
       "MaxZ": -112.3
     },
     {
-      "Name": "ruta_09",
+      "Name": "waypoint_09",
       "MinX": 111.3,
       "MinZ": -110.7,
       "MaxX": 112.7,
       "MaxZ": -109.3
     },
     {
-      "Name": "ruta_10",
+      "Name": "waypoint_10",
       "MinX": 90.3,
       "MinZ": -82.7,
       "MaxX": 91.7,
       "MaxZ": -81.3
     },
     {
-      "Name": "ruta_11",
+      "Name": "waypoint_11",
       "MinX": 119.3,
       "MinZ": -62.7,
       "MaxX": 120.7,
       "MaxZ": -61.3
     },
     {
-      "Name": "ruta_12",
+      "Name": "waypoint_12",
       "MinX": 167.3,
       "MinZ": -68.7,
       "MaxX": 168.7,
       "MaxZ": -67.3
     },
     {
-      "Name": "ruta_13",
+      "Name": "waypoint_13",
       "MinX": 189.3,
       "MinZ": -34.7,
       "MaxX": 190.7,
       "MaxZ": -33.3
     },
     {
-      "Name": "ruta_14",
+      "Name": "waypoint_14",
       "MinX": 176.3,
       "MinZ": 10.3,
       "MaxX": 177.7,
       "MaxZ": 11.7
     },
     {
-      "Name": "ruta_15",
+      "Name": "waypoint_15",
       "MinX": 136.3,
       "MinZ": 29.3,
       "MaxX": 137.7,
       "MaxZ": 30.7
     },
     {
-      "Name": "ruta_16",
+      "Name": "waypoint_16",
       "MinX": 94.3,
       "MinZ": 14.3,
       "MaxX": 95.7,
       "MaxZ": 15.7
     },
     {
-      "Name": "ruta_17",
+      "Name": "waypoint_17",
       "MinX": 48.3,
       "MinZ": 30.3,
       "MaxX": 49.7,
       "MaxZ": 31.7
     },
     {
-      "Name": "ruta_18",
+      "Name": "waypoint_18",
       "MinX": 37.3,
       "MinZ": 59.3,
       "MaxX": 38.7,
       "MaxZ": 60.7
     },
     {
-      "Name": "ruta_19",
+      "Name": "waypoint_19",
       "MinX": 72.3,
       "MinZ": 74.3,
       "MaxX": 73.7,
       "MaxZ": 75.7
     },
     {
-      "Name": "ruta_20",
+      "Name": "waypoint_20",
       "MinX": 122.3,
       "MinZ": 66.3,
       "MaxX": 123.7,
       "MaxZ": 67.7
     },
     {
-      "Name": "ruta_21",
+      "Name": "waypoint_21",
       "MinX": 167.3,
       "MinZ": 91.3,
       "MaxX": 168.7,
       "MaxZ": 92.7
     },
     {
-      "Name": "ruta_22",
+      "Name": "waypoint_22",
       "MinX": 183.3,
       "MinZ": 140.3,
       "MaxX": 184.7,
       "MaxZ": 141.7
     },
     {
-      "Name": "ruta_23",
+      "Name": "waypoint_23",
       "MinX": 150.3,
       "MinZ": 176.3,
       "MaxX": 151.7,
       "MaxZ": 177.7
     },
     {
-      "Name": "ruta_24",
+      "Name": "waypoint_24",
       "MinX": 96.3,
       "MinZ": 185.3,
       "MaxX": 97.7,
       "MaxZ": 186.7
     },
     {
-      "Name": "ruta_25",
+      "Name": "waypoint_25",
       "MinX": 60.3,
       "MinZ": 150.3,
       "MaxX": 61.7,
       "MaxZ": 151.7
     },
     {
-      "Name": "ruta_26",
+      "Name": "waypoint_26",
       "MinX": 22.3,
       "MinZ": 138.3,
       "MaxX": 23.7,
       "MaxZ": 139.7
     },
     {
-      "Name": "ruta_27",
+      "Name": "waypoint_27",
       "MinX": -10.7,
       "MinZ": 168.3,
       "MaxX": -9.3,
       "MaxZ": 169.7
     },
     {
-      "Name": "ruta_28",
+      "Name": "waypoint_28",
       "MinX": -54.7,
       "MinZ": 184.3,
       "MaxX": -53.3,
       "MaxZ": 185.7
     },
     {
-      "Name": "ruta_29",
+      "Name": "waypoint_29",
       "MinX": -100.7,
       "MinZ": 162.3,
       "MaxX": -99.3,
       "MaxZ": 163.7
     },
     {
-      "Name": "ruta_30",
+      "Name": "waypoint_30",
       "MinX": -142.7,
       "MinZ": 177.3,
       "MaxX": -141.3,
       "MaxZ": 178.7
     },
     {
-      "Name": "ruta_31",
+      "Name": "waypoint_31",
       "MinX": -182.7,
       "MinZ": 147.3,
       "MaxX": -181.3,
       "MaxZ": 148.7
     },
     {
-      "Name": "ruta_32",
+      "Name": "waypoint_32",
       "MinX": -184.7,
       "MinZ": 103.3,
       "MaxX": -183.3,
       "MaxZ": 104.7
     },
     {
-      "Name": "ruta_33",
+      "Name": "waypoint_33",
       "MinX": -150.7,
       "MinZ": 85.3,
       "MaxX": -149.3,
       "MaxZ": 86.7
     },
     {
-      "Name": "ruta_34",
+      "Name": "waypoint_34",
       "MinX": -107.7,
       "MinZ": 110.3,
       "MaxX": -106.3,
       "MaxZ": 111.7
     },
     {
-      "Name": "ruta_35",
+      "Name": "waypoint_35",
       "MinX": -74.7,
       "MinZ": 92.3,
       "MaxX": -73.3,
       "MaxZ": 93.7
     },
     {
-      "Name": "ruta_36",
+      "Name": "waypoint_36",
       "MinX": -82.7,
       "MinZ": 57.3,
       "MaxX": -81.3,
       "MaxZ": 58.7
     },
     {
-      "Name": "ruta_37",
+      "Name": "waypoint_37",
       "MinX": -124.7,
       "MinZ": 33.3,
       "MaxX": -123.3,
       "MaxZ": 34.7
     },
     {
-      "Name": "ruta_38",
+      "Name": "waypoint_38",
       "MinX": -161.7,
       "MinZ": 44.3,
       "MaxX": -160.3,
       "MaxZ": 45.7
     },
     {
-      "Name": "ruta_39",
+      "Name": "waypoint_39",
       "MinX": -186.7,
       "MinZ": 11.3,
       "MaxX": -185.3,
       "MaxZ": 12.7
     },
     {
-      "Name": "ruta_40",
+      "Name": "waypoint_40",
       "MinX": -171.7,
       "MinZ": -28.7,
       "MaxX": -170.3,
       "MaxZ": -27.3
     },
     {
-      "Name": "ruta_41",
+      "Name": "waypoint_41",
       "MinX": -125.7,
       "MinZ": -42.7,
       "MaxX": -124.3,
       "MaxZ": -41.3
     },
     {
-      "Name": "ruta_42",
+      "Name": "waypoint_42",
       "MinX": -80.7,
       "MinZ": -24.7,
       "MaxX": -79.3,
       "MaxZ": -23.3
     },
     {
-      "Name": "ruta_43",
+      "Name": "waypoint_43",
       "MinX": -42.7,
       "MinZ": -37.7,
       "MaxX": -41.3,
       "MaxZ": -36.3
     },
     {
-      "Name": "ruta_44",
+      "Name": "waypoint_44",
       "MinX": -41.7,
       "MinZ": -75.7,
       "MaxX": -40.3,
       "MaxZ": -74.3
     },
     {
-      "Name": "ruta_45",
+      "Name": "waypoint_45",
       "MinX": -78.7,
       "MinZ": -101.7,
       "MaxX": -77.3,
       "MaxZ": -100.3
     },
     {
-      "Name": "ruta_46",
+      "Name": "waypoint_46",
       "MinX": -123.7,
       "MinZ": -88.7,
       "MaxX": -122.3,
       "MaxZ": -87.3
     },
     {
-      "Name": "ruta_47",
+      "Name": "waypoint_47",
       "MinX": -163.7,
       "MinZ": -98.7,
       "MaxX": -162.3,
       "MaxZ": -97.3
     },
     {
-      "Name": "ruta_48",
+      "Name": "waypoint_48",
       "MinX": -184.7,
       "MinZ": -137.7,
       "MaxX": -183.3,
       "MaxZ": -136.3
     },
     {
-      "Name": "ruta_49",
+      "Name": "waypoint_49",
       "MinX": -150.7,
       "MinZ": -174.7,
       "MaxX": -149.3,
       "MaxZ": -173.3
     },
     {
-      "Name": "ruta_50",
+      "Name": "waypoint_50",
       "MinX": -114.7,
       "MinZ": -177.7,
       "MaxX": -113.3,
       "MaxZ": -176.3
-    },
-    {
-      "Name": "salto_05",
-      "MinX": 100.3,
-      "MinZ": -187.7,
-      "MaxX": 101.7,
-      "MaxZ": -186.3
-    },
-    {
-      "Name": "salto_13",
-      "MinX": 189.3,
-      "MinZ": -34.7,
-      "MaxX": 190.7,
-      "MaxZ": -33.3
-    },
-    {
-      "Name": "salto_24",
-      "MinX": 96.3,
-      "MinZ": 185.3,
-      "MaxX": 97.7,
-      "MaxZ": 186.7
-    },
-    {
-      "Name": "salto_45",
-      "MinX": -78.7,
-      "MinZ": -101.7,
-      "MaxX": -77.3,
-      "MaxZ": -100.3
     }
   ],
   "SpawnAnchors": [

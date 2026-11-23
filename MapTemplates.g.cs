@@ -12,6 +12,8 @@ public static class UnitIds
 	public const string Chad = "unit/chad";
 	public const string Kevin = "unit/kevin";
 	public const string ChariotRacer = "unit/chariot_racer";
+	public const string Aguja = "unit/aguja";
+	public const string Mastodonte = "unit/mastodonte";
 }
 
 public static class BuildingIds
@@ -42,6 +44,9 @@ public static class AbilityIds
 	public const string SteerRight = "ability/steer_right";
 	public const string SteerLeftStop = "ability/steer_left_stop";
 	public const string SteerRightStop = "ability/steer_right_stop";
+	public const string GarageLaps = "ability/garage_laps";
+	public const string GarageCar = "ability/garage_car";
+	public const string GarageStart = "ability/garage_start";
 }
 
 public static class WeaponIds

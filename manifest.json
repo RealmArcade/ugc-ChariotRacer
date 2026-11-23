@@ -2,7 +2,7 @@
   "MapName": "Chariot Racer",
   "Author": "RealmArcade",
   "Version": "1.0.0",
-  "Description": "Circuito de las brasas. Carrera de tres carriles para uno a ocho jugadores.",
+  "Description": "Ember Circuit. Three-lane racing for one to eight players.",
   "Tags": [
     "Racing",
     "Arcade"
@@ -28,7 +28,9 @@
     "Character": {
       "fantasy_warrior_unit_1.rmesh": "c0e16b9c16871a5d2e4ff820d6d25138ba1121feda3db1327bfa7a7116363b6d",
       "orc_warrior_7.rmesh": "b01affb5917119fb76052db8440e56af2140866c60904729b2ffaecd4324efa2",
-      "ember_chariot.rmesh": "a4c4096ad5cebf6a94070d91bbbd9283a808dbf3c8e5c72a905ade2fff56c780"
+      "ember_chariot.rmesh": "a4c4096ad5cebf6a94070d91bbbd9283a808dbf3c8e5c72a905ade2fff56c780",
+      "aguja.rmesh": "ad48e002515b584c9e768563e4567dd24bb64eebeeff53e58aa83414fe0d73a2",
+      "mastodonte.rmesh": "4d79fd063ffc9ed97a0ba27d736d04dbbf00c5d0dd35e9248f46f623be7aff72"
     },
     "Decal": {
       "acid_drip.rtex": "303aa61310bae34e7f40ed4d2614d772e6fe3a313e1c2bcd7255c2f1c47a5884",
