@@ -8,7 +8,7 @@
       "PosX": -106.024,
       "PosY": 18,
       "PosZ": -101.709,
-      "RotationY": 113.807,
+      "RotationY": 113.80699,
       "Scale": 0.9
     },
     {
@@ -16,7 +16,7 @@
       "PosX": -99.566,
       "PosY": 17.999998,
       "PosZ": -87.07,
-      "RotationY": 113.807,
+      "RotationY": 113.80699,
       "Scale": 0.9
     },
     {
@@ -24,7 +24,7 @@
       "PosX": 124.992,
       "PosY": 20,
       "PosZ": -176.504,
-      "RotationY": -102.886,
+      "RotationY": -102.885994,
       "Scale": 0.9
     },
     {
@@ -32,7 +32,7 @@
       "PosX": 128.56,
       "PosY": 19.999962,
       "PosZ": -192.101,
-      "RotationY": -102.886,
+      "RotationY": -102.885994,
       "Scale": 0.9
     },
     {
@@ -40,7 +40,7 @@
       "PosX": 179.062,
       "PosY": 17,
       "PosZ": -10.768,
-      "RotationY": 162.639,
+      "RotationY": 162.63899,
       "Scale": 0.9
     },
     {
@@ -48,7 +48,7 @@
       "PosX": 194.333,
       "PosY": 16.999998,
       "PosZ": -5.993,
-      "RotationY": 162.639,
+      "RotationY": 162.63899,
       "Scale": 0.9
     },
     {
@@ -56,7 +56,7 @@
       "PosX": 83.933,
       "PosY": 22,
       "PosZ": 164.401,
-      "RotationY": 37.818,
+      "RotationY": 37.817997,
       "Scale": 0.9
     },
     {
@@ -64,7 +64,7 @@
       "PosX": 71.294,
       "PosY": 21.999945,
       "PosZ": 174.211,
-      "RotationY": 37.818,
+      "RotationY": 37.817997,
       "Scale": 0.9
     },
     {
@@ -72,7 +72,7 @@
       "PosX": -123.649,
       "PosY": 13.982001,
       "PosZ": -97.979,
-      "RotationY": 93.722,
+      "RotationY": 93.72199,
       "Scale": 0.55
     },
     {
@@ -80,7 +80,7 @@
       "PosX": -81.007,
       "PosY": 15.831053,
       "PosZ": -108.179,
-      "RotationY": 90.105,
+      "RotationY": 90.104996,
       "Scale": 0.8
     },
     {
@@ -88,7 +88,7 @@
       "PosX": -122.351,
       "PosY": 13.992997,
       "PosZ": -78.021,
-      "RotationY": 93.722,
+      "RotationY": 93.72199,
       "Scale": 0.55
     },
     {
@@ -96,7 +96,7 @@
       "PosX": -80.982,
       "PosY": 15.889374,
       "PosZ": -94.179,
-      "RotationY": 90.105,
+      "RotationY": 90.104996,
       "Scale": 0.8
     },
     {
@@ -104,7 +104,7 @@
       "PosX": -113.747,
       "PosY": 3.0028584,
       "PosZ": -167.003,
-      "RotationY": -88.55,
+      "RotationY": -88.549995,
       "Scale": 0.55
     },
     {
@@ -112,7 +112,7 @@
       "PosX": -174.148,
       "PosY": 3.0243013,
       "PosZ": -135.285,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "Scale": 0.55
     },
     {
@@ -120,7 +120,7 @@
       "PosX": -114.253,
       "PosY": 3.0032773,
       "PosZ": -186.997,
-      "RotationY": -88.55,
+      "RotationY": -88.549995,
       "Scale": 0.55
     },
     {
@@ -136,7 +136,7 @@
       "PosX": -79.152,
       "PosY": 8.997587,
       "PosZ": -33.964,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "Scale": 0.55
     },
     {
@@ -152,7 +152,7 @@
       "PosX": -193.852,
       "PosY": 2.9995263,
       "PosZ": -138.715,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "Scale": 0.55
     },
     {
@@ -168,7 +168,7 @@
       "PosX": -177.635,
       "PosY": 0.016129384,
       "PosZ": -35.481,
-      "RotationY": -48.43,
+      "RotationY": -48.429996,
       "Scale": 0.55
     },
     {
@@ -176,7 +176,7 @@
       "PosX": -80.848,
       "PosY": 8.996811,
       "PosZ": -14.036,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "Scale": 0.55
     },
     {
@@ -184,7 +184,7 @@
       "PosX": -164.365,
       "PosY": 0.031605877,
       "PosZ": -20.519,
-      "RotationY": -48.43,
+      "RotationY": -48.429996,
       "Scale": 0.55
     },
     {
@@ -200,7 +200,7 @@
       "PosX": -157.935,
       "PosY": 7.052068,
       "PosZ": 35.481,
-      "RotationY": 72.15,
+      "RotationY": 72.149994,
       "Scale": 0.55
     },
     {
@@ -224,7 +224,7 @@
       "PosX": -164.065,
       "PosY": 6.9907265,
       "PosZ": 54.519,
-      "RotationY": 72.15,
+      "RotationY": 72.149994,
       "Scale": 0.55
     },
     {
@@ -248,7 +248,7 @@
       "PosX": -70.645,
       "PosY": 21.476017,
       "PosZ": 65.384,
-      "RotationY": 23.783,
+      "RotationY": 23.782999,
       "Scale": 0.56
     },
     {
@@ -256,7 +256,7 @@
       "PosX": -67.254,
       "PosY": 21.06467,
       "PosZ": 76.151,
-      "RotationY": 11.006,
+      "RotationY": 11.005999,
       "Scale": 0.56
     },
     {
@@ -264,7 +264,7 @@
       "PosX": 81.14,
       "PosY": 22.912632,
       "PosZ": -80.33,
-      "RotationY": -170.389,
+      "RotationY": -170.38899,
       "Scale": 0.55
     },
     {
@@ -280,7 +280,7 @@
       "PosX": 96.817,
       "PosY": 22.446873,
       "PosZ": -82.985,
-      "RotationY": -170.389,
+      "RotationY": -170.38899,
       "Scale": 0.56
     },
     {
@@ -288,7 +288,7 @@
       "PosX": 97.515,
       "PosY": 21.62447,
       "PosZ": -86.877,
-      "RotationY": 160.286,
+      "RotationY": 160.28598,
       "Scale": 0.56
     },
     {
@@ -296,7 +296,7 @@
       "PosX": -68.662,
       "PosY": 21.4105,
       "PosZ": 95.513,
-      "RotationY": -25.205,
+      "RotationY": -25.204998,
       "Scale": 0.56
     },
     {
@@ -304,7 +304,7 @@
       "PosX": -105.816,
       "PosY": 14.960828,
       "PosZ": 101.07,
-      "RotationY": -96.801,
+      "RotationY": -96.800995,
       "Scale": 0.55
     },
     {
@@ -320,7 +320,7 @@
       "PosX": 100.86,
       "PosY": 16.436571,
       "PosZ": -83.67,
-      "RotationY": -170.389,
+      "RotationY": -170.38899,
       "Scale": 0.55
     },
     {
@@ -328,7 +328,7 @@
       "PosX": -73.839,
       "PosY": 21.18103,
       "PosZ": 102.702,
-      "RotationY": -43.637,
+      "RotationY": -43.636997,
       "Scale": 0.56
     },
     {
@@ -336,7 +336,7 @@
       "PosX": 104.354,
       "PosY": 22.292662,
       "PosZ": -74.865,
-      "RotationY": -124.371,
+      "RotationY": -124.37099,
       "Scale": 0.56
     },
     {
@@ -344,7 +344,7 @@
       "PosX": 29.222,
       "PosY": 8.9853735,
       "PosZ": 64.791,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "Scale": 0.55
     },
     {
@@ -352,7 +352,7 @@
       "PosX": -192.887,
       "PosY": 16.932957,
       "PosZ": 99.415,
-      "RotationY": -27.288,
+      "RotationY": -27.287998,
       "Scale": 0.55
     },
     {
@@ -360,7 +360,7 @@
       "PosX": 104.098,
       "PosY": 17.828903,
       "PosZ": -180.07,
-      "RotationY": -89.191,
+      "RotationY": -89.190994,
       "Scale": 0.8
     },
     {
@@ -368,7 +368,7 @@
       "PosX": 112.126,
       "PosY": 22.216171,
       "PosZ": -70.611,
-      "RotationY": -113.424,
+      "RotationY": -113.423996,
       "Scale": 0.56
     },
     {
@@ -376,7 +376,7 @@
       "PosX": -175.113,
       "PosY": 16.891994,
       "PosZ": 108.585,
-      "RotationY": -27.288,
+      "RotationY": -27.287998,
       "Scale": 0.55
     },
     {
@@ -384,7 +384,7 @@
       "PosX": 46.778,
       "PosY": 8.935918,
       "PosZ": 55.209,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "Scale": 0.55
     },
     {
@@ -392,7 +392,7 @@
       "PosX": 103.9,
       "PosY": 17.862871,
       "PosZ": -194.069,
-      "RotationY": -89.191,
+      "RotationY": -89.190994,
       "Scale": 0.8
     },
     {
@@ -400,7 +400,7 @@
       "PosX": -108.184,
       "PosY": 14.979819,
       "PosZ": 120.93,
-      "RotationY": -96.801,
+      "RotationY": -96.800995,
       "Scale": 0.55
     },
     {
@@ -424,7 +424,7 @@
       "PosX": 150.087,
       "PosY": 15.956143,
       "PosZ": -165.29,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "Scale": 0.55
     },
     {
@@ -432,7 +432,7 @@
       "PosX": 160.258,
       "PosY": 6.051453,
       "PosZ": -122.273,
-      "RotationY": 111.976,
+      "RotationY": 111.97599,
       "Scale": 0.55
     },
     {
@@ -440,7 +440,7 @@
       "PosX": 20.351,
       "PosY": 17.935379,
       "PosZ": 129.357,
-      "RotationY": 105.363,
+      "RotationY": 105.36299,
       "Scale": 0.55
     },
     {
@@ -448,7 +448,7 @@
       "PosX": 167.742,
       "PosY": 6.0060625,
       "PosZ": -103.727,
-      "RotationY": 111.976,
+      "RotationY": 111.97599,
       "Scale": 0.55
     },
     {
@@ -456,7 +456,7 @@
       "PosX": 159.913,
       "PosY": 15.960382,
       "PosZ": -182.71,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "Scale": 0.55
     },
     {
@@ -464,7 +464,7 @@
       "PosX": -140.452,
       "PosY": 3.9955902,
       "PosZ": 168.121,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "Scale": 0.55
     },
     {
@@ -472,7 +472,7 @@
       "PosX": 164.539,
       "PosY": 13.050174,
       "PosZ": -58.618,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "Scale": 0.55
     },
     {
@@ -480,7 +480,7 @@
       "PosX": 171.461,
       "PosY": 12.988606,
       "PosZ": -77.382,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "Scale": 0.55
     },
     {
@@ -488,7 +488,7 @@
       "PosX": 124.554,
       "PosY": 19.919468,
       "PosZ": 57.121,
-      "RotationY": -98.938,
+      "RotationY": -98.937996,
       "Scale": 0.55
     },
     {
@@ -496,7 +496,7 @@
       "PosX": -53.126,
       "PosY": 3.0153959,
       "PosZ": 175.038,
-      "RotationY": 84.985,
+      "RotationY": 84.98499,
       "Scale": 0.55
     },
     {
@@ -504,7 +504,7 @@
       "PosX": 25.649,
       "PosY": 17.8815,
       "PosZ": 148.643,
-      "RotationY": 105.363,
+      "RotationY": 105.36299,
       "Scale": 0.55
     },
     {
@@ -512,7 +512,7 @@
       "PosX": 121.446,
       "PosY": 19.897015,
       "PosZ": 76.879,
-      "RotationY": -98.938,
+      "RotationY": -98.937996,
       "Scale": 0.55
     },
     {
@@ -520,7 +520,7 @@
       "PosX": -143.548,
       "PosY": 3.996768,
       "PosZ": 187.879,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "Scale": 0.55
     },
     {
@@ -528,7 +528,7 @@
       "PosX": 169.289,
       "PosY": 12.922159,
       "PosZ": 4.633,
-      "RotationY": 140.455,
+      "RotationY": 140.45499,
       "Scale": 0.55
     },
     {
@@ -536,7 +536,7 @@
       "PosX": 183.202,
       "PosY": 14.889135,
       "PosZ": -30.76,
-      "RotationY": -177.978,
+      "RotationY": -177.97798,
       "Scale": 0.8
     },
     {
@@ -544,7 +544,7 @@
       "PosX": -54.874,
       "PosY": 3.0038266,
       "PosZ": 194.962,
-      "RotationY": 84.985,
+      "RotationY": 84.98499,
       "Scale": 0.55
     },
     {
@@ -552,7 +552,7 @@
       "PosX": 197.194,
       "PosY": 14.844171,
       "PosZ": -31.254,
-      "RotationY": -177.978,
+      "RotationY": -177.97798,
       "Scale": 0.8
     },
     {
@@ -560,7 +560,7 @@
       "PosX": 184.711,
       "PosY": 12.950464,
       "PosZ": 17.367,
-      "RotationY": 140.455,
+      "RotationY": 140.45499,
       "Scale": 0.55
     },
     {
@@ -568,7 +568,7 @@
       "PosX": 99.94,
       "PosY": 19.080988,
       "PosZ": 176.442,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "Scale": 0.55
     },
     {
@@ -592,7 +592,7 @@
       "PosX": 94.06,
       "PosY": 18.92005,
       "PosZ": 195.558,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "Scale": 0.55
     },
     {
@@ -600,7 +600,7 @@
       "PosX": 174.192,
       "PosY": 4.063246,
       "PosZ": 139.048,
-      "RotationY": 168.743,
+      "RotationY": 168.74298,
       "Scale": 0.55
     },
     {
@@ -608,7 +608,7 @@
       "PosX": 193.808,
       "PosY": 4.011699,
       "PosZ": 142.952,
-      "RotationY": 168.743,
+      "RotationY": 168.74298,
       "Scale": 0.55
     }
   ],
@@ -616,7 +616,7 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -77.517,
-      "PosY": 14.945,
+      "PosY": 14.913156,
       "PosZ": -104.466,
       "RotationX": 0,
       "RotationY": 82.062,
@@ -626,20 +626,20 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -187.448,
-      "PosY": 3,
+      "PosY": 3.0074697,
       "PosZ": -137.6,
       "RotationX": 0,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -60.045,
-      "PosY": 3.388,
+      "PosY": 3.3879604,
       "PosZ": -178.346,
       "RotationX": 0,
-      "RotationY": -86.109,
+      "RotationY": -86.10899,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -649,14 +649,14 @@
       "PosY": 9,
       "PosZ": -24,
       "RotationX": 0,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 15.43,
-      "PosY": 10.012,
+      "PosY": 10.006039,
       "PosZ": -154.473,
       "RotationX": 0,
       "RotationY": -97.063,
@@ -666,7 +666,7 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -189.465,
-      "PosY": 3,
+      "PosY": 3.003813,
       "PosZ": 12.491,
       "RotationX": 0,
       "RotationY": 8.067,
@@ -676,7 +676,7 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -79.331,
-      "PosY": 22,
+      "PosY": 21.989376,
       "PosZ": 55.735,
       "RotationX": 0,
       "RotationY": 40.32,
@@ -689,74 +689,74 @@
       "PosY": 10,
       "PosZ": 86,
       "RotationX": 0,
-      "RotationY": -96.975,
+      "RotationY": -96.97499,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 110.704,
-      "PosY": 14,
+      "PosY": 13.996713,
       "PosZ": -113.251,
       "RotationX": 0,
-      "RotationY": 111.725,
+      "RotationY": 111.72499,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 34.928,
-      "PosY": 9,
+      "PosY": 9.003515,
       "PosZ": 61.677,
       "RotationX": 0,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 155,
-      "PosY": 16,
+      "PosY": 15.9873085,
       "PosZ": -174,
       "RotationX": 0,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 169.211,
-      "PosY": 13,
+      "PosY": 13.019678,
       "PosZ": -71.284,
       "RotationX": 0,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 137,
-      "PosY": 3,
+      "PosY": 3.0193553,
       "PosZ": 30,
       "RotationX": 0,
-      "RotationY": 91.26,
+      "RotationY": 91.259995,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -142.542,
-      "PosY": 4,
+      "PosY": 4.0078154,
       "PosZ": 181.458,
       "RotationX": 0,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
       "PosX": -11.885,
-      "PosY": 8.006,
+      "PosY": 7.9997764,
       "PosZ": 166.051,
       "RotationX": 0,
       "RotationY": 122.591,
@@ -766,7 +766,7 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 170.697,
-      "PosY": 10,
+      "PosY": 10.003446,
       "PosZ": 89.769,
       "RotationX": 0,
       "RotationY": -140.396,
@@ -776,27 +776,27 @@
     {
       "TemplateId": "decal/acid_drip",
       "PosX": 97,
-      "PosY": 18.945,
+      "PosY": 18.93515,
       "PosZ": 186,
       "RotationX": 0,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -87.216,
-      "PosY": 17.604,
+      "PosY": 17.585629,
       "PosZ": -100.326,
       "RotationX": 0,
-      "RotationY": 103.198,
+      "RotationY": 103.19799,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -78,
-      "PosY": 14.945,
+      "PosY": 14.924025,
       "PosZ": -101,
       "RotationX": 0,
       "RotationY": 82.062,
@@ -806,37 +806,37 @@
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -180.552,
-      "PosY": 3.011,
+      "PosY": 3.0179741,
       "PosZ": -136.4,
       "RotationX": 0,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -60.283,
-      "PosY": 3.388,
+      "PosY": 3.3878708,
       "PosZ": -181.838,
       "RotationX": 0,
-      "RotationY": -86.109,
+      "RotationY": -86.10899,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -79.703,
-      "PosY": 9.006,
+      "PosY": 8.995898,
       "PosZ": -27.487,
       "RotationX": 0,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 14.57,
-      "PosY": 10,
+      "PosY": 10.004745,
       "PosZ": -147.527,
       "RotationX": 0,
       "RotationY": -97.063,
@@ -846,7 +846,7 @@
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -182.535,
-      "PosY": 2.996,
+      "PosY": 3.0051005,
       "PosZ": 11.509,
       "RotationX": 0,
       "RotationY": 8.067,
@@ -866,10 +866,10 @@
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -149.575,
-      "PosY": 10,
+      "PosY": 10.010671,
       "PosZ": 82.526,
       "RotationX": 0,
-      "RotationY": -96.975,
+      "RotationY": -96.97499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -879,7 +879,7 @@
       "PosY": 14,
       "PosZ": -110,
       "RotationX": 0,
-      "RotationY": 111.725,
+      "RotationY": 111.72499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -889,64 +889,64 @@
       "PosY": 9,
       "PosZ": 60,
       "RotationX": 0,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 110.293,
-      "PosY": 19.604,
+      "PosY": 19.592892,
       "PosZ": -186.879,
       "RotationX": 0,
-      "RotationY": -94.14,
+      "RotationY": -94.13999,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 156.719,
-      "PosY": 16,
+      "PosY": 15.989561,
       "PosZ": -177.049,
       "RotationX": 0,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 166.789,
-      "PosY": 13,
+      "PosY": 13.04066,
       "PosZ": -64.716,
       "RotationX": 0,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -141.458,
-      "PosY": 3.992,
+      "PosY": 4.012024,
       "PosZ": 174.542,
       "RotationX": 0,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 137.077,
-      "PosY": 3,
+      "PosY": 3.0140908,
       "PosZ": 33.499,
       "RotationX": 0,
-      "RotationY": 91.26,
+      "RotationY": 91.259995,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": -10,
-      "PosY": 8,
+      "PosY": 8.008129,
       "PosZ": 169,
       "RotationX": 0,
       "RotationY": 122.591,
@@ -956,17 +956,17 @@
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 189.994,
-      "PosY": 16.604,
+      "PosY": 16.586166,
       "PosZ": -24.715,
       "RotationX": 0,
-      "RotationY": 175.154,
+      "RotationY": 175.15399,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 165.303,
-      "PosY": 10.007,
+      "PosY": 10.00632,
       "PosZ": 94.231,
       "RotationX": 0,
       "RotationY": -140.396,
@@ -976,24 +976,25 @@
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 88.899,
-      "PosY": 21.604,
+      "PosY": 21.586325,
       "PosZ": 181.553,
       "RotationX": 0,
-      "RotationY": 51.996,
+      "RotationY": 51.995995,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
       "PosX": 95.971,
-      "PosY": 18.945,
+      "PosY": 18.96772,
       "PosZ": 189.345,
       "RotationX": 0,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "RotationZ": 0,
       "Scale": 1
     }
   ],
+  "Items": [],
   "Vfx": [],
   "CameraBoundsLeft": -216,
   "CameraBoundsRight": 216,
@@ -1042,6 +1043,62 @@
       "MinZ": 92.3,
       "MaxX": -73.3,
       "MaxZ": 93.7
+    },
+    {
+      "Name": "spawn_1",
+      "MinX": -85.319,
+      "MinZ": -181.207,
+      "MaxX": -83.919,
+      "MaxZ": -179.807
+    },
+    {
+      "Name": "spawn_2",
+      "MinX": -85.325,
+      "MinZ": -177.707,
+      "MaxX": -83.925,
+      "MaxZ": -176.307
+    },
+    {
+      "Name": "spawn_3",
+      "MinX": -85.331,
+      "MinZ": -174.207,
+      "MaxX": -83.931,
+      "MaxZ": -172.807
+    },
+    {
+      "Name": "spawn_4",
+      "MinX": -90.011,
+      "MinZ": -181.244,
+      "MaxX": -88.611,
+      "MaxZ": -179.844
+    },
+    {
+      "Name": "spawn_5",
+      "MinX": -90.05,
+      "MinZ": -177.744,
+      "MaxX": -88.65,
+      "MaxZ": -176.344
+    },
+    {
+      "Name": "spawn_6",
+      "MinX": -90.089,
+      "MinZ": -174.245,
+      "MaxX": -88.689,
+      "MaxZ": -172.845
+    },
+    {
+      "Name": "spawn_7",
+      "MinX": -94.72,
+      "MinZ": -181.31,
+      "MaxX": -93.32,
+      "MaxZ": -179.91
+    },
+    {
+      "Name": "spawn_8",
+      "MinX": -94.774,
+      "MinZ": -177.81,
+      "MaxX": -93.374,
+      "MaxZ": -176.41
     },
     {
       "Name": "waypoint_01",
@@ -1397,43 +1454,35 @@
   "SpawnAnchors": [
     {
       "Player": 1,
-      "PosX": -84.619,
-      "PosZ": -180.507
+      "CoordinateName": "spawn_1"
     },
     {
       "Player": 2,
-      "PosX": -84.625,
-      "PosZ": -177.007
+      "CoordinateName": "spawn_2"
     },
     {
       "Player": 3,
-      "PosX": -84.631,
-      "PosZ": -173.507
+      "CoordinateName": "spawn_3"
     },
     {
       "Player": 4,
-      "PosX": -89.311,
-      "PosZ": -180.544
+      "CoordinateName": "spawn_4"
     },
     {
       "Player": 5,
-      "PosX": -89.35,
-      "PosZ": -177.044
+      "CoordinateName": "spawn_5"
     },
     {
       "Player": 6,
-      "PosX": -89.389,
-      "PosZ": -173.545
+      "CoordinateName": "spawn_6"
     },
     {
       "Player": 7,
-      "PosX": -94.02,
-      "PosZ": -180.61
+      "CoordinateName": "spawn_7"
     },
     {
       "Player": 8,
-      "PosX": -94.074,
-      "PosZ": -177.11
+      "CoordinateName": "spawn_8"
     }
   ]
 }
