@@ -1,613 +1,613 @@
 {
-  "Width": 224,
-  "Depth": 224,
+  "Width": 320,
+  "Depth": 320,
   "Units": [],
   "Props": [
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": -106.024,
+      "PosX": -140.472,
       "PosY": 18,
-      "PosZ": -101.709,
-      "RotationY": 113.807,
+      "PosZ": -148.786,
+      "RotationY": 112.004,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": -99.566,
-      "PosY": 17.999998,
-      "PosZ": -87.07,
-      "RotationY": 113.807,
+      "PosX": -132.791,
+      "PosY": 17.999569,
+      "PosZ": -129.779,
+      "RotationY": 112.004,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 124.992,
+      "PosX": 168.541,
       "PosY": 20,
-      "PosZ": -176.504,
-      "RotationY": -102.886,
+      "PosZ": -255.344,
+      "RotationY": -99.218,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 128.56,
-      "PosY": 19.999962,
-      "PosZ": -192.101,
-      "RotationY": -102.886,
+      "PosX": 171.825,
+      "PosY": 20,
+      "PosZ": -275.579,
+      "RotationY": -99.218,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 179.062,
+      "PosX": 259.505,
       "PosY": 17,
-      "PosZ": -10.768,
-      "RotationY": 162.639,
+      "PosZ": -24.862,
+      "RotationY": 168.079,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 194.333,
-      "PosY": 16.999998,
-      "PosZ": -5.993,
-      "RotationY": 162.639,
+      "PosX": 279.562,
+      "PosY": 17,
+      "PosZ": -20.627,
+      "RotationY": 168.079,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 83.933,
+      "PosX": 125.59,
       "PosY": 22,
-      "PosZ": 164.401,
-      "RotationY": 37.818,
+      "PosZ": 243.711,
+      "RotationY": 41.495,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/crystal_cluster_29",
-      "PosX": 71.294,
-      "PosY": 21.999945,
-      "PosZ": 174.211,
-      "RotationY": 37.818,
+      "PosX": 110.235,
+      "PosY": 22,
+      "PosZ": 257.293,
+      "RotationY": 41.495,
       "Scale": 0.9
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -123.649,
-      "PosY": 13.982001,
-      "PosZ": -97.979,
-      "RotationY": 93.722,
+      "PosX": -176.509,
+      "PosY": 13.98134,
+      "PosZ": -137.938,
+      "RotationY": 93.723,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -81.007,
-      "PosY": 15.831053,
-      "PosZ": -108.179,
-      "RotationY": 90.105,
+      "PosX": -114.051,
+      "PosY": 15.89809,
+      "PosZ": -153.708,
+      "RotationY": 87.692,
       "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -122.351,
-      "PosY": 13.992997,
-      "PosZ": -78.021,
-      "RotationY": 93.722,
+      "PosX": -174.919,
+      "PosY": 13.923949,
+      "PosZ": -113.49,
+      "RotationY": 93.723,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -80.982,
-      "PosY": 15.889374,
-      "PosZ": -94.179,
-      "RotationY": 90.105,
+      "PosX": -114.796,
+      "PosY": 15.787088,
+      "PosZ": -135.223,
+      "RotationY": 87.692,
       "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -113.747,
-      "PosY": 3.0028584,
-      "PosZ": -167.003,
+      "PosX": -162.547,
+      "PosY": 3.013474,
+      "PosZ": -240.611,
       "RotationY": -88.55,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -174.148,
-      "PosY": 3.0243013,
-      "PosZ": -135.285,
+      "PosX": -250.788,
+      "PosY": 3.0159018,
+      "PosZ": -193.613,
       "RotationY": -9.875,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -114.253,
-      "PosY": 3.0032773,
-      "PosZ": -186.997,
+      "PosX": -163.167,
+      "PosY": 3.020411,
+      "PosZ": -265.103,
       "RotationY": -88.55,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -49.731,
-      "PosY": 13.995525,
-      "PosZ": -70.124,
+      "PosX": -69.266,
+      "PosY": 13.967023,
+      "PosZ": -101.17,
       "RotationY": 29.182,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -79.152,
-      "PosY": 8.997587,
-      "PosZ": -33.964,
-      "RotationY": -94.862,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -32.269,
-      "PosY": 13.995154,
-      "PosZ": -79.876,
-      "RotationY": 29.182,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -193.852,
-      "PosY": 2.9995263,
-      "PosZ": -138.715,
+      "PosX": -274.926,
+      "PosY": 3.006953,
+      "PosZ": -197.815,
       "RotationY": -9.875,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -30.715,
-      "PosY": 4.0258784,
-      "PosZ": -167.376,
-      "RotationY": -105.753,
+      "PosX": -47.876,
+      "PosY": 13.977408,
+      "PosZ": -113.116,
+      "RotationY": 29.182,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -177.635,
-      "PosY": 0.016129384,
-      "PosZ": -35.481,
-      "RotationY": -48.43,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -80.848,
-      "PosY": 8.996811,
-      "PosZ": -14.036,
+      "PosX": -113.248,
+      "PosY": 8.972834,
+      "PosZ": -46.492,
       "RotationY": -94.862,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -164.365,
-      "PosY": 0.031605877,
-      "PosZ": -20.519,
-      "RotationY": -48.43,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -25.285,
-      "PosY": 4.0075736,
-      "PosZ": -186.624,
+      "PosX": -43.326,
+      "PosY": 3.997912,
+      "PosZ": -241.067,
       "RotationY": -105.753,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -157.935,
-      "PosY": 7.052068,
-      "PosZ": 35.481,
-      "RotationY": 72.15,
+      "PosX": -252.414,
+      "PosY": 0.016960053,
+      "PosZ": -49.165,
+      "RotationY": -48.43,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -74.376,
-      "PosY": 21.945595,
-      "PosZ": 51.529,
+      "PosX": -115.324,
+      "PosY": 8.999276,
+      "PosZ": -22.08,
+      "RotationY": -94.862,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -236.158,
+      "PosY": 0.028700246,
+      "PosZ": -30.835,
+      "RotationY": -48.43,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -36.674,
+      "PosY": 3.9851518,
+      "PosZ": -264.647,
+      "RotationY": -105.753,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -226.245,
+      "PosY": 7.029501,
+      "PosZ": 52.626,
+      "RotationY": 72.151,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -107.803,
+      "PosY": 21.923374,
+      "PosZ": 74.931,
       "RotationY": 40.32,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 49.865,
-      "PosY": 15.954949,
-      "PosZ": -177.105,
-      "RotationY": -65.576,
+      "PosX": -233.755,
+      "PosY": 6.998498,
+      "PosZ": 75.946,
+      "RotationY": 72.151,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -164.065,
-      "PosY": 6.9907265,
-      "PosZ": 54.519,
-      "RotationY": 72.15,
+      "PosX": 72.078,
+      "PosY": 15.953608,
+      "PosZ": -251.154,
+      "RotationY": -65.575,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 58.135,
-      "PosY": 15.950694,
-      "PosZ": -158.895,
-      "RotationY": -65.576,
+      "PosX": 82.208,
+      "PosY": 15.9448395,
+      "PosZ": -228.846,
+      "RotationY": -65.575,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -89.624,
-      "PosY": 21.929028,
-      "PosZ": 64.471,
+      "PosX": -126.483,
+      "PosY": 21.887966,
+      "PosZ": 90.783,
       "RotationY": 40.32,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -70.645,
-      "PosY": 21.476017,
-      "PosZ": 65.384,
-      "RotationY": 23.783,
+      "PosX": -97.111,
+      "PosY": 21.137327,
+      "PosZ": 105.36,
+      "RotationY": 13.968,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -67.254,
-      "PosY": 21.06467,
-      "PosZ": 76.151,
-      "RotationY": 11.006,
-      "Scale": 0.56
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 81.14,
-      "PosY": 22.912632,
-      "PosZ": -80.33,
-      "RotationY": -170.389,
+      "PosX": 117.922,
+      "PosY": 22.966095,
+      "PosZ": -115.098,
+      "RotationY": -170.388,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -66.427,
-      "PosY": 21.694231,
-      "PosZ": 85.435,
-      "RotationY": -2.019,
+      "PosX": -95.278,
+      "PosY": 21.008444,
+      "PosZ": 116.637,
+      "RotationY": 3.843,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 96.817,
-      "PosY": 22.446873,
-      "PosZ": -82.985,
-      "RotationY": -170.389,
+      "PosX": -95.535,
+      "PosY": 21.141949,
+      "PosZ": 126.225,
+      "RotationY": -7.449,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 97.515,
-      "PosY": 21.62447,
-      "PosZ": -86.877,
-      "RotationY": 160.286,
+      "PosX": 138.424,
+      "PosY": 22.14631,
+      "PosZ": -122.134,
+      "RotationY": 166.183,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -68.662,
-      "PosY": 21.4105,
-      "PosZ": 95.513,
+      "PosX": 138.036,
+      "PosY": 22.856766,
+      "PosZ": -118.504,
+      "RotationY": -170.388,
+      "Scale": 0.56
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -98.34,
+      "PosY": 21.683527,
+      "PosZ": 136.328,
       "RotationY": -25.205,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -105.816,
-      "PosY": 14.960828,
-      "PosZ": 101.07,
+      "PosX": 140.003,
+      "PosY": 22.628513,
+      "PosZ": -114.822,
+      "RotationY": -143.713,
+      "Scale": 0.56
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 142.078,
+      "PosY": 16.36367,
+      "PosZ": -119.188,
+      "RotationY": -170.388,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -151.406,
+      "PosY": 14.981216,
+      "PosZ": 146.407,
       "RotationY": -96.801,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 99.277,
-      "PosY": 22.243599,
-      "PosZ": -79.15,
-      "RotationY": -137.392,
+      "PosX": 144.281,
+      "PosY": 22.391544,
+      "PosZ": -110.324,
+      "RotationY": -131.245,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 100.86,
-      "PosY": 16.436571,
-      "PosZ": -83.67,
-      "RotationY": -170.389,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -73.839,
-      "PosY": 21.18103,
-      "PosZ": 102.702,
-      "RotationY": -43.637,
+      "PosX": -103.283,
+      "PosY": 21.529163,
+      "PosZ": 143.864,
+      "RotationY": -39.503,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 104.354,
-      "PosY": 22.292662,
-      "PosZ": -74.865,
-      "RotationY": -124.371,
+      "PosX": 151.265,
+      "PosY": 22.285671,
+      "PosZ": -105.23,
+      "RotationY": -121.807,
       "Scale": 0.56
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 29.222,
-      "PosY": 8.9853735,
-      "PosZ": 64.791,
-      "RotationY": -151.376,
-      "Scale": 0.55
+      "PosX": 147.562,
+      "PosY": 17.863792,
+      "PosZ": -257.967,
+      "RotationY": -88.286,
+      "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -192.887,
-      "PosY": 16.932957,
-      "PosZ": 99.415,
+      "PosX": -273.744,
+      "PosY": 16.966074,
+      "PosZ": 142.955,
       "RotationY": -27.288,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 104.098,
-      "PosY": 17.828903,
-      "PosZ": -180.07,
-      "RotationY": -89.191,
-      "Scale": 0.8
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 112.126,
-      "PosY": 22.216171,
-      "PosZ": -70.611,
-      "RotationY": -113.424,
-      "Scale": 0.56
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -175.113,
-      "PosY": 16.891994,
-      "PosZ": 108.585,
-      "RotationY": -27.288,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 46.778,
-      "PosY": 8.935918,
-      "PosZ": 55.209,
+      "PosX": 43.533,
+      "PosY": 8.96859,
+      "PosZ": 91.583,
       "RotationY": -151.376,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 103.9,
-      "PosY": 17.862871,
-      "PosZ": -194.069,
-      "RotationY": -89.191,
+      "PosX": -251.97,
+      "PosY": 16.953228,
+      "PosZ": 154.187,
+      "RotationY": -27.288,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 147.009,
+      "PosY": 17.824846,
+      "PosZ": -276.458,
+      "RotationY": -88.286,
       "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -108.184,
-      "PosY": 14.979819,
-      "PosZ": 120.93,
+      "PosX": 65.039,
+      "PosY": 8.957079,
+      "PosZ": 79.845,
+      "RotationY": -151.376,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -154.308,
+      "PosY": 14.921774,
+      "PosZ": 170.735,
       "RotationY": -96.801,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 95.089,
-      "PosY": 0.027549814,
-      "PosZ": 5,
-      "RotationY": 89.49,
+      "PosX": 135.823,
+      "PosY": 0.013570054,
+      "PosZ": 9.179,
+      "RotationY": 89.491,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 94.911,
-      "PosY": 0.045531187,
-      "PosZ": 25,
-      "RotationY": 89.49,
+      "PosX": 135.605,
+      "PosY": 0.021745142,
+      "PosZ": 33.679,
+      "RotationY": 89.491,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 150.087,
-      "PosY": 15.956143,
-      "PosZ": -165.29,
+      "PosX": 215.411,
+      "PosY": 15.954393,
+      "PosZ": -237.901,
       "RotationY": -119.424,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 160.258,
-      "PosY": 6.051453,
-      "PosZ": -122.273,
-      "RotationY": 111.976,
+      "PosX": 229.702,
+      "PosY": 6.018384,
+      "PosZ": -172.789,
+      "RotationY": 111.977,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 20.351,
-      "PosY": 17.935379,
-      "PosZ": 129.357,
-      "RotationY": 105.363,
+      "PosX": 29.611,
+      "PosY": 17.926537,
+      "PosZ": 186.759,
+      "RotationY": 105.364,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 167.742,
-      "PosY": 6.0060625,
-      "PosZ": -103.727,
-      "RotationY": 111.976,
+      "PosX": 238.87,
+      "PosY": 5.993814,
+      "PosZ": -150.069,
+      "RotationY": 111.977,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 159.913,
-      "PosY": 15.960382,
-      "PosZ": -182.71,
+      "PosX": 227.447,
+      "PosY": 15.943806,
+      "PosZ": -259.241,
       "RotationY": -119.424,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -140.452,
-      "PosY": 3.9955902,
-      "PosZ": 168.121,
-      "RotationY": 81.095,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 164.539,
-      "PosY": 13.050174,
-      "PosZ": -58.618,
+      "PosX": 235.76,
+      "PosY": 12.981713,
+      "PosZ": -85.65,
       "RotationY": -110.251,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 171.461,
-      "PosY": 12.988606,
-      "PosZ": -77.382,
-      "RotationY": -110.251,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 124.554,
-      "PosY": 19.919468,
-      "PosZ": 57.121,
-      "RotationY": -98.938,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -53.126,
-      "PosY": 3.0153959,
-      "PosZ": 175.038,
-      "RotationY": 84.985,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 25.649,
-      "PosY": 17.8815,
-      "PosZ": 148.643,
-      "RotationY": 105.363,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 121.446,
-      "PosY": 19.897015,
-      "PosZ": 76.879,
-      "RotationY": -98.938,
-      "Scale": 0.55
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -143.548,
-      "PosY": 3.996768,
-      "PosZ": 187.879,
+      "PosX": -200.961,
+      "PosY": 4.0100994,
+      "PosZ": 242.184,
       "RotationY": 81.095,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 169.289,
-      "PosY": 12.922159,
-      "PosZ": 4.633,
-      "RotationY": 140.455,
+      "PosX": 244.24,
+      "PosY": 12.939716,
+      "PosZ": -108.636,
+      "RotationY": -110.251,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 183.202,
-      "PosY": 14.889135,
-      "PosZ": -30.76,
-      "RotationY": -177.978,
-      "Scale": 0.8
+      "PosX": 177.617,
+      "PosY": 19.927036,
+      "PosZ": 83.613,
+      "RotationY": -98.938,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": -54.874,
-      "PosY": 3.0038266,
-      "PosZ": 194.962,
+      "PosX": 36.103,
+      "PosY": 17.934126,
+      "PosZ": 210.383,
+      "RotationY": 105.364,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -76.072,
+      "PosY": 3.0157952,
+      "PosZ": 252.083,
       "RotationY": 84.985,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 197.194,
-      "PosY": 14.844171,
-      "PosZ": -31.254,
-      "RotationY": -177.978,
-      "Scale": 0.8
+      "PosX": 173.811,
+      "PosY": 19.957487,
+      "PosZ": 107.815,
+      "RotationY": -98.938,
+      "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 184.711,
-      "PosY": 12.950464,
-      "PosZ": 17.367,
+      "PosX": -204.753,
+      "PosY": 4.007747,
+      "PosZ": 266.388,
+      "RotationY": 81.095,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 243.411,
+      "PosY": 12.955109,
+      "PosZ": 7.915,
       "RotationY": 140.455,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 99.94,
-      "PosY": 19.080988,
-      "PosZ": 176.442,
+      "PosX": 262.392,
+      "PosY": 14.820229,
+      "PosZ": -45.043,
+      "RotationY": -176.687,
+      "Scale": 0.8
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": -78.214,
+      "PosY": 2.9924004,
+      "PosZ": 276.489,
+      "RotationY": 84.985,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 280.862,
+      "PosY": 14.8669815,
+      "PosZ": -46.112,
+      "RotationY": -176.687,
+      "Scale": 0.8
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 262.303,
+      "PosY": 12.976613,
+      "PosZ": 23.513,
+      "RotationY": 140.455,
+      "Scale": 0.55
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 139.303,
+      "PosY": 19.815367,
+      "PosZ": 256.045,
+      "RotationY": 67.652,
+      "Scale": 0.8
+    },
+    {
+      "TemplateId": "prop/spiked_wooden_stake",
+      "PosX": 142.173,
+      "PosY": 19.180288,
+      "PosZ": 254.006,
       "RotationY": 72.901,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 97.128,
-      "PosY": 19.86064,
-      "PosZ": 178.521,
-      "RotationY": 65.4,
+      "PosX": 132.268,
+      "PosY": 19.871681,
+      "PosZ": 273.155,
+      "RotationY": 67.652,
       "Scale": 0.8
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 91.301,
-      "PosY": 19.879185,
-      "PosZ": 191.251,
-      "RotationY": 65.4,
-      "Scale": 0.8
-    },
-    {
-      "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 94.06,
-      "PosY": 18.92005,
-      "PosZ": 195.558,
+      "PosX": 134.969,
+      "PosY": 18.872314,
+      "PosZ": 277.422,
       "RotationY": 72.901,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 174.192,
-      "PosY": 4.063246,
-      "PosZ": 139.048,
+      "PosX": 250.843,
+      "PosY": 4.047781,
+      "PosZ": 199.038,
       "RotationY": 168.743,
       "Scale": 0.55
     },
     {
       "TemplateId": "prop/spiked_wooden_stake",
-      "PosX": 193.808,
-      "PosY": 4.011699,
-      "PosZ": 142.952,
+      "PosX": 274.871,
+      "PosY": 4.00438,
+      "PosZ": 203.82,
       "RotationY": 168.743,
       "Scale": 0.55
     }
@@ -615,9 +615,9 @@
   "Decals": [
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -77.517,
+      "PosX": -110.738,
       "PosY": 14.945,
-      "PosZ": -104.466,
+      "PosZ": -149.238,
       "RotationX": 0,
       "RotationY": 82.062,
       "RotationZ": 0,
@@ -625,9 +625,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -187.448,
+      "PosX": -267.783,
       "PosY": 3,
-      "PosZ": -137.6,
+      "PosZ": -196.572,
       "RotationX": 0,
       "RotationY": -9.875,
       "RotationZ": 0,
@@ -635,19 +635,19 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -60.045,
-      "PosY": 3.388,
-      "PosZ": -178.346,
+      "PosX": -95.182,
+      "PosY": 3.228,
+      "PosZ": -254.077,
       "RotationX": 0,
-      "RotationY": -86.109,
+      "RotationY": -85.68,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -80,
+      "PosX": -114.286,
       "PosY": 9,
-      "PosZ": -24,
+      "PosZ": -34.286,
       "RotationX": 0,
       "RotationY": -94.862,
       "RotationZ": 0,
@@ -655,9 +655,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 15.43,
+      "PosX": 22.044,
       "PosY": 10.012,
-      "PosZ": -154.473,
+      "PosZ": -220.676,
       "RotationX": 0,
       "RotationY": -97.063,
       "RotationZ": 0,
@@ -665,9 +665,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -189.465,
+      "PosX": -270.665,
       "PosY": 3,
-      "PosZ": 12.491,
+      "PosZ": 17.845,
       "RotationX": 0,
       "RotationY": 8.067,
       "RotationZ": 0,
@@ -675,9 +675,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -79.331,
+      "PosX": -113.331,
       "PosY": 22,
-      "PosZ": 55.735,
+      "PosZ": 79.622,
       "RotationX": 0,
       "RotationY": 40.32,
       "RotationZ": 0,
@@ -685,9 +685,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -150,
+      "PosX": -214.286,
       "PosY": 10,
-      "PosZ": 86,
+      "PosZ": 122.857,
       "RotationX": 0,
       "RotationY": -96.975,
       "RotationZ": 0,
@@ -695,9 +695,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 110.704,
+      "PosX": 158.149,
       "PosY": 14,
-      "PosZ": -113.251,
+      "PosZ": -161.788,
       "RotationX": 0,
       "RotationY": 111.725,
       "RotationZ": 0,
@@ -705,9 +705,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 34.928,
+      "PosX": 49.897,
       "PosY": 9,
-      "PosZ": 61.677,
+      "PosZ": 88.109,
       "RotationX": 0,
       "RotationY": -151.376,
       "RotationZ": 0,
@@ -715,9 +715,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 155,
+      "PosX": 221.429,
       "PosY": 16,
-      "PosZ": -174,
+      "PosZ": -248.571,
       "RotationX": 0,
       "RotationY": -119.424,
       "RotationZ": 0,
@@ -725,9 +725,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 169.211,
+      "PosX": 241.731,
       "PosY": 13,
-      "PosZ": -71.284,
+      "PosZ": -101.834,
       "RotationX": 0,
       "RotationY": -110.251,
       "RotationZ": 0,
@@ -735,9 +735,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 137,
+      "PosX": 195.714,
       "PosY": 3,
-      "PosZ": 30,
+      "PosZ": 42.857,
       "RotationX": 0,
       "RotationY": 91.26,
       "RotationZ": 0,
@@ -745,9 +745,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -142.542,
+      "PosX": -203.631,
       "PosY": 4,
-      "PosZ": 181.458,
+      "PosZ": 259.226,
       "RotationX": 0,
       "RotationY": 81.095,
       "RotationZ": 0,
@@ -755,9 +755,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": -11.885,
+      "PosX": -16.979,
       "PosY": 8.006,
-      "PosZ": 166.051,
+      "PosZ": 237.216,
       "RotationX": 0,
       "RotationY": 122.591,
       "RotationZ": 0,
@@ -765,9 +765,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 170.697,
+      "PosX": 243.852,
       "PosY": 10,
-      "PosZ": 89.769,
+      "PosZ": 128.242,
       "RotationX": 0,
       "RotationY": -140.396,
       "RotationZ": 0,
@@ -775,9 +775,9 @@
     },
     {
       "TemplateId": "decal/acid_drip",
-      "PosX": 97,
+      "PosX": 138.571,
       "PosY": 18.945,
-      "PosZ": 186,
+      "PosZ": 265.714,
       "RotationX": 0,
       "RotationY": 72.901,
       "RotationZ": 0,
@@ -785,19 +785,19 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -87.216,
+      "PosX": -120.696,
       "PosY": 17.604,
-      "PosZ": -100.326,
+      "PosZ": -144.127,
       "RotationX": 0,
-      "RotationY": 103.198,
+      "RotationY": 98.338,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -78,
+      "PosX": -111.429,
       "PosY": 14.945,
-      "PosZ": -101,
+      "PosZ": -144.286,
       "RotationX": 0,
       "RotationY": 82.062,
       "RotationZ": 0,
@@ -805,9 +805,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -180.552,
+      "PosX": -257.931,
       "PosY": 3.011,
-      "PosZ": -136.4,
+      "PosZ": -194.856,
       "RotationX": 0,
       "RotationY": -9.875,
       "RotationZ": 0,
@@ -815,19 +815,19 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -60.283,
-      "PosY": 3.388,
-      "PosZ": -181.838,
+      "PosX": -95.558,
+      "PosY": 3.228,
+      "PosZ": -259.063,
       "RotationX": 0,
-      "RotationY": -86.109,
+      "RotationY": -85.68,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -79.703,
+      "PosX": -113.862,
       "PosY": 9.006,
-      "PosZ": -27.487,
+      "PosZ": -39.268,
       "RotationX": 0,
       "RotationY": -94.862,
       "RotationZ": 0,
@@ -835,9 +835,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 14.57,
+      "PosX": 20.814,
       "PosY": 10,
-      "PosZ": -147.527,
+      "PosZ": -210.752,
       "RotationX": 0,
       "RotationY": -97.063,
       "RotationZ": 0,
@@ -845,9 +845,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -182.535,
+      "PosX": -260.763,
       "PosY": 2.996,
-      "PosZ": 11.509,
+      "PosZ": 16.441,
       "RotationX": 0,
       "RotationY": 8.067,
       "RotationZ": 0,
@@ -855,9 +855,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -82,
+      "PosX": -117.143,
       "PosY": 22,
-      "PosZ": 58,
+      "PosZ": 82.857,
       "RotationX": 0,
       "RotationY": 40.32,
       "RotationZ": 0,
@@ -865,9 +865,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -149.575,
+      "PosX": -213.679,
       "PosY": 10,
-      "PosZ": 82.526,
+      "PosZ": 117.894,
       "RotationX": 0,
       "RotationY": -96.975,
       "RotationZ": 0,
@@ -875,9 +875,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 112,
+      "PosX": 160,
       "PosY": 14,
-      "PosZ": -110,
+      "PosZ": -157.143,
       "RotationX": 0,
       "RotationY": 111.725,
       "RotationZ": 0,
@@ -885,9 +885,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 38,
+      "PosX": 54.286,
       "PosY": 9,
-      "PosZ": 60,
+      "PosZ": 85.714,
       "RotationX": 0,
       "RotationY": -151.376,
       "RotationZ": 0,
@@ -895,19 +895,19 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 110.293,
+      "PosX": 153.582,
       "PosY": 19.604,
-      "PosZ": -186.879,
+      "PosZ": -267.162,
       "RotationX": 0,
-      "RotationY": -94.14,
+      "RotationY": -92.136,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 156.719,
+      "PosX": 223.885,
       "PosY": 16,
-      "PosZ": -177.049,
+      "PosZ": -252.926,
       "RotationX": 0,
       "RotationY": -119.424,
       "RotationZ": 0,
@@ -915,9 +915,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 166.789,
+      "PosX": 238.269,
       "PosY": 13,
-      "PosZ": -64.716,
+      "PosZ": -92.452,
       "RotationX": 0,
       "RotationY": -110.251,
       "RotationZ": 0,
@@ -925,9 +925,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -141.458,
+      "PosX": -202.083,
       "PosY": 3.992,
-      "PosZ": 174.542,
+      "PosZ": 249.346,
       "RotationX": 0,
       "RotationY": 81.095,
       "RotationZ": 0,
@@ -935,9 +935,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 137.077,
+      "PosX": 195.824,
       "PosY": 3,
-      "PosZ": 33.499,
+      "PosZ": 47.856,
       "RotationX": 0,
       "RotationY": 91.26,
       "RotationZ": 0,
@@ -945,9 +945,9 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": -10,
+      "PosX": -14.286,
       "PosY": 8,
-      "PosZ": 169,
+      "PosZ": 241.429,
       "RotationX": 0,
       "RotationY": 122.591,
       "RotationZ": 0,
@@ -955,19 +955,19 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 189.994,
+      "PosX": 271.688,
       "PosY": 16.604,
-      "PosZ": -24.715,
+      "PosZ": -39.282,
       "RotationX": 0,
-      "RotationY": 175.154,
+      "RotationY": 177.876,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 165.303,
+      "PosX": 236.148,
       "PosY": 10.007,
-      "PosZ": 94.231,
+      "PosZ": 134.616,
       "RotationX": 0,
       "RotationY": -140.396,
       "RotationZ": 0,
@@ -975,465 +975,514 @@
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 88.899,
+      "PosX": 130.228,
       "PosY": 21.604,
-      "PosZ": 181.553,
+      "PosZ": 261.681,
       "RotationX": 0,
-      "RotationY": 51.996,
+      "RotationY": 57.343,
       "RotationZ": 0,
       "Scale": 1
     },
     {
       "TemplateId": "decal/arcane_spark",
-      "PosX": 95.971,
+      "PosX": 137.101,
       "PosY": 18.945,
-      "PosZ": 189.345,
+      "PosZ": 270.493,
       "RotationX": 0,
       "RotationY": 72.901,
       "RotationZ": 0,
       "Scale": 1
     }
   ],
+  "Items": [],
   "Vfx": [],
-  "CameraBoundsLeft": -216,
-  "CameraBoundsRight": 216,
-  "CameraBoundsTop": -216,
-  "CameraBoundsBottom": 216,
+  "CameraBoundsLeft": -312,
+  "CameraBoundsRight": 312,
+  "CameraBoundsTop": -312,
+  "CameraBoundsBottom": 312,
   "SkyboxPath": "jade_shrine.rtex",
   "Coordinates": [
     {
       "Name": "jump_05",
-      "MinX": 100.3,
-      "MinZ": -187.7,
-      "MaxX": 101.7,
-      "MaxZ": -186.3
+      "MinX": 143.586,
+      "MinZ": -267.843,
+      "MaxX": 144.986,
+      "MaxZ": -266.443
     },
     {
       "Name": "jump_13",
-      "MinX": 189.3,
-      "MinZ": -34.7,
-      "MaxX": 190.7,
-      "MaxZ": -33.3
+      "MinX": 270.729,
+      "MinZ": -49.271,
+      "MaxX": 272.129,
+      "MaxZ": -47.871
     },
     {
       "Name": "jump_24",
-      "MinX": 96.3,
-      "MinZ": 185.3,
-      "MaxX": 97.7,
-      "MaxZ": 186.7
+      "MinX": 137.871,
+      "MinZ": 265.014,
+      "MaxX": 139.271,
+      "MaxZ": 266.414
     },
     {
       "Name": "jump_45",
-      "MinX": -78.7,
-      "MinZ": -101.7,
-      "MaxX": -77.3,
-      "MaxZ": -100.3
+      "MinX": -112.129,
+      "MinZ": -144.986,
+      "MaxX": -110.729,
+      "MaxZ": -143.586
     },
     {
       "Name": "left_cliff_10",
-      "MinX": 90.3,
-      "MinZ": -82.7,
-      "MaxX": 91.7,
-      "MaxZ": -81.3
+      "MinX": 129.3,
+      "MinZ": -117.843,
+      "MaxX": 130.7,
+      "MaxZ": -116.443
     },
     {
       "Name": "right_cliff_35",
-      "MinX": -74.7,
-      "MinZ": 92.3,
-      "MaxX": -73.3,
-      "MaxZ": 93.7
+      "MinX": -106.414,
+      "MinZ": 132.157,
+      "MaxX": -105.014,
+      "MaxZ": 133.557
+    },
+    {
+      "Name": "starting_grid_1",
+      "MinX": -120.027,
+      "MinZ": -258.114,
+      "MaxX": -119.527,
+      "MaxZ": -257.614
+    },
+    {
+      "Name": "starting_grid_2",
+      "MinX": -120.018,
+      "MinZ": -253.114,
+      "MaxX": -119.518,
+      "MaxZ": -252.614
+    },
+    {
+      "Name": "starting_grid_3",
+      "MinX": -120.009,
+      "MinZ": -248.114,
+      "MaxX": -119.509,
+      "MaxZ": -247.614
+    },
+    {
+      "Name": "starting_grid_4",
+      "MinX": -124.703,
+      "MinZ": -258.14,
+      "MaxX": -124.203,
+      "MaxZ": -257.64
+    },
+    {
+      "Name": "starting_grid_5",
+      "MinX": -124.743,
+      "MinZ": -253.14,
+      "MaxX": -124.243,
+      "MaxZ": -252.64
+    },
+    {
+      "Name": "starting_grid_6",
+      "MinX": -124.782,
+      "MinZ": -248.141,
+      "MaxX": -124.282,
+      "MaxZ": -247.641
+    },
+    {
+      "Name": "starting_grid_7",
+      "MinX": -129.405,
+      "MinZ": -258.189,
+      "MaxX": -128.905,
+      "MaxZ": -257.689
+    },
+    {
+      "Name": "starting_grid_8",
+      "MinX": -129.468,
+      "MinZ": -253.19,
+      "MaxX": -128.968,
+      "MaxZ": -252.69
     },
     {
       "Name": "waypoint_01",
-      "MinX": -82.7,
-      "MinZ": -177.7,
-      "MaxX": -81.3,
-      "MaxZ": -176.3
+      "MinX": -117.843,
+      "MinZ": -253.557,
+      "MaxX": -116.443,
+      "MaxZ": -252.157
     },
     {
       "Name": "waypoint_02",
-      "MinX": -28.7,
-      "MinZ": -177.7,
-      "MaxX": -27.3,
-      "MaxZ": -176.3
+      "MinX": -40.7,
+      "MinZ": -253.557,
+      "MaxX": -39.3,
+      "MaxZ": -252.157
     },
     {
       "Name": "waypoint_03",
-      "MinX": 14.3,
-      "MinZ": -151.7,
-      "MaxX": 15.7,
-      "MaxZ": -150.3
+      "MinX": 20.729,
+      "MinZ": -216.414,
+      "MaxX": 22.129,
+      "MaxZ": -215.014
     },
     {
       "Name": "waypoint_04",
-      "MinX": 53.3,
-      "MinZ": -168.7,
-      "MaxX": 54.7,
-      "MaxZ": -167.3
+      "MinX": 76.443,
+      "MinZ": -240.7,
+      "MaxX": 77.843,
+      "MaxZ": -239.3
     },
     {
       "Name": "waypoint_05",
-      "MinX": 100.3,
-      "MinZ": -187.7,
-      "MaxX": 101.7,
-      "MaxZ": -186.3
+      "MinX": 143.586,
+      "MinZ": -267.843,
+      "MaxX": 144.986,
+      "MaxZ": -266.443
     },
     {
       "Name": "waypoint_06",
-      "MinX": 154.3,
-      "MinZ": -174.7,
-      "MaxX": 155.7,
-      "MaxZ": -173.3
+      "MinX": 220.729,
+      "MinZ": -249.271,
+      "MaxX": 222.129,
+      "MaxZ": -247.871
     },
     {
       "Name": "waypoint_07",
-      "MinX": 182.3,
-      "MinZ": -141.7,
-      "MaxX": 183.7,
-      "MaxZ": -140.3
+      "MinX": 260.729,
+      "MinZ": -202.129,
+      "MaxX": 262.129,
+      "MaxZ": -200.729
     },
     {
       "Name": "waypoint_08",
-      "MinX": 163.3,
-      "MinZ": -113.7,
-      "MaxX": 164.7,
-      "MaxZ": -112.3
+      "MinX": 233.586,
+      "MinZ": -162.129,
+      "MaxX": 234.986,
+      "MaxZ": -160.729
     },
     {
       "Name": "waypoint_09",
-      "MinX": 111.3,
-      "MinZ": -110.7,
-      "MaxX": 112.7,
-      "MaxZ": -109.3
+      "MinX": 159.3,
+      "MinZ": -157.843,
+      "MaxX": 160.7,
+      "MaxZ": -156.443
     },
     {
       "Name": "waypoint_10",
-      "MinX": 90.3,
-      "MinZ": -82.7,
-      "MaxX": 91.7,
-      "MaxZ": -81.3
+      "MinX": 129.3,
+      "MinZ": -117.843,
+      "MaxX": 130.7,
+      "MaxZ": -116.443
     },
     {
       "Name": "waypoint_11",
-      "MinX": 119.3,
-      "MinZ": -62.7,
-      "MaxX": 120.7,
-      "MaxZ": -61.3
+      "MinX": 170.729,
+      "MinZ": -89.271,
+      "MaxX": 172.129,
+      "MaxZ": -87.871
     },
     {
       "Name": "waypoint_12",
-      "MinX": 167.3,
-      "MinZ": -68.7,
-      "MaxX": 168.7,
-      "MaxZ": -67.3
+      "MinX": 239.3,
+      "MinZ": -97.843,
+      "MaxX": 240.7,
+      "MaxZ": -96.443
     },
     {
       "Name": "waypoint_13",
-      "MinX": 189.3,
-      "MinZ": -34.7,
-      "MaxX": 190.7,
-      "MaxZ": -33.3
+      "MinX": 270.729,
+      "MinZ": -49.271,
+      "MaxX": 272.129,
+      "MaxZ": -47.871
     },
     {
       "Name": "waypoint_14",
-      "MinX": 176.3,
-      "MinZ": 10.3,
-      "MaxX": 177.7,
-      "MaxZ": 11.7
+      "MinX": 252.157,
+      "MinZ": 15.014,
+      "MaxX": 253.557,
+      "MaxZ": 16.414
     },
     {
       "Name": "waypoint_15",
-      "MinX": 136.3,
-      "MinZ": 29.3,
-      "MaxX": 137.7,
-      "MaxZ": 30.7
+      "MinX": 195.014,
+      "MinZ": 42.157,
+      "MaxX": 196.414,
+      "MaxZ": 43.557
     },
     {
       "Name": "waypoint_16",
-      "MinX": 94.3,
-      "MinZ": 14.3,
-      "MaxX": 95.7,
-      "MaxZ": 15.7
+      "MinX": 135.014,
+      "MinZ": 20.729,
+      "MaxX": 136.414,
+      "MaxZ": 22.129
     },
     {
       "Name": "waypoint_17",
-      "MinX": 48.3,
-      "MinZ": 30.3,
-      "MaxX": 49.7,
-      "MaxZ": 31.7
+      "MinX": 69.3,
+      "MinZ": 43.586,
+      "MaxX": 70.7,
+      "MaxZ": 44.986
     },
     {
       "Name": "waypoint_18",
-      "MinX": 37.3,
-      "MinZ": 59.3,
-      "MaxX": 38.7,
-      "MaxZ": 60.7
+      "MinX": 53.586,
+      "MinZ": 85.014,
+      "MaxX": 54.986,
+      "MaxZ": 86.414
     },
     {
       "Name": "waypoint_19",
-      "MinX": 72.3,
-      "MinZ": 74.3,
-      "MaxX": 73.7,
-      "MaxZ": 75.7
+      "MinX": 103.586,
+      "MinZ": 106.443,
+      "MaxX": 104.986,
+      "MaxZ": 107.843
     },
     {
       "Name": "waypoint_20",
-      "MinX": 122.3,
-      "MinZ": 66.3,
-      "MaxX": 123.7,
-      "MaxZ": 67.7
+      "MinX": 175.014,
+      "MinZ": 95.014,
+      "MaxX": 176.414,
+      "MaxZ": 96.414
     },
     {
       "Name": "waypoint_21",
-      "MinX": 167.3,
-      "MinZ": 91.3,
-      "MaxX": 168.7,
-      "MaxZ": 92.7
+      "MinX": 239.3,
+      "MinZ": 130.729,
+      "MaxX": 240.7,
+      "MaxZ": 132.129
     },
     {
       "Name": "waypoint_22",
-      "MinX": 183.3,
-      "MinZ": 140.3,
-      "MaxX": 184.7,
-      "MaxZ": 141.7
+      "MinX": 262.157,
+      "MinZ": 200.729,
+      "MaxX": 263.557,
+      "MaxZ": 202.129
     },
     {
       "Name": "waypoint_23",
-      "MinX": 150.3,
-      "MinZ": 176.3,
-      "MaxX": 151.7,
-      "MaxZ": 177.7
+      "MinX": 215.014,
+      "MinZ": 252.157,
+      "MaxX": 216.414,
+      "MaxZ": 253.557
     },
     {
       "Name": "waypoint_24",
-      "MinX": 96.3,
-      "MinZ": 185.3,
-      "MaxX": 97.7,
-      "MaxZ": 186.7
+      "MinX": 137.871,
+      "MinZ": 265.014,
+      "MaxX": 139.271,
+      "MaxZ": 266.414
     },
     {
       "Name": "waypoint_25",
-      "MinX": 60.3,
-      "MinZ": 150.3,
-      "MaxX": 61.7,
-      "MaxZ": 151.7
+      "MinX": 86.443,
+      "MinZ": 215.014,
+      "MaxX": 87.843,
+      "MaxZ": 216.414
     },
     {
       "Name": "waypoint_26",
-      "MinX": 22.3,
-      "MinZ": 138.3,
-      "MaxX": 23.7,
-      "MaxZ": 139.7
+      "MinX": 32.157,
+      "MinZ": 197.871,
+      "MaxX": 33.557,
+      "MaxZ": 199.271
     },
     {
       "Name": "waypoint_27",
-      "MinX": -10.7,
-      "MinZ": 168.3,
-      "MaxX": -9.3,
-      "MaxZ": 169.7
+      "MinX": -14.986,
+      "MinZ": 240.729,
+      "MaxX": -13.586,
+      "MaxZ": 242.129
     },
     {
       "Name": "waypoint_28",
-      "MinX": -54.7,
-      "MinZ": 184.3,
-      "MaxX": -53.3,
-      "MaxZ": 185.7
+      "MinX": -77.843,
+      "MinZ": 263.586,
+      "MaxX": -76.443,
+      "MaxZ": 264.986
     },
     {
       "Name": "waypoint_29",
-      "MinX": -100.7,
-      "MinZ": 162.3,
-      "MaxX": -99.3,
-      "MaxZ": 163.7
+      "MinX": -143.557,
+      "MinZ": 232.157,
+      "MaxX": -142.157,
+      "MaxZ": 233.557
     },
     {
       "Name": "waypoint_30",
-      "MinX": -142.7,
-      "MinZ": 177.3,
-      "MaxX": -141.3,
-      "MaxZ": 178.7
+      "MinX": -203.557,
+      "MinZ": 253.586,
+      "MaxX": -202.157,
+      "MaxZ": 254.986
     },
     {
       "Name": "waypoint_31",
-      "MinX": -182.7,
-      "MinZ": 147.3,
-      "MaxX": -181.3,
-      "MaxZ": 148.7
+      "MinX": -260.7,
+      "MinZ": 210.729,
+      "MaxX": -259.3,
+      "MaxZ": 212.129
     },
     {
       "Name": "waypoint_32",
-      "MinX": -184.7,
-      "MinZ": 103.3,
-      "MaxX": -183.3,
-      "MaxZ": 104.7
+      "MinX": -263.557,
+      "MinZ": 147.871,
+      "MaxX": -262.157,
+      "MaxZ": 149.271
     },
     {
       "Name": "waypoint_33",
-      "MinX": -150.7,
-      "MinZ": 85.3,
-      "MaxX": -149.3,
-      "MaxZ": 86.7
+      "MinX": -214.986,
+      "MinZ": 122.157,
+      "MaxX": -213.586,
+      "MaxZ": 123.557
     },
     {
       "Name": "waypoint_34",
-      "MinX": -107.7,
-      "MinZ": 110.3,
-      "MaxX": -106.3,
-      "MaxZ": 111.7
+      "MinX": -153.557,
+      "MinZ": 157.871,
+      "MaxX": -152.157,
+      "MaxZ": 159.271
     },
     {
       "Name": "waypoint_35",
-      "MinX": -74.7,
-      "MinZ": 92.3,
-      "MaxX": -73.3,
-      "MaxZ": 93.7
+      "MinX": -106.414,
+      "MinZ": 132.157,
+      "MaxX": -105.014,
+      "MaxZ": 133.557
     },
     {
       "Name": "waypoint_36",
-      "MinX": -82.7,
-      "MinZ": 57.3,
-      "MaxX": -81.3,
-      "MaxZ": 58.7
+      "MinX": -117.843,
+      "MinZ": 82.157,
+      "MaxX": -116.443,
+      "MaxZ": 83.557
     },
     {
       "Name": "waypoint_37",
-      "MinX": -124.7,
-      "MinZ": 33.3,
-      "MaxX": -123.3,
-      "MaxZ": 34.7
+      "MinX": -177.843,
+      "MinZ": 47.871,
+      "MaxX": -176.443,
+      "MaxZ": 49.271
     },
     {
       "Name": "waypoint_38",
-      "MinX": -161.7,
-      "MinZ": 44.3,
-      "MaxX": -160.3,
-      "MaxZ": 45.7
+      "MinX": -230.7,
+      "MinZ": 63.586,
+      "MaxX": -229.3,
+      "MaxZ": 64.986
     },
     {
       "Name": "waypoint_39",
-      "MinX": -186.7,
-      "MinZ": 11.3,
-      "MaxX": -185.3,
-      "MaxZ": 12.7
+      "MinX": -266.414,
+      "MinZ": 16.443,
+      "MaxX": -265.014,
+      "MaxZ": 17.843
     },
     {
       "Name": "waypoint_40",
-      "MinX": -171.7,
-      "MinZ": -28.7,
-      "MaxX": -170.3,
-      "MaxZ": -27.3
+      "MinX": -244.986,
+      "MinZ": -40.7,
+      "MaxX": -243.586,
+      "MaxZ": -39.3
     },
     {
       "Name": "waypoint_41",
-      "MinX": -125.7,
-      "MinZ": -42.7,
-      "MaxX": -124.3,
-      "MaxZ": -41.3
+      "MinX": -179.271,
+      "MinZ": -60.7,
+      "MaxX": -177.871,
+      "MaxZ": -59.3
     },
     {
       "Name": "waypoint_42",
-      "MinX": -80.7,
-      "MinZ": -24.7,
-      "MaxX": -79.3,
-      "MaxZ": -23.3
+      "MinX": -114.986,
+      "MinZ": -34.986,
+      "MaxX": -113.586,
+      "MaxZ": -33.586
     },
     {
       "Name": "waypoint_43",
-      "MinX": -42.7,
-      "MinZ": -37.7,
-      "MaxX": -41.3,
-      "MaxZ": -36.3
+      "MinX": -60.7,
+      "MinZ": -53.557,
+      "MaxX": -59.3,
+      "MaxZ": -52.157
     },
     {
       "Name": "waypoint_44",
-      "MinX": -41.7,
-      "MinZ": -75.7,
-      "MaxX": -40.3,
-      "MaxZ": -74.3
+      "MinX": -59.271,
+      "MinZ": -107.843,
+      "MaxX": -57.871,
+      "MaxZ": -106.443
     },
     {
       "Name": "waypoint_45",
-      "MinX": -78.7,
-      "MinZ": -101.7,
-      "MaxX": -77.3,
-      "MaxZ": -100.3
+      "MinX": -112.129,
+      "MinZ": -144.986,
+      "MaxX": -110.729,
+      "MaxZ": -143.586
     },
     {
       "Name": "waypoint_46",
-      "MinX": -123.7,
-      "MinZ": -88.7,
-      "MaxX": -122.3,
-      "MaxZ": -87.3
+      "MinX": -176.414,
+      "MinZ": -126.414,
+      "MaxX": -175.014,
+      "MaxZ": -125.014
     },
     {
       "Name": "waypoint_47",
-      "MinX": -163.7,
-      "MinZ": -98.7,
-      "MaxX": -162.3,
-      "MaxZ": -97.3
+      "MinX": -233.557,
+      "MinZ": -140.7,
+      "MaxX": -232.157,
+      "MaxZ": -139.3
     },
     {
       "Name": "waypoint_48",
-      "MinX": -184.7,
-      "MinZ": -137.7,
-      "MaxX": -183.3,
-      "MaxZ": -136.3
+      "MinX": -263.557,
+      "MinZ": -196.414,
+      "MaxX": -262.157,
+      "MaxZ": -195.014
     },
     {
       "Name": "waypoint_49",
-      "MinX": -150.7,
-      "MinZ": -174.7,
-      "MaxX": -149.3,
-      "MaxZ": -173.3
+      "MinX": -214.986,
+      "MinZ": -249.271,
+      "MaxX": -213.586,
+      "MaxZ": -247.871
     },
     {
       "Name": "waypoint_50",
-      "MinX": -114.7,
-      "MinZ": -177.7,
-      "MaxX": -113.3,
-      "MaxZ": -176.3
+      "MinX": -163.557,
+      "MinZ": -253.557,
+      "MaxX": -162.157,
+      "MaxZ": -252.157
     }
   ],
   "SpawnAnchors": [
     {
       "Player": 1,
-      "PosX": -84.619,
-      "PosZ": -180.507
+      "CoordinateName": "starting_grid_1"
     },
     {
       "Player": 2,
-      "PosX": -84.625,
-      "PosZ": -177.007
+      "CoordinateName": "starting_grid_2"
     },
     {
       "Player": 3,
-      "PosX": -84.631,
-      "PosZ": -173.507
+      "CoordinateName": "starting_grid_3"
     },
     {
       "Player": 4,
-      "PosX": -89.311,
-      "PosZ": -180.544
+      "CoordinateName": "starting_grid_4"
     },
     {
       "Player": 5,
-      "PosX": -89.35,
-      "PosZ": -177.044
+      "CoordinateName": "starting_grid_5"
     },
     {
       "Player": 6,
-      "PosX": -89.389,
-      "PosZ": -173.545
+      "CoordinateName": "starting_grid_6"
     },
     {
       "Player": 7,
-      "PosX": -94.02,
-      "PosZ": -180.61
+      "CoordinateName": "starting_grid_7"
     },
     {
       "Player": 8,
-      "PosX": -94.074,
-      "PosZ": -177.11
+      "CoordinateName": "starting_grid_8"
     }
   ]
 }

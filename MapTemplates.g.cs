@@ -14,6 +14,7 @@ public static class UnitIds
 	public const string ChariotRacer = "unit/chariot_racer";
 	public const string Aguja = "unit/aguja";
 	public const string Mastodonte = "unit/mastodonte";
+	public const string RaceCoin = "unit/race_coin";
 }
 
 public static class BuildingIds
@@ -47,6 +48,10 @@ public static class AbilityIds
 	public const string GarageLaps = "ability/garage_laps";
 	public const string GarageCar = "ability/garage_car";
 	public const string GarageStart = "ability/garage_start";
+	public const string ScoutAxle = "ability/scout_axle";
+	public const string StoneguardPlating = "ability/stoneguard_plating";
+	public const string ReinforcedSuspension = "ability/reinforced_suspension";
+	public const string CoinRepair = "ability/coin_repair";
 }
 
 public static class WeaponIds

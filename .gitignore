@@ -1,9 +1,12 @@
 bin/*
 !bin/script/
 bin/script/*
-!bin/script/MapScript.wasm
+!bin/script/*.wasm
 !bin/script/.build-flavor
 obj/
 *.jit.elf
 realm_lldb.py
 *.pdb
+authority.pid
+*.debug.json
+*.pid
