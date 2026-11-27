@@ -629,7 +629,7 @@
       "PosY": 3,
       "PosZ": -196.572,
       "RotationX": 0,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -649,7 +649,7 @@
       "PosY": 9,
       "PosZ": -34.286,
       "RotationX": 0,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -689,7 +689,7 @@
       "PosY": 10,
       "PosZ": 122.857,
       "RotationX": 0,
-      "RotationY": -96.975,
+      "RotationY": -96.97499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -699,7 +699,7 @@
       "PosY": 14,
       "PosZ": -161.788,
       "RotationX": 0,
-      "RotationY": 111.725,
+      "RotationY": 111.72499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -709,7 +709,7 @@
       "PosY": 9,
       "PosZ": 88.109,
       "RotationX": 0,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -719,7 +719,7 @@
       "PosY": 16,
       "PosZ": -248.571,
       "RotationX": 0,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -729,7 +729,7 @@
       "PosY": 13,
       "PosZ": -101.834,
       "RotationX": 0,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -739,7 +739,7 @@
       "PosY": 3,
       "PosZ": 42.857,
       "RotationX": 0,
-      "RotationY": 91.26,
+      "RotationY": 91.259995,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -749,7 +749,7 @@
       "PosY": 4,
       "PosZ": 259.226,
       "RotationX": 0,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -779,7 +779,7 @@
       "PosY": 18.945,
       "PosZ": 265.714,
       "RotationX": 0,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -809,7 +809,7 @@
       "PosY": 3.011,
       "PosZ": -194.856,
       "RotationX": 0,
-      "RotationY": -9.875,
+      "RotationY": -9.874999,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -829,7 +829,7 @@
       "PosY": 9.006,
       "PosZ": -39.268,
       "RotationX": 0,
-      "RotationY": -94.862,
+      "RotationY": -94.86199,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -869,7 +869,7 @@
       "PosY": 10,
       "PosZ": 117.894,
       "RotationX": 0,
-      "RotationY": -96.975,
+      "RotationY": -96.97499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -879,7 +879,7 @@
       "PosY": 14,
       "PosZ": -157.143,
       "RotationX": 0,
-      "RotationY": 111.725,
+      "RotationY": 111.72499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -889,7 +889,7 @@
       "PosY": 9,
       "PosZ": 85.714,
       "RotationX": 0,
-      "RotationY": -151.376,
+      "RotationY": -151.37599,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -909,7 +909,7 @@
       "PosY": 16,
       "PosZ": -252.926,
       "RotationX": 0,
-      "RotationY": -119.424,
+      "RotationY": -119.423996,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -919,7 +919,7 @@
       "PosY": 13,
       "PosZ": -92.452,
       "RotationX": 0,
-      "RotationY": -110.251,
+      "RotationY": -110.25099,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -929,7 +929,7 @@
       "PosY": 3.992,
       "PosZ": 249.346,
       "RotationX": 0,
-      "RotationY": 81.095,
+      "RotationY": 81.09499,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -939,7 +939,7 @@
       "PosY": 3,
       "PosZ": 47.856,
       "RotationX": 0,
-      "RotationY": 91.26,
+      "RotationY": 91.259995,
       "RotationZ": 0,
       "Scale": 1
     },
@@ -989,7 +989,7 @@
       "PosY": 18.945,
       "PosZ": 270.493,
       "RotationX": 0,
-      "RotationY": 72.901,
+      "RotationY": 72.90099,
       "RotationZ": 0,
       "Scale": 1
     }
@@ -1099,6 +1099,62 @@
       "MinZ": -253.19,
       "MaxX": -128.968,
       "MaxZ": -252.69
+    },
+    {
+      "Name": "spawn_1",
+      "MinX": -85.319,
+      "MinZ": -181.207,
+      "MaxX": -83.919,
+      "MaxZ": -179.807
+    },
+    {
+      "Name": "spawn_2",
+      "MinX": -85.325,
+      "MinZ": -177.707,
+      "MaxX": -83.925,
+      "MaxZ": -176.307
+    },
+    {
+      "Name": "spawn_3",
+      "MinX": -85.331,
+      "MinZ": -174.207,
+      "MaxX": -83.931,
+      "MaxZ": -172.807
+    },
+    {
+      "Name": "spawn_4",
+      "MinX": -90.011,
+      "MinZ": -181.244,
+      "MaxX": -88.611,
+      "MaxZ": -179.844
+    },
+    {
+      "Name": "spawn_5",
+      "MinX": -90.05,
+      "MinZ": -177.744,
+      "MaxX": -88.65,
+      "MaxZ": -176.344
+    },
+    {
+      "Name": "spawn_6",
+      "MinX": -90.089,
+      "MinZ": -174.245,
+      "MaxX": -88.689,
+      "MaxZ": -172.845
+    },
+    {
+      "Name": "spawn_7",
+      "MinX": -94.72,
+      "MinZ": -181.31,
+      "MaxX": -93.32,
+      "MaxZ": -179.91
+    },
+    {
+      "Name": "spawn_8",
+      "MinX": -94.774,
+      "MinZ": -177.81,
+      "MaxX": -93.374,
+      "MaxZ": -176.41
     },
     {
       "Name": "waypoint_01",

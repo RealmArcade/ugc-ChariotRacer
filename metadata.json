@@ -430,7 +430,7 @@
         "Brightness": 1,
         "Tint": null,
         "NormalizeLuminance": true,
-        "IgnorePlayerColor": false,
+        "IgnorePlayerColor": true,
         "DespillPlayerColor": false,
         "PathingType": 9,
         "SpawnShader": null,
@@ -637,9 +637,7 @@
         "PseudoSockets": null,
         "DespawnShader": null,
         "Attribution_ImportedFromMap": null
-      }
-    ],
-    "Buildings": [
+      },
       {
         "MaxHp": 0,
         "Damage": 0,

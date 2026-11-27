@@ -9,7 +9,6 @@ namespace Realm.Maps;
 
 public static class UnitIds
 {
-	public const string Chad = "unit/chad";
 	public const string Kevin = "unit/kevin";
 	public const string ChariotRacer = "unit/chariot_racer";
 	public const string Aguja = "unit/aguja";
